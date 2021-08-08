@@ -36,8 +36,9 @@ import javax.swing.filechooser.FileSystemView;
 import com.geberl.winggcodedesigner.utils.GUIHelpers;
 import com.geberl.winggcodedesigner.utils.SettingChangeListener;
 import com.geberl.winggcodedesigner.utils.Settings;
+// import com.geberl.winggcodedesigner.utils.SettingsFactory;
 import com.geberl.winggcodedesigner.listeners.WingCalculatorEventListener;
-
+ 
 
 /**
  * Model - all calculations
@@ -71,12 +72,12 @@ public class WingCalculatorModel implements SettingChangeListener {
 	// =====================================
 	// Parameter
 	// =====================================
-	private Double startDistance = 0.0;
 	private Double wireLength = 0.0;
+	private Double startDistance = 0.0;
 	private Double saveHeight = 0.0;
 	private Double pause = 0.0;
 	private Double wireSpeed = 0.0;
-	private Double setupSpeed = 1000.00;
+	private Double travelSpeed = 1000.00;
 	private Boolean cutBaseFirst = false;
 	// =====================================
 
@@ -147,6 +148,12 @@ public class WingCalculatorModel implements SettingChangeListener {
 
 	private void applySettings() {
 		this.wireLength = settings.getWireLength();
+		this.startDistance = settings.getStartDistance();
+		this.saveHeight = settings.getSaveHeight();
+		this.pause = settings.getPause();
+		this.wireSpeed = settings.getWireSpeed();
+		this.travelSpeed = settings.getTravelSpeed();
+		this.cutBaseFirst = settings.getCutBaseFirst();
 		
 		
 	}
@@ -179,23 +186,21 @@ public class WingCalculatorModel implements SettingChangeListener {
 	// ==================
 	// Parameter
 	// ==================
-	public void setStartDistance(Double aValue) { this.startDistance = aValue; }
-	public void setWireLength(Double aValue) { this.wireLength = aValue; this.settings.setWireLength(aValue);}
-	public void setSaveHeight(Double aValue) { this.saveHeight = aValue; }
-	public void setCutBaseFirst(Boolean aValue) { this.cutBaseFirst = aValue; }
-	public void setPause(Double aValue) { this.pause = aValue; }
-	public void setWireSpeed(Double aValue) { this.wireSpeed = aValue; }
-	public void setSetupSpeed(Double aValue) { this.setupSpeed = aValue; }
+	public void setWireLength(Double aValue) { this.wireLength = aValue; this.settings.setWireLength(aValue); }
+	public void setStartDistance(Double aValue) { this.startDistance = aValue; this.settings.setStartDistance(aValue); }
+	public void setSaveHeight(Double aValue) { this.saveHeight = aValue; this.settings.setSaveHeight(aValue); }
+	public void setPause(Double aValue) { this.pause = aValue; this.settings.setPause(aValue); }
+	public void setWireSpeed(Double aValue) { this.wireSpeed = aValue; this.settings.setWireSpeed(aValue); }
+	public void setTravelSpeed(Double aValue) { this.travelSpeed = aValue; this.settings.setTravelSpeed(aValue); }
+	public void setCutBaseFirst(Boolean aValue) { this.cutBaseFirst = aValue; this.settings.setCutBaseFirst(aValue); }
 
-	public Double getStartDistance() {return this.startDistance;}
 	public Double getWireLength() {return this.wireLength;}
+	public Double getStartDistance() {return this.startDistance;}
 	public Double getSaveHeight() {return this.saveHeight;}
-	public Boolean getCutBaseFirst() {return this.cutBaseFirst;}
 	public Double getPause() {return this.pause;}
 	public Double getWireSpeed() {return this.wireSpeed;}
-	public Double getSetupSpeed() {return this.setupSpeed;}
-	
-	
+	public Double getTravelSpeed() {return this.travelSpeed;}
+	public Boolean getCutBaseFirst() {return this.cutBaseFirst;}
 	
 	
 	// ==================
@@ -446,7 +451,7 @@ public class WingCalculatorModel implements SettingChangeListener {
 		String aLine = "";
 		String aPrefix = "G01 ";
 		String aPostfix = " F" + String.valueOf(this.wireSpeed.intValue());
-		String aPostfixFast = " F" + String.valueOf(this.setupSpeed.intValue());
+		String aPostfixFast = " F" + String.valueOf(this.travelSpeed.intValue());
 		String aWaitLine = "G4 P" + String.valueOf(this.pause.intValue()); // P in Sekunden!
 				
 		

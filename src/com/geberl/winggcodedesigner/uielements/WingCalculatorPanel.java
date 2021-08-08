@@ -30,6 +30,7 @@ import com.geberl.winggcodedesigner.model.WingCalculatorEvent;
 import com.geberl.winggcodedesigner.model.WingCalculatorModel;
 import com.geberl.winggcodedesigner.utils.SettingChangeListener;
 import com.geberl.winggcodedesigner.utils.Settings;
+import com.geberl.winggcodedesigner.utils.SettingsFactory;
 
 import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
@@ -191,6 +192,8 @@ public class WingCalculatorPanel extends JPanel implements WingCalculatorEventLi
 		
 		// ============= Daten erfassen ===================
 		// ------------------------------------------
+		// ============= Parameter ===================
+
 		JFormattedTextField inputWireLength = new JFormattedTextField(integerFormatter);
 		inputWireLength.setText(String.valueOf(wingCalculatorModel.getWireLength()));
 		inputWireLength.addPropertyChangeListener(new PropertyChangeListener() {
@@ -202,7 +205,7 @@ public class WingCalculatorPanel extends JPanel implements WingCalculatorEventLi
 		add(inputWireLength);
 		// ------------------------------------------
 		JFormattedTextField inputStartDistance = new JFormattedTextField(integerFormatter);
-		inputStartDistance.setText("0");
+		inputStartDistance.setText(String.valueOf(wingCalculatorModel.getStartDistance()));
 		inputStartDistance.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent evt) {
 				if (inputStartDistance.getValue() != null) { wingCalculatorModel.setStartDistance( Double.parseDouble(inputStartDistance.getText()) ); }
@@ -212,7 +215,7 @@ public class WingCalculatorPanel extends JPanel implements WingCalculatorEventLi
 		add(inputStartDistance);
 		// ------------------------------------------
 		JFormattedTextField inputSaveHeight = new JFormattedTextField(integerFormatter);
-		inputSaveHeight.setText("0");
+		inputSaveHeight.setText(String.valueOf(wingCalculatorModel.getSaveHeight()));
 		inputSaveHeight.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent evt) {
 				if (inputSaveHeight.getValue() != null) { wingCalculatorModel.setSaveHeight( Double.parseDouble(inputSaveHeight.getText()) ); }
@@ -222,7 +225,7 @@ public class WingCalculatorPanel extends JPanel implements WingCalculatorEventLi
 		add(inputSaveHeight);
 		// ------------------------------------------
 		JFormattedTextField inputPause = new JFormattedTextField(integerFormatter);
-		inputPause.setText("0");
+		inputPause.setText(String.valueOf(wingCalculatorModel.getPause()));
 		inputPause.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent evt) {
 				if (inputPause.getValue() != null) { wingCalculatorModel.setPause( Double.parseDouble(inputPause.getText()) ); }
@@ -232,7 +235,7 @@ public class WingCalculatorPanel extends JPanel implements WingCalculatorEventLi
 		add(inputPause);
 		// ------------------------------------------
 		JFormattedTextField inputWireSpeed = new JFormattedTextField(integerFormatter);
-		inputWireSpeed.setText("0");
+		inputWireSpeed.setText(String.valueOf(wingCalculatorModel.getWireSpeed()));
 		inputWireSpeed.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent evt) {
 				if (inputWireSpeed.getValue() != null) { wingCalculatorModel.setWireSpeed( Double.parseDouble(inputWireSpeed.getText()) ); }
@@ -241,16 +244,17 @@ public class WingCalculatorPanel extends JPanel implements WingCalculatorEventLi
 		inputWireSpeed.setBounds(139, 387, 75, 25);
 		add(inputWireSpeed);
 		// ------------------------------------------
-		JFormattedTextField inputWireSpeed_1 = new JFormattedTextField(integerFormatter);
-		inputWireSpeed_1.setText("0");
-		inputWireSpeed_1.setBounds(139, 412, 75, 25);
-		add(inputWireSpeed_1);
+		JFormattedTextField inputTravelSpeed = new JFormattedTextField(integerFormatter);
+		inputTravelSpeed.setText(String.valueOf(wingCalculatorModel.getTravelSpeed()));
+		inputTravelSpeed.setBounds(139, 412, 75, 25);
+		add(inputTravelSpeed);
 		// ------------------------------------------
-		JCheckBox chckbxCutBaseFirst = new JCheckBox("Cut base first");
-		chckbxCutBaseFirst.setSelected(false);
-		chckbxCutBaseFirst.setBounds(6, 445, 208, 18);
-		add(chckbxCutBaseFirst);
+		JCheckBox cbxCutBaseFirst = new JCheckBox("Cut base first");
+		cbxCutBaseFirst.setSelected(wingCalculatorModel.getCutBaseFirst());
+		cbxCutBaseFirst.setBounds(6, 445, 208, 18);
+		add(cbxCutBaseFirst);
 		// ------------------------------------------
+		// ============= Parameter Ende ===================
 
 		
 		
@@ -665,9 +669,18 @@ public class WingCalculatorPanel extends JPanel implements WingCalculatorEventLi
 		add(wingPanel);
 		wingCalculatorModel.addWingCalculatorEventListener(wingPanel);
 		
+
+		
 		JButton btnSaveParameters = new JButton("Save Parameters");
+		btnSaveParameters.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				SettingsFactory.saveSettings(settings);
+				}
+		});
 		btnSaveParameters.setBounds(6, 471, 208, 27);
 		add(btnSaveParameters);
+		
+		
 		
 
 		

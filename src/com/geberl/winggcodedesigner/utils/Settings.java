@@ -19,8 +19,8 @@
 
 package com.geberl.winggcodedesigner.utils;
 
-import org.apache.commons.lang3.StringUtils;
-import com.geberl.winggcodedesigner.types.WindowSettings;
+// import org.apache.commons.lang3.StringUtils;
+// import com.geberl.winggcodedesigner.types.WindowSettings;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayDeque;
@@ -45,7 +45,7 @@ public class Settings {
     private double saveHeight = 50.0;
     private double pause = 2.0;
     private double wireSpeed = 100.0;
-    private double setupSpeed = 1000.0;
+    private double travelSpeed = 1000.0;
     private boolean cutBaseFirst = false;
 
 	/**
@@ -112,20 +112,19 @@ public class Settings {
         stack.removeLast();
     }
 
-	public void setStartDistance(Double aValue) {
-         this.startDistance = aValue;
-         changed();
-		 }
+	// ==================
+	// Parameter
+	// ==================
 	public void setWireLength(Double aValue) {
 		this.wireLength = aValue;
         changed();
 		}
+	public void setStartDistance(Double aValue) {
+         this.startDistance = aValue;
+         changed();
+		 }
 	public void setSaveHeight(Double aValue) {
 		this.saveHeight = aValue;
-        changed();
-		}
-	public void setCutBaseFirst(Boolean aValue) {
-		this.cutBaseFirst = aValue;
         changed();
 		}
 	public void setPause(Double aValue) {
@@ -136,19 +135,25 @@ public class Settings {
 		this.wireSpeed = aValue;
         changed();
 		}
-	public void setSetupSpeed(Double aValue) {
-		this.setupSpeed = aValue;
+	public void setTravelSpeed(Double aValue) {
+		this.travelSpeed = aValue;
         changed();
 		}
+	public void setCutBaseFirst(Boolean aValue) {
+		this.cutBaseFirst = aValue;
+        changed();
+		}
+	// ==================
 
-	public Double getStartDistance() {return this.startDistance;}
 	public Double getWireLength() {return this.wireLength;}
+	public Double getStartDistance() {return this.startDistance;}
 	public Double getSaveHeight() {return this.saveHeight;}
-	public Boolean getCutBaseFirst() {return this.cutBaseFirst;}
 	public Double getPause() {return this.pause;}
 	public Double getWireSpeed() {return this.wireSpeed;}
-	public Double getSetupSpeed() {return this.setupSpeed;}
+	public Double getTravelSpeed() {return this.travelSpeed;}
+	public Boolean getCutBaseFirst() {return this.cutBaseFirst;}
 
+	// ==================
     
     public String getWorkspaceDirectory() {
         return this.workspaceDirectory;
