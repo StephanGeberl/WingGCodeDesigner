@@ -246,11 +246,21 @@ public class WingCalculatorPanel extends JPanel implements WingCalculatorEventLi
 		// ------------------------------------------
 		JFormattedTextField inputTravelSpeed = new JFormattedTextField(integerFormatter);
 		inputTravelSpeed.setText(String.valueOf(wingCalculatorModel.getTravelSpeed()));
+		inputTravelSpeed.addPropertyChangeListener(new PropertyChangeListener() {
+			public void propertyChange(PropertyChangeEvent evt) {
+				if (inputTravelSpeed.getValue() != null) { wingCalculatorModel.setTravelSpeed( Double.parseDouble(inputTravelSpeed.getText()) ); }
+			}
+		});
 		inputTravelSpeed.setBounds(139, 412, 75, 25);
 		add(inputTravelSpeed);
 		// ------------------------------------------
 		JCheckBox cbxCutBaseFirst = new JCheckBox("Cut base first");
 		cbxCutBaseFirst.setSelected(wingCalculatorModel.getCutBaseFirst());
+		cbxCutBaseFirst.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				wingCalculatorModel.setCutBaseFirst(cbxCutBaseFirst.isSelected());
+			}
+		});
 		cbxCutBaseFirst.setBounds(6, 445, 208, 18);
 		add(cbxCutBaseFirst);
 		// ------------------------------------------
