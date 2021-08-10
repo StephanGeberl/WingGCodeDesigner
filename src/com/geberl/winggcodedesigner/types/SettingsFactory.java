@@ -30,15 +30,16 @@ import java.util.logging.Logger;
  * @author moll
  */
 public class SettingsFactory {
+	
     private static final Logger logger = Logger.getLogger(SettingsFactory.class.getName());
     private static final String USER_HOME = "user.home";
     private static final String FALSE = "false";
-    private static Settings settings;
-
     public static final String SETTINGS_DIRECTORY_NAME = "WGCD";
     public static final String PROPERTIES_FILENAME = "WingGCodeDesigner.properties";
     public static final String JSON_FILENAME = "WingGCodeDesigner.json";
     public static final String MAC_LIBRARY = "/Library/Preferences/";
+
+    private static Settings settings;
 
     public static Settings loadSettings() {
         if (settings == null) {

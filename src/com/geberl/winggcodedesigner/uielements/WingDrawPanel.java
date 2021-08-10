@@ -92,26 +92,26 @@ public class WingDrawPanel extends JPanel implements WingCalculatorEventListener
 	    g2d.drawRect(this.borderOffset, this.borderOffset, this.buildXMax, this.buildYMax);
 	    g2d.drawLine(this.buildXHalf, this.borderOffset, this.buildXHalf, this.buildYMax);
 		
-		if (wingCalculatorModel != null && wingCalculatorModel.getWireLength() > 0 && wingCalculatorModel.getBaseCordLengthTipTotal() > 0) {
+		if (wingCalculatorModel != null && wingCalculatorModel.settings.getWireLength() > 0 && wingCalculatorModel.getBaseCordLengthTipTotal() > 0) {
 			
 			double drawFactorX = 1.0;
 			double drawFactorY = 1.0;
 		
 			Double maxY = wingCalculatorModel.getBaseCordLengthBaseTotal();
 			if (maxY < wingCalculatorModel.getBaseCordLengthTipTotal()) { maxY = wingCalculatorModel.getBaseCordLengthTipTotal(); };
-			drawFactorX = this.buildXMax / wingCalculatorModel.getWireLength();
+			drawFactorX = this.buildXMax / wingCalculatorModel.settings.getWireLength();
 			drawFactorY = this.buildYMax / maxY;
 			this.drawFactor = drawFactorX;
 			if (drawFactorY < drawFactorX) { this.drawFactor = drawFactorY; };
 
 			g2d.setColor(Color.BLUE);
 			
-			double baseCordStart = wingCalculatorModel.getStartDistance() * this.drawFactor;
+			double baseCordStart = wingCalculatorModel.settings.getStartDistance() * this.drawFactor;
 			
 			g2d.drawLine(this.borderOffset, (int)baseCordStart, this.buildXMax, (int)baseCordStart);
 			
 			double halfSpan = wingCalculatorModel.getHalfSpanLength() /2  * this.drawFactor;
-			double halfWire = wingCalculatorModel.getWireLength() /2  * this.drawFactor;
+			double halfWire = wingCalculatorModel.settings.getWireLength() /2  * this.drawFactor;
 			
 			g2d.drawLine((int)(this.buildXHalf - halfWire), this.borderOffset, (int)(this.buildXHalf - halfWire), this.buildYMax);
 			g2d.drawLine((int)(this.buildXHalf + halfWire), this.borderOffset, (int)(this.buildXHalf + halfWire), this.buildYMax);

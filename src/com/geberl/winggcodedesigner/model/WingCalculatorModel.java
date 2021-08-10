@@ -69,17 +69,6 @@ public class WingCalculatorModel {
 	private Boolean baseDirection = true;
 	private Boolean tipDirection = true;
 	
-	// =====================================
-	// Parameter
-	// =====================================
-	private Double wireLength = 0.0;
-	private Double startDistance = 0.0;
-	private Double saveHeight = 0.0;
-	private Double pause = 0.0;
-	private Double wireSpeed = 0.0;
-	private Double travelSpeed = 1000.00;
-	private Boolean cutBaseFirst = false;
-	// =====================================
 	
 	// =====================================
 	// Input
@@ -136,22 +125,10 @@ public class WingCalculatorModel {
 	
 	public WingCalculatorModel() {
         this.settings = SettingsFactory.loadSettings();
-        this.applySettings();
 
     }
 
 
-	private void applySettings() {
-		this.wireLength = settings.getWireLength();
-		this.startDistance = settings.getStartDistance();
-		this.saveHeight = settings.getSaveHeight();
-		this.pause = settings.getPause();
-		this.wireSpeed = settings.getWireSpeed();
-		this.travelSpeed = settings.getTravelSpeed();
-		this.cutBaseFirst = settings.getCutBaseFirst();
-		
-		
-	}
 
 	// ==================
 	// Set/Get Input Values
@@ -209,24 +186,6 @@ public class WingCalculatorModel {
 	
 	
 	
-	// ==================
-	// Set/Get Parameter
-	// ==================
-	public void setWireLength(Double aValue) { this.wireLength = aValue; this.settings.setWireLength(aValue); }
-	public void setStartDistance(Double aValue) { this.startDistance = aValue; this.settings.setStartDistance(aValue); }
-	public void setSaveHeight(Double aValue) { this.saveHeight = aValue; this.settings.setSaveHeight(aValue); }
-	public void setPause(Double aValue) { this.pause = aValue; this.settings.setPause(aValue); }
-	public void setWireSpeed(Double aValue) { this.wireSpeed = aValue; this.settings.setWireSpeed(aValue); }
-	public void setTravelSpeed(Double aValue) { this.travelSpeed = aValue; this.settings.setTravelSpeed(aValue); }
-	public void setCutBaseFirst(Boolean aValue) { this.cutBaseFirst = aValue; this.settings.setCutBaseFirst(aValue); }
-
-	public Double getWireLength() {return this.wireLength;}
-	public Double getStartDistance() {return this.startDistance;}
-	public Double getSaveHeight() {return this.saveHeight;}
-	public Double getPause() {return this.pause;}
-	public Double getWireSpeed() {return this.wireSpeed;}
-	public Double getTravelSpeed() {return this.travelSpeed;}
-	public Boolean getCutBaseFirst() {return this.cutBaseFirst;}
 	
 	
 	// ==================
@@ -252,9 +211,12 @@ public class WingCalculatorModel {
 		Double dtiw = 0.0;
 		Double dti = 0.0;
 		
+		Double wireLength = this.settings.getWireLength();
+		Double startDistance = this.settings.getStartDistance();
+		
 		this.middleCordLength = (this.baseCordLength + this.tipCordLength)/2;
 		dti = (this.baseCordLength - this.middleCordLength)/2;
-		dtiw = this.wireLength * dti / this.halfSpanLength;
+		dtiw = wireLength * dti / this.halfSpanLength;
 		
 		this.baseCordWireBase = this.middleCordLength + (2 * dtiw);
 		this.baseCordWire = this.baseCordWireBase + (2 * this.baseMeltingLoss);
@@ -267,21 +229,21 @@ public class WingCalculatorModel {
 		
 		// Versatz bei Pfeilung
 		Double angleRad = Math.toRadians(this.wingSweep);
-		this.tipDeltaSweep = (-1) * (this.wireLength * Math.tan(angleRad));
+		this.tipDeltaSweep = (-1) * (wireLength * Math.tan(angleRad));
 		
 		this.tipDeltaAll = this.tipDeltaBase + this.tipDeltaSweep;
 		
 
 		if (this.tipDeltaAll < 0) {
-			this.baseCordLengthBaseTotal = this.startDistance + ((-1)* this.tipDeltaAll) + this.baseCordWireBase;
-			this.baseCordLengthTipTotal = this.startDistance + this.tipCordWireBase;
-			this.baseCordStartBaseTotal = this.startDistance + ((-1)* this.tipDeltaAll);
-			this.baseCordStartTipTotal = this.startDistance;
+			this.baseCordLengthBaseTotal = startDistance + ((-1)* this.tipDeltaAll) + this.baseCordWireBase;
+			this.baseCordLengthTipTotal = startDistance + this.tipCordWireBase;
+			this.baseCordStartBaseTotal = startDistance + ((-1)* this.tipDeltaAll);
+			this.baseCordStartTipTotal = startDistance;
 		} else {
-			this.baseCordLengthBaseTotal = this.startDistance + this.baseCordWireBase;
-			this.baseCordLengthTipTotal = this.startDistance + this.tipDeltaAll + this.tipCordWireBase;
-			this.baseCordStartBaseTotal = this.startDistance;
-			this.baseCordStartTipTotal = this.startDistance + this.tipDeltaAll;
+			this.baseCordLengthBaseTotal = startDistance + this.baseCordWireBase;
+			this.baseCordLengthTipTotal = startDistance + this.tipDeltaAll + this.tipCordWireBase;
+			this.baseCordStartBaseTotal = startDistance;
+			this.baseCordStartTipTotal = startDistance + this.tipDeltaAll;
 		}
 	
 	}
@@ -332,6 +294,8 @@ public class WingCalculatorModel {
 	public void calculateCoordinates() {
 		
 		ProfileCoordinate coordinate = null;
+		Double startDistance = this.settings.getStartDistance();
+
 		double sparTopStart = 0.0;
 		double sparTopEnd = 0.0;
 		double sparBottomStart = 0.0;
@@ -394,11 +358,11 @@ public class WingCalculatorModel {
 		Boolean isFirstCoordinate;
 		
 		if (this.tipDeltaAll < 0) {
-			startDistanceBase = this.startDistance + (-1)* this.tipDeltaAll;
-			startDistanceTip = this.startDistance;
+			startDistanceBase = startDistance + (-1)* this.tipDeltaAll;
+			startDistanceTip = startDistance;
 		} else {
-			startDistanceBase = this.startDistance;
-			startDistanceTip = this.startDistance + this.tipDeltaAll;
+			startDistanceBase = startDistance;
+			startDistanceTip = startDistance + this.tipDeltaAll;
 		}
 		
 		isFirstCoordinate = true;
@@ -452,15 +416,19 @@ public class WingCalculatorModel {
 	
 	private void generateGcodeList(Boolean isRight) {
 		
-		Double aSaveHeight = 100.0;
+		Double saveHeight = settings.getSaveHeight();
+		Double pause = settings.getPause();
+		Double wireSpeed = settings.getWireSpeed();
+		Double travelSpeed = settings.getTravelSpeed();
+		
 		ProfileCoordinate baseCordinate;
 		ProfileCoordinate tipCordinate;
 		
 		String aLine = "";
 		String aPrefix = "G01 ";
-		String aPostfix = " F" + String.valueOf(this.wireSpeed.intValue());
-		String aPostfixFast = " F" + String.valueOf(this.travelSpeed.intValue());
-		String aWaitLine = "G4 P" + String.valueOf(this.pause.intValue()); // P in Sekunden!
+		String aPostfix = " F" + String.valueOf(wireSpeed.intValue());
+		String aPostfixFast = " F" + String.valueOf(travelSpeed.intValue());
+		String aWaitLine = "G4 P" + String.valueOf(pause.intValue()); // P in Sekunden!
 				
 		
 		List<ProfileCoordinate> baseCoordinates = new ArrayList<ProfileCoordinate>( baseProfileSet );
@@ -482,8 +450,8 @@ public class WingCalculatorModel {
 			this.gCodeLines.add("(Goto zero at save height)");
 			this.gCodeLines.add(
 					aPrefix
-					+ "X0.0 Y" + String.valueOf(aSaveHeight) 
-					+ " Z0.0 A" + String.valueOf(aSaveHeight)
+					+ "X0.0 Y" + String.valueOf(saveHeight) 
+					+ " Z0.0 A" + String.valueOf(saveHeight)
 					+ aPostfixFast
 					);
 
@@ -496,22 +464,22 @@ public class WingCalculatorModel {
 						+ "X"
 						+ String.valueOf(baseCordinate.getXGcodeCoordinate())
 						+ " Y"
-						+ String.valueOf(aSaveHeight)
+						+ String.valueOf(saveHeight)
 						+ " Z"
 						+ String.valueOf(tipCordinate.getXGcodeCoordinate())
 						+ " A"
-						+ String.valueOf(aSaveHeight)
+						+ String.valueOf(saveHeight)
 						+ aPostfixFast;
 			} else {
 				aLine = aPrefix
 						+ "X"
 						+ String.valueOf(tipCordinate.getXGcodeCoordinate())
 						+ " Y"
-						+ String.valueOf(aSaveHeight)
+						+ String.valueOf(saveHeight)
 						+ " Z"
 						+ String.valueOf(baseCordinate.getXGcodeCoordinate())
 						+ " A"
-						+ String.valueOf(aSaveHeight)
+						+ String.valueOf(saveHeight)
 						+ aPostfixFast;
 			}
 			this.gCodeLines.add("(Goto start position at save height)");
@@ -605,22 +573,22 @@ public class WingCalculatorModel {
 						+ "X"
 						+ String.valueOf(baseCordinate.getXGcodeCoordinate())
 						+ " Y"
-						+ String.valueOf(aSaveHeight)
+						+ String.valueOf(saveHeight)
 						+ " Z"
 						+ String.valueOf(tipCordinate.getXGcodeCoordinate())
 						+ " A"
-						+ String.valueOf(aSaveHeight)
+						+ String.valueOf(saveHeight)
 						+ aPostfix;
 			} else {
 				aLine = aPrefix
 						+ "X"
 						+ String.valueOf(tipCordinate.getXGcodeCoordinate())
 						+ " Y"
-						+ String.valueOf(aSaveHeight)
+						+ String.valueOf(saveHeight)
 						+ " Z"
 						+ String.valueOf(baseCordinate.getXGcodeCoordinate())
 						+ " A"
-						+ String.valueOf(aSaveHeight)
+						+ String.valueOf(saveHeight)
 						+ aPostfix;
 			}
 			this.gCodeLines.add("(Goto save height verticaly)");
@@ -638,10 +606,10 @@ public class WingCalculatorModel {
 					+ aPrefix
 					+ "X0.0"
 					+ " Y"
-					+ String.valueOf(aSaveHeight)
+					+ String.valueOf(saveHeight)
 					+ " Z0.0"
 					+ " A"
-					+ String.valueOf(aSaveHeight)
+					+ String.valueOf(saveHeight)
 					+ aPostfix			
 					+ ">"
 			);
@@ -651,10 +619,10 @@ public class WingCalculatorModel {
 					aPrefix
 					+ "X0.0"
 					+ " Y"
-					+ String.valueOf(aSaveHeight)
+					+ String.valueOf(saveHeight)
 					+ " Z0.0"
 					+ " A"
-					+ String.valueOf(aSaveHeight)
+					+ String.valueOf(saveHeight)
 					+ aPostfix
 					);
 			

@@ -19,14 +19,6 @@
 
 package com.geberl.winggcodedesigner.types;
 
-// import org.apache.commons.lang3.StringUtils;
-// import com.geberl.winggcodedesigner.types.WindowSettings;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayDeque;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Deque;
 import java.util.logging.Logger;
 
 public class Settings {
@@ -43,22 +35,12 @@ public class Settings {
 
 
     /**
-     * The GSON deserialization doesn't do anything beyond initialize what's in the json document.  Call finalizeInitialization() before using the Settings.
+     * 
      */
     public Settings() {
         logger.fine("Initializing...");
-
-        // Initialize macros with a default macro
     }
 
-    /*
-    private static void updateRecent(Deque<String> stack, int maxSize, String element) {
-      stack.remove(element);
-      stack.push(element);
-      while( stack.size() > maxSize)
-        stack.removeLast();
-    }
-*/
 	// ==================
 	// Parameter
 	// ==================
