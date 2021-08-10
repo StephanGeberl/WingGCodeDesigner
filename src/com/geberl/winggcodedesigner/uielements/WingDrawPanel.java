@@ -18,9 +18,9 @@
  */
 package com.geberl.winggcodedesigner.uielements;
 
-import com.geberl.winggcodedesigner.listeners.WingCalculatorEventListener;
+import com.geberl.winggcodedesigner.eventing.WingCalculatorEvent;
+import com.geberl.winggcodedesigner.eventing.WingCalculatorEventListener;
 import com.geberl.winggcodedesigner.model.ProfileCoordinate;
-import com.geberl.winggcodedesigner.model.WingCalculatorEvent;
 import com.geberl.winggcodedesigner.model.WingCalculatorModel;
 
 //import javax.annotation.PostConstruct;
@@ -110,7 +110,7 @@ public class WingDrawPanel extends JPanel implements WingCalculatorEventListener
 			
 			g2d.drawLine(this.borderOffset, (int)baseCordStart, this.buildXMax, (int)baseCordStart);
 			
-			double halfSpan = wingCalculatorModel.getHalfspanLength() /2  * this.drawFactor;
+			double halfSpan = wingCalculatorModel.getHalfSpanLength() /2  * this.drawFactor;
 			double halfWire = wingCalculatorModel.getWireLength() /2  * this.drawFactor;
 			
 			g2d.drawLine((int)(this.buildXHalf - halfWire), this.borderOffset, (int)(this.buildXHalf - halfWire), this.buildYMax);

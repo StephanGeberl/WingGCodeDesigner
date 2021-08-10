@@ -25,12 +25,11 @@ import javax.swing.JPanel;
 
 import javax.swing.JButton;
 
-import com.geberl.winggcodedesigner.listeners.WingCalculatorEventListener;
-import com.geberl.winggcodedesigner.model.WingCalculatorEvent;
+import com.geberl.winggcodedesigner.eventing.WingCalculatorEvent;
+import com.geberl.winggcodedesigner.eventing.WingCalculatorEventListener;
 import com.geberl.winggcodedesigner.model.WingCalculatorModel;
-import com.geberl.winggcodedesigner.utils.SettingChangeListener;
-import com.geberl.winggcodedesigner.utils.Settings;
-import com.geberl.winggcodedesigner.utils.SettingsFactory;
+import com.geberl.winggcodedesigner.types.Settings;
+import com.geberl.winggcodedesigner.types.SettingsFactory;
 
 import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
@@ -48,14 +47,13 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
 import javax.swing.JSeparator;
 
-public class WingCalculatorPanel extends JPanel implements WingCalculatorEventListener, SettingChangeListener {
+public class WingCalculatorPanel extends JPanel implements WingCalculatorEventListener {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-    private Settings settings;
-
+ 
 	private WingCalculatorModel wingCalculatorModel;
 	private JTextField inputBaseProfileName;
 	private JTextField inputBaseProfileNumberPoints;
@@ -74,11 +72,9 @@ public class WingCalculatorPanel extends JPanel implements WingCalculatorEventLi
 	private JFormattedTextField sTipDeltaBase;
 	private JFormattedTextField sTipDeltaAll;
 
-	public WingCalculatorPanel(WingCalculatorModel anWingDesignerModel, Settings settings) {
+	public WingCalculatorPanel(WingCalculatorModel anWingDesignerModel) {
 		
-		wingCalculatorModel = anWingDesignerModel;
-		this.settings = settings;
-		this.settings.setSettingChangeListener(this);
+		this.wingCalculatorModel = anWingDesignerModel;
 		
 		
 		setForeground(Color.LIGHT_GRAY);
@@ -195,75 +191,83 @@ public class WingCalculatorPanel extends JPanel implements WingCalculatorEventLi
 		// ============= Parameter ===================
 
 		JFormattedTextField inputWireLength = new JFormattedTextField(integerFormatter);
-		inputWireLength.setText(String.valueOf(wingCalculatorModel.getWireLength()));
+		inputWireLength.setText(String.valueOf(wingCalculatorModel.settings.getWireLength()));
 		inputWireLength.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent evt) {
-				if (inputWireLength.getValue() != null) { wingCalculatorModel.setWireLength( Double.parseDouble(inputWireLength.getText()) ); }
+				if (inputWireLength.getValue() != null) { wingCalculatorModel.settings.setWireLength( Double.parseDouble(inputWireLength.getText()) ); }
 			}
 		});
 		inputWireLength.setBounds(139, 286, 75, 25);
 		add(inputWireLength);
 		// ------------------------------------------
 		JFormattedTextField inputStartDistance = new JFormattedTextField(integerFormatter);
-		inputStartDistance.setText(String.valueOf(wingCalculatorModel.getStartDistance()));
+		inputStartDistance.setText(String.valueOf(wingCalculatorModel.settings.getStartDistance()));
 		inputStartDistance.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent evt) {
-				if (inputStartDistance.getValue() != null) { wingCalculatorModel.setStartDistance( Double.parseDouble(inputStartDistance.getText()) ); }
+				if (inputStartDistance.getValue() != null) { wingCalculatorModel.settings.setStartDistance( Double.parseDouble(inputStartDistance.getText()) ); }
 			}
 		});
 		inputStartDistance.setBounds(139, 311, 75, 25);
 		add(inputStartDistance);
 		// ------------------------------------------
 		JFormattedTextField inputSaveHeight = new JFormattedTextField(integerFormatter);
-		inputSaveHeight.setText(String.valueOf(wingCalculatorModel.getSaveHeight()));
+		inputSaveHeight.setText(String.valueOf(wingCalculatorModel.settings.getSaveHeight()));
 		inputSaveHeight.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent evt) {
-				if (inputSaveHeight.getValue() != null) { wingCalculatorModel.setSaveHeight( Double.parseDouble(inputSaveHeight.getText()) ); }
+				if (inputSaveHeight.getValue() != null) { wingCalculatorModel.settings.setSaveHeight( Double.parseDouble(inputSaveHeight.getText()) ); }
 			}
 		});
 		inputSaveHeight.setBounds(139, 335, 75, 25);
 		add(inputSaveHeight);
 		// ------------------------------------------
 		JFormattedTextField inputPause = new JFormattedTextField(integerFormatter);
-		inputPause.setText(String.valueOf(wingCalculatorModel.getPause()));
+		inputPause.setText(String.valueOf(wingCalculatorModel.settings.getPause()));
 		inputPause.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent evt) {
-				if (inputPause.getValue() != null) { wingCalculatorModel.setPause( Double.parseDouble(inputPause.getText()) ); }
+				if (inputPause.getValue() != null) { wingCalculatorModel.settings.setPause( Double.parseDouble(inputPause.getText()) ); }
 			}
 		});
 		inputPause.setBounds(139, 362, 75, 25);
 		add(inputPause);
 		// ------------------------------------------
 		JFormattedTextField inputWireSpeed = new JFormattedTextField(integerFormatter);
-		inputWireSpeed.setText(String.valueOf(wingCalculatorModel.getWireSpeed()));
+		inputWireSpeed.setText(String.valueOf(wingCalculatorModel.settings.getWireSpeed()));
 		inputWireSpeed.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent evt) {
-				if (inputWireSpeed.getValue() != null) { wingCalculatorModel.setWireSpeed( Double.parseDouble(inputWireSpeed.getText()) ); }
+				if (inputWireSpeed.getValue() != null) { wingCalculatorModel.settings.setWireSpeed( Double.parseDouble(inputWireSpeed.getText()) ); }
 			}
 		});
 		inputWireSpeed.setBounds(139, 387, 75, 25);
 		add(inputWireSpeed);
 		// ------------------------------------------
 		JFormattedTextField inputTravelSpeed = new JFormattedTextField(integerFormatter);
-		inputTravelSpeed.setText(String.valueOf(wingCalculatorModel.getTravelSpeed()));
+		inputTravelSpeed.setText(String.valueOf(wingCalculatorModel.settings.getTravelSpeed()));
 		inputTravelSpeed.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent evt) {
-				if (inputTravelSpeed.getValue() != null) { wingCalculatorModel.setTravelSpeed( Double.parseDouble(inputTravelSpeed.getText()) ); }
+				if (inputTravelSpeed.getValue() != null) { wingCalculatorModel.settings.setTravelSpeed( Double.parseDouble(inputTravelSpeed.getText()) ); }
 			}
 		});
 		inputTravelSpeed.setBounds(139, 412, 75, 25);
 		add(inputTravelSpeed);
 		// ------------------------------------------
 		JCheckBox cbxCutBaseFirst = new JCheckBox("Cut base first");
-		cbxCutBaseFirst.setSelected(wingCalculatorModel.getCutBaseFirst());
+		cbxCutBaseFirst.setSelected(wingCalculatorModel.settings.getCutBaseFirst());
 		cbxCutBaseFirst.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				wingCalculatorModel.setCutBaseFirst(cbxCutBaseFirst.isSelected());
+				wingCalculatorModel.settings.setCutBaseFirst(cbxCutBaseFirst.isSelected());
 			}
 		});
 		cbxCutBaseFirst.setBounds(6, 445, 208, 18);
 		add(cbxCutBaseFirst);
 		// ------------------------------------------
+		JButton btnSaveParameters = new JButton("Save Parameters");
+		btnSaveParameters.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				wingCalculatorModel.saveSettings();
+				}
+		});
+		btnSaveParameters.setBounds(6, 471, 208, 27);
+		add(btnSaveParameters);
 		// ============= Parameter Ende ===================
 
 		
@@ -277,7 +281,7 @@ public class WingCalculatorPanel extends JPanel implements WingCalculatorEventLi
 		inputHalfspanLength.setText("0.0");
 		inputHalfspanLength.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent evt) {
-				if (inputHalfspanLength.getValue() != null) { wingCalculatorModel.setHalfspanLength( Double.parseDouble(inputHalfspanLength.getText()) ); }
+				if (inputHalfspanLength.getValue() != null) { wingCalculatorModel.setHalfSpanLength( Double.parseDouble(inputHalfspanLength.getText()) ); }
 			}
 		});
 		inputHalfspanLength.setBounds(160, 6, 75, 25);
@@ -681,14 +685,6 @@ public class WingCalculatorPanel extends JPanel implements WingCalculatorEventLi
 		
 
 		
-		JButton btnSaveParameters = new JButton("Save Parameters");
-		btnSaveParameters.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				SettingsFactory.saveSettings(settings);
-				}
-		});
-		btnSaveParameters.setBounds(6, 471, 208, 27);
-		add(btnSaveParameters);
 		
 		
 		
@@ -770,17 +766,5 @@ public class WingCalculatorPanel extends JPanel implements WingCalculatorEventLi
 	        }
 	        component.setEnabled(isEnabled);
 	    }
-	}
-
-	@Override
-	public void settingChanged() {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	
-	private void applySettings() {
-		
-		
 	}
 }

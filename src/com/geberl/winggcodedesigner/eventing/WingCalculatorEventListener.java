@@ -16,9 +16,7 @@
     You should have received a copy of the GNU General Public License
     along with UGS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.geberl.winggcodedesigner.listeners;
-
-import com.geberl.winggcodedesigner.model.WingCalculatorEvent;
+package com.geberl.winggcodedesigner.eventing;
 
 /**
  *

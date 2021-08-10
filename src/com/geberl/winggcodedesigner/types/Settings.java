@@ -17,11 +17,8 @@
     along with WingGCodeDesigner.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.geberl.winggcodedesigner.utils;
+package com.geberl.winggcodedesigner.types;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 // import org.apache.commons.lang3.StringUtils;
 // import com.geberl.winggcodedesigner.types.WindowSettings;
 import java.nio.file.Path;
@@ -30,16 +27,11 @@ import java.util.ArrayDeque;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Deque;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.google.gson.Gson;
+public class Settings {
+    private static final Logger logger = Logger.getLogger(Settings.class.getName());
 
-public class Project {
-    private static final Logger logger = Logger.getLogger(Project.class.getName());
-
-    // Transient, don't serialize or deserialize.
-    transient public static int HISTORY_SIZE = 20;
 
     private double wireLength = 800.0;
     private double startDistance = 20.0;
@@ -49,51 +41,34 @@ public class Project {
     private double travelSpeed = 1000.0;
     private boolean cutBaseFirst = false;
 
-	/**
-     * A directory with gcode files for easy access through pendant
-     */
-    private String workspaceDirectory;
 
     /**
      * The GSON deserialization doesn't do anything beyond initialize what's in the json document.  Call finalizeInitialization() before using the Settings.
      */
-    public Project() {
+    public Settings() {
         logger.fine("Initializing...");
 
         // Initialize macros with a default macro
     }
 
+    /*
     private static void updateRecent(Deque<String> stack, int maxSize, String element) {
       stack.remove(element);
       stack.push(element);
       while( stack.size() > maxSize)
         stack.removeLast();
     }
-
+*/
 	// ==================
 	// Parameter
 	// ==================
-	public void setWireLength(Double aValue) {
-		this.wireLength = aValue;
-		}
-	public void setStartDistance(Double aValue) {
-         this.startDistance = aValue;
- 		 }
-	public void setSaveHeight(Double aValue) {
-		this.saveHeight = aValue;
-		}
-	public void setPause(Double aValue) {
-		this.pause = aValue;
-		}
-	public void setWireSpeed(Double aValue) {
-		this.wireSpeed = aValue;
-		}
-	public void setTravelSpeed(Double aValue) {
-		this.travelSpeed = aValue;
-		}
-	public void setCutBaseFirst(Boolean aValue) {
-		this.cutBaseFirst = aValue;
-		}
+	public void setWireLength(Double aValue) { this.wireLength = aValue; }
+	public void setStartDistance(Double aValue) { this.startDistance = aValue; }
+	public void setSaveHeight(Double aValue) { this.saveHeight = aValue; }
+	public void setPause(Double aValue) { this.pause = aValue; }
+	public void setWireSpeed(Double aValue) { this.wireSpeed = aValue; }
+	public void setTravelSpeed(Double aValue) { this.travelSpeed = aValue; }
+	public void setCutBaseFirst(Boolean aValue) { this.cutBaseFirst = aValue; }
 	// ==================
 
 	public Double getWireLength() {return this.wireLength;}
@@ -105,23 +80,5 @@ public class Project {
 	public Boolean getCutBaseFirst() {return this.cutBaseFirst;}
 
 	// ==================
-    
-    public String getWorkspaceDirectory() {
-        return this.workspaceDirectory;
-    }
 
-    
-    
-    
-    
-     
-    
-    
-    
-    
-    
-    
-    
-    
-    
 }

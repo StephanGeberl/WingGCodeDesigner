@@ -18,9 +18,9 @@
  */
 package com.geberl.winggcodedesigner.uielements;
 
-import com.geberl.winggcodedesigner.listeners.WingCalculatorEventListener;
+import com.geberl.winggcodedesigner.eventing.WingCalculatorEvent;
+import com.geberl.winggcodedesigner.eventing.WingCalculatorEventListener;
 import com.geberl.winggcodedesigner.model.ProfileCoordinate;
-import com.geberl.winggcodedesigner.model.WingCalculatorEvent;
 import com.geberl.winggcodedesigner.model.WingCalculatorModel;
 
 //import javax.annotation.PostConstruct;

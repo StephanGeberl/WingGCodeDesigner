@@ -34,10 +34,10 @@ import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileSystemView;
 
 import com.geberl.winggcodedesigner.utils.GUIHelpers;
-import com.geberl.winggcodedesigner.utils.SettingChangeListener;
-import com.geberl.winggcodedesigner.utils.Settings;
-// import com.geberl.winggcodedesigner.utils.SettingsFactory;
-import com.geberl.winggcodedesigner.listeners.WingCalculatorEventListener;
+import com.geberl.winggcodedesigner.eventing.WingCalculatorEvent;
+import com.geberl.winggcodedesigner.eventing.WingCalculatorEventListener;
+import com.geberl.winggcodedesigner.types.Settings;
+import com.geberl.winggcodedesigner.types.SettingsFactory;
  
 
 /**
@@ -46,13 +46,13 @@ import com.geberl.winggcodedesigner.listeners.WingCalculatorEventListener;
  * @author sgeberl
  */
 
-public class WingCalculatorModel implements SettingChangeListener {
+public class WingCalculatorModel {
 
 	private javax.swing.JFileChooser fileChooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
 
 	private final Collection<WingCalculatorEventListener> wingCalculatorEventListener = new ArrayList<>();
 
-    private Settings settings;
+    public Settings settings;
 	
 	
 	
@@ -80,28 +80,19 @@ public class WingCalculatorModel implements SettingChangeListener {
 	private Double travelSpeed = 1000.00;
 	private Boolean cutBaseFirst = false;
 	// =====================================
-
 	
-	
-	private Double halfspanLength = 0.0;
+	// =====================================
+	// Input
+	// =====================================
+	private Double halfSpanLength = 0.0;
 	private Double baseCordLength = 0.0;
 	private Double tipCordLength = 0.0;
-	private Double wingTipOffset = 0.0;
-	private Double wingTipYOffset = 0.0;
-	
-	// calculated
-	private Double middleCordLength = 0.0;
-	private Double baseCordWire = 0.0;
-	private Double tipCordWire = 0.0;
-	private Double baseCordWireBase = 0.0;
-	private Double tipCordWireBase = 0.0;
-	
-	// ----------
-	
 	private Double baseMeltingLoss = 0.0;
 	private Double tipMeltingLoss = 0.0;
 	private Double wingSweep = 0.0;
-	
+	private Double wingTipOffset = 0.0;
+	private Double wingTipYOffset = 0.0;
+
 	private Boolean hasSparTop = false;
 	private Boolean hasSparBottom = false;
 	private Double sparOffsetTop = 0.0;
@@ -110,6 +101,18 @@ public class WingCalculatorModel implements SettingChangeListener {
 	private Double sparOffsetBottom = 0.0;
 	private Double sparWidthBottom = 0.0;
 	private Double sparHeightBottom = 0.0;
+	
+	
+	
+	
+	// =====================================
+	
+	// calculated
+	private Double middleCordLength = 0.0;
+	private Double baseCordWire = 0.0;
+	private Double tipCordWire = 0.0;
+	private Double baseCordWireBase = 0.0;
+	private Double tipCordWireBase = 0.0;
 
 	private Double totalMaxX = 0.0;
 	private Double totalMaxY = 0.0;
@@ -118,33 +121,25 @@ public class WingCalculatorModel implements SettingChangeListener {
 	private Double baseCordLengthTipTotal = 0.0;
 	private Double baseCordStartBaseTotal = 0.0;
 	private Double baseCordStartTipTotal = 0.0;
-	
-	
-	private String statusMessage = "<html><b>Idle</b></html>";
-	
+
 	private Double tipDeltaBase = 0.0;
 	private Double tipDeltaSweep = 0.0;
 	private Double tipDeltaAll = 0.0;
+	
+
+	
+	private String statusMessage = "<html><b>Idle</b></html>";
 	
 	
 	
 	
 	
 	public WingCalculatorModel() {
+        this.settings = SettingsFactory.loadSettings();
+        this.applySettings();
 
     }
 
-	public WingCalculatorModel(Settings settings) {
-		this.settings = settings;
-		this.settings.setSettingChangeListener(this);
-        
-		try {
-            this.applySettings();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-    }
 
 	private void applySettings() {
 		this.wireLength = settings.getWireLength();
@@ -159,12 +154,9 @@ public class WingCalculatorModel implements SettingChangeListener {
 	}
 
 	// ==================
-	// Setter
+	// Set/Get Input Values
 	// ==================
-	public void setBaseDirection(Boolean aValue) { this.baseDirection = aValue; this.changeBaseProfileDirection(aValue); }
-	public void setTipDirection(Boolean aValue) { this.tipDirection = aValue; this.changeTipProfileDirection(aValue); }
-
-	public void setHalfspanLength(Double aValue) { this.halfspanLength = aValue; }
+	public void setHalfSpanLength(Double aValue) { this.halfSpanLength = aValue; }
 	public void setBaseCordLength(Double aValue) { this.baseCordLength = aValue; }
 	public void setTipCordLength(Double aValue) { this.tipCordLength = aValue; }
 	public void setBaseMeltingLoss(Double aValue) { this.baseMeltingLoss = aValue; }
@@ -183,8 +175,42 @@ public class WingCalculatorModel implements SettingChangeListener {
 	public void setSparWidthBottom(Double aValue) { this.sparWidthBottom = aValue; }
 	public void setSparHeightBottom(Double aValue) { this.sparHeightBottom = aValue; }
 
+
+	
+	public void setBaseDirection(Boolean aValue) { this.baseDirection = aValue; this.changeBaseProfileDirection(aValue); }
+	public void setTipDirection(Boolean aValue) { this.tipDirection = aValue; this.changeTipProfileDirection(aValue); }
+
+	// --------------------
+	
+	public Double getHalfSpanLength() {return this.halfSpanLength;};
+
+	
+	public Double getMiddleCordLength() {return this.middleCordLength;};
+	public Double getBaseCordWireBase() {return this.baseCordWireBase;};
+	public Double getBaseCordWire() {return this.baseCordWire;};
+	public Double getTipCordWireBase() {return this.tipCordWireBase;};
+	public Double getTipCordWire() {return this.tipCordWire;};
+	public Double getTipDeltaBase() {return this.tipDeltaBase;};
+	public Double getTipDeltaSweep() {return this.tipDeltaSweep;};
+	public Double getTipDeltaAll() {return this.tipDeltaAll;};
+	
+	
+	public String getBaseProfileName() {return this.baseProfileName;}
+	public Integer getBaseProfilePointNumber() {return this.baseProfilePointNumber;}
+	public String getTipProfileName() {return this.tipProfileName;}
+	public Integer getTipProfilePointNumber() {return this.tipProfilePointNumber;}
+	public String getStatusMessage() {return this.statusMessage;}
+
+	public Double getTotalMaxX() {return this.totalMaxX;}
+	public Double getTotalMaxY() {return this.totalMaxY;}
+	
+	
+	
+	
+	
+	
 	// ==================
-	// Parameter
+	// Set/Get Parameter
 	// ==================
 	public void setWireLength(Double aValue) { this.wireLength = aValue; this.settings.setWireLength(aValue); }
 	public void setStartDistance(Double aValue) { this.startDistance = aValue; this.settings.setStartDistance(aValue); }
@@ -206,29 +232,11 @@ public class WingCalculatorModel implements SettingChangeListener {
 	// ==================
 	// Getter
 	// ==================
+
 	public Double getBaseCordLengthBaseTotal() {return this.baseCordLengthBaseTotal;}
 	public Double getBaseCordLengthTipTotal() {return this.baseCordLengthTipTotal;}
 	public Double getBaseCordStartBaseTotal() {return this.baseCordStartBaseTotal;}
 	public Double getBaseCordStartTipTotal() {return this.baseCordStartTipTotal;}
-
-	public String getBaseProfileName() {return this.baseProfileName;}
-	public Integer getBaseProfilePointNumber() {return this.baseProfilePointNumber;}
-	public String getTipProfileName() {return this.tipProfileName;}
-	public Integer getTipProfilePointNumber() {return this.tipProfilePointNumber;}
-	public String getStatusMessage() {return this.statusMessage;}
-
-	public Double getTotalMaxX() {return this.totalMaxX;}
-	public Double getTotalMaxY() {return this.totalMaxY;}
-	
-	public Double getMiddleCordLength() {return this.middleCordLength;};
-	public Double getBaseCordWireBase() {return this.baseCordWireBase;};
-	public Double getBaseCordWire() {return this.baseCordWire;};
-	public Double getTipCordWireBase() {return this.tipCordWireBase;};
-	public Double getTipCordWire() {return this.tipCordWire;};
-	public Double getTipDeltaBase() {return this.tipDeltaBase;};
-	public Double getTipDeltaSweep() {return this.tipDeltaSweep;};
-	public Double getTipDeltaAll() {return this.tipDeltaAll;};
-	public Double getHalfspanLength() {return this.halfspanLength;};
 
 	
 	
@@ -246,7 +254,7 @@ public class WingCalculatorModel implements SettingChangeListener {
 		
 		this.middleCordLength = (this.baseCordLength + this.tipCordLength)/2;
 		dti = (this.baseCordLength - this.middleCordLength)/2;
-		dtiw = this.wireLength * dti / this.halfspanLength;
+		dtiw = this.wireLength * dti / this.halfSpanLength;
 		
 		this.baseCordWireBase = this.middleCordLength + (2 * dtiw);
 		this.baseCordWire = this.baseCordWireBase + (2 * this.baseMeltingLoss);
@@ -829,16 +837,10 @@ public class WingCalculatorModel implements SettingChangeListener {
 		}
 	}
 
-	// ==================
-	// Eventing
-	// ==================
+	public void saveSettings() {
+		SettingsFactory.saveSettings(settings);
 
-	@Override
-	public void settingChanged() {
-		// TODO Auto-generated method stub
-		
 	}
-
 
 
 }

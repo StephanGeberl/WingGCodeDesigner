@@ -27,11 +27,10 @@ import javax.swing.*;
 import java.awt.BorderLayout;
 import java.awt.Toolkit;
 
-
 import com.geberl.winggcodedesigner.model.WingCalculatorModel;
+import com.geberl.winggcodedesigner.types.Settings;
+import com.geberl.winggcodedesigner.types.SettingsFactory;
 import com.geberl.winggcodedesigner.uielements.WingCalculatorPanel;
-import com.geberl.winggcodedesigner.utils.Settings;
-import com.geberl.winggcodedesigner.utils.SettingsFactory;
 
 
 /**
@@ -42,8 +41,6 @@ public class WingDesigner extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
-    private Settings settings;
 
 	private javax.swing.JScrollPane wingCalculatorScrollPanel;
 	private WingCalculatorPanel wingCalculatorPanel;
@@ -58,10 +55,9 @@ public class WingDesigner extends JFrame {
 
         super("GCode Designer for Foam Wings");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.settings = SettingsFactory.loadSettings();
-        
-        this.wingCalculatorModel = new WingCalculatorModel(this.settings);
-        this.wingCalculatorPanel = new WingCalculatorPanel(wingCalculatorModel, this.settings);
+         
+        this.wingCalculatorModel = new WingCalculatorModel();
+        this.wingCalculatorPanel = new WingCalculatorPanel(this.wingCalculatorModel);
         
         this.wingCalculatorModel.addWingCalculatorEventListener(this.wingCalculatorPanel);
 
@@ -94,7 +90,6 @@ public class WingDesigner extends JFrame {
         Runtime.getRuntime().addShutdownHook(
         		new Thread(() -> {
         			System.out.println("Shutting down...");
-         			SettingsFactory.saveSettings(settings);
         		}));
 
     }

@@ -16,7 +16,7 @@
     You should have received a copy of the GNU General Public License
     along with UGS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.geberl.winggcodedesigner.model;
+package com.geberl.winggcodedesigner.eventing;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
