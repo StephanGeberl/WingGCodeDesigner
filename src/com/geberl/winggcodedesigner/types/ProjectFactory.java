@@ -33,12 +33,20 @@ public class ProjectFactory {
     private static final Logger logger = Logger.getLogger(ProjectFactory.class.getName());
     private static final String USER_HOME = "user.home";
     private static final String FALSE = "false";
-    private static Project project;
 
     public static final String PROJECT_DIRECTORY_NAME = "WingGCodeDesignerProjects";
     public static final String JSON_FILENAME = "WingProject.json";
 
+    private static Project project;
+
     
+    public static Project newProject() {
+       project = new Project();
+       return project;
+    }
+
+    
+ /*   
     public static Project loadProject() {
         if (project == null) {
             // the defaults are now in the settings bean
@@ -62,12 +70,11 @@ public class ProjectFactory {
         }
         return project;
     }
-
-    public static void saveProject(Project project) {
+*/
+    public static void saveProject(Project project, File jsonFile) {
         logger.info("Saving project.");
         try {
             // Save json file.
-            File jsonFile = getProjectFile();
             try (FileWriter fileWriter = new FileWriter(jsonFile)) {
                 Gson gson = new GsonBuilder().setPrettyPrinting().create();
                 fileWriter.write(gson.toJson(project, Project.class));
@@ -78,38 +85,5 @@ public class ProjectFactory {
         }
     }
 
-    /**
-     * This is public.
-     */
-    public static File getProjectDirectory() {
-        String homeDir = System.getProperty(USER_HOME);
-        String osName = System.getProperty("os.name").toLowerCase();
 
-        if (osName.contains("mac")) {
-            homeDir = homeDir;
-        }
-        if (!homeDir.endsWith(File.separator)) {
-            homeDir = homeDir + File.separator;
-        }
-
-        File dir = new File(homeDir + PROJECT_DIRECTORY_NAME);
-        dir.mkdirs();
-        return dir;
-    }
-
-
-    private static File getProjectFile() {
-        File projectDir = ProjectFactory.getProjectDirectory();
-        return new File (projectDir, JSON_FILENAME);
-    }
-
-    /**
-     * Saves the current settings
-     */
-    public static void saveProject() {
-        if(project == null) {
-            throw new RuntimeException("No project is loaded");
-        }
-        saveProject(project);
-    }
 }

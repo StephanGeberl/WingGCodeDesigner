@@ -270,11 +270,21 @@ public class WingCalculatorPanel extends JPanel implements WingCalculatorEventLi
 		add(btnSaveParameters);
 		// ============= Parameter Ende ===================
 
+		// ============= Manage Projects ===================
+		JButton btnSaveProject = new JButton("Save Project");
+		btnSaveProject.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				wingCalculatorModel.saveProject();
+				}
+		});
+		btnSaveProject.setBounds(6, 222, 208, 27);
+		add(btnSaveProject);
 		
 		
 		
 		
 		
+		// ============= Manage Projects Ende ===================
 		
 		// ------------------------------------------
 		JFormattedTextField inputHalfspanLength = new JFormattedTextField(doubleFormatter);

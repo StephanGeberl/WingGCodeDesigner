@@ -31,11 +31,14 @@ import java.util.LinkedHashSet;
 import java.util.List;
 
 import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
 
 import com.geberl.winggcodedesigner.utils.GUIHelpers;
 import com.geberl.winggcodedesigner.eventing.WingCalculatorEvent;
 import com.geberl.winggcodedesigner.eventing.WingCalculatorEventListener;
+import com.geberl.winggcodedesigner.types.Project;
+import com.geberl.winggcodedesigner.types.ProjectFactory;
 import com.geberl.winggcodedesigner.types.Settings;
 import com.geberl.winggcodedesigner.types.SettingsFactory;
  
@@ -53,6 +56,7 @@ public class WingCalculatorModel {
 	private final Collection<WingCalculatorEventListener> wingCalculatorEventListener = new ArrayList<>();
 
     public Settings settings;
+    public Project project;
 	
 	
 	
@@ -125,6 +129,7 @@ public class WingCalculatorModel {
 	
 	public WingCalculatorModel() {
         this.settings = SettingsFactory.loadSettings();
+        this.newProject();
 
     }
 
@@ -742,7 +747,7 @@ public class WingCalculatorModel {
 				this.sendWingCalculatorEvent(new WingCalculatorEvent(WingCalculatorEvent.EventType.CALCULATOR_STATUS_CHANGED_EVENT));
 			
 			} catch (Exception ex) {
-				GUIHelpers.displayErrorDialog("Problem saving controller config: " + ex.getMessage());
+				GUIHelpers.displayErrorDialog("Problem loading profile data: " + ex.getMessage());
 			}
 		}
 	}
@@ -780,7 +785,7 @@ public class WingCalculatorModel {
 				this.sendWingCalculatorEvent(new WingCalculatorEvent(WingCalculatorEvent.EventType.TIP_PROFILE_CHANGED_EVENT));
 				this.sendWingCalculatorEvent(new WingCalculatorEvent(WingCalculatorEvent.EventType.CALCULATOR_STATUS_CHANGED_EVENT));
 			} catch (Exception ex) {
-				GUIHelpers.displayErrorDialog("Problem saving controller config: " + ex.getMessage());
+				GUIHelpers.displayErrorDialog("Problem loading profile data: " + ex.getMessage());
 			}
 		}
 	}	
@@ -810,5 +815,40 @@ public class WingCalculatorModel {
 
 	}
 
+	// Project - File
+	
+	public void loadProject() {
+		SettingsFactory.saveSettings(settings);
+
+	}
+	
+	public void saveProject() {
+
+		JFileChooser projectFileChooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+		projectFileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+		projectFileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		projectFileChooser.addChoosableFileFilter(new FileNameExtensionFilter("JSON Files", "json"));
+		projectFileChooser.setAcceptAllFileFilterUsed(false);
+		
+		int returnVal = projectFileChooser.showSaveDialog(null);
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			try {
+				File fileToSave = projectFileChooser.getSelectedFile();
+				ProjectFactory.saveProject(this.project, fileToSave);
+			} catch (Exception ex) {
+				GUIHelpers.displayErrorDialog("Problem saving project file: " + ex.getMessage());
+			}
+		}
+
+	}
+	
+	public void newProject() {
+		this.project = ProjectFactory.newProject();
+	}
+
+
+	
+	
+	
 
 }
