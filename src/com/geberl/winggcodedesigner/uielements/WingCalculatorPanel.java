@@ -59,6 +59,7 @@ public class WingCalculatorPanel extends JPanel implements WingCalculatorEventLi
 	private JTextField inputBaseProfileNumberPoints;
 	private JTextField inputTipProfileName;
 	private JTextField inputTipProfileNumberPoints;
+	private JTextField inputProjectName;
 	private JPanel topSparePanel = new JPanel();
 	private JPanel bottomSparePanel = new JPanel();
 	private JLabel statusMessage = new JLabel("<html><b>Idle</b></html>");
@@ -277,10 +278,32 @@ public class WingCalculatorPanel extends JPanel implements WingCalculatorEventLi
 				wingCalculatorModel.saveProject();
 				}
 		});
-		btnSaveProject.setBounds(6, 222, 208, 27);
+		btnSaveProject.setBounds(742, 44, 170, 27);
 		add(btnSaveProject);
+		// ------------------------------------------
+		JButton btnLoadProject = new JButton("Load Project");
+		btnLoadProject.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				wingCalculatorModel.loadProject();
+				inputProjectName.setText(wingCalculatorModel.project.getProjectName());
+				}
+		});
+		btnLoadProject.setBounds(742, 5, 170, 27);
+		add(btnLoadProject);
+		
+		inputProjectName = new JTextField();
+		inputProjectName.setBounds(6, 212, 229, 25);
+		add(inputProjectName);
+		inputProjectName.setColumns(10);
+		inputProjectName.setEditable(false);
+		inputProjectName.setBackground(Color.LIGHT_GRAY);
+
 		
 		
+		JFormattedTextField sProjectName = new JFormattedTextField();
+		sProjectName.setEditable(false);
+		sProjectName.setBounds(6, 212, 229, 25);
+		add(sProjectName);
 		
 		
 		
@@ -565,21 +588,21 @@ public class WingCalculatorPanel extends JPanel implements WingCalculatorEventLi
 		btnSaveRightGcode.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) { wingCalculatorModel.saveRightGcodeList(); }
 		});
-		btnSaveRightGcode.setBounds(742, 53, 170, 27);
+		btnSaveRightGcode.setBounds(742, 115, 170, 27);
 		add(btnSaveRightGcode);
 
 		JButton btnSaveLeftGcode = new JButton("Save left GCode");
 		btnSaveLeftGcode.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) { wingCalculatorModel.saveLeftGcodeList(); }
 		});
-		btnSaveLeftGcode.setBounds(742, 5, 170, 27);
+		btnSaveLeftGcode.setBounds(742, 80, 170, 27);
 		add(btnSaveLeftGcode);
 		
 		JButton btnDrawDraft = new JButton("Draw draft");
 		btnDrawDraft.addActionListener(new ActionListener() { 
 			public void actionPerformed(ActionEvent e) { wingCalculatorModel.drawDraft(); }
 		});
-		btnDrawDraft.setBounds(742, 89, 170, 27);
+		btnDrawDraft.setBounds(742, 155, 170, 27);
 		add(btnDrawDraft);
 		
 		JLabel lblInputHalfspanLength_1_3_2_2 = new JLabel("Mid cord length [mm]");
@@ -692,6 +715,7 @@ public class WingCalculatorPanel extends JPanel implements WingCalculatorEventLi
 		wingPanel.setBounds(259, 463, 660, 210);
 		add(wingPanel);
 		wingCalculatorModel.addWingCalculatorEventListener(wingPanel);
+		
 		
 
 		

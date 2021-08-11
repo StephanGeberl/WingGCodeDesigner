@@ -38,7 +38,7 @@ public class Settings {
      * 
      */
     public Settings() {
-        logger.fine("Initializing...");
+        logger.fine("Initializing settings ...");
     }
 
 	// ==================

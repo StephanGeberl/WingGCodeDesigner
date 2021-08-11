@@ -39,17 +39,17 @@ import com.google.gson.GsonBuilder;
 
 public class Project {
     private static final Logger logger = Logger.getLogger(Project.class.getName());
-    private static final String USER_HOME = "user.home";
-    private static final String FALSE = "false";
-    private static Project project;
-
-    public static final String PROJECT_DIRECTORY_NAME = "WingGCodeDesignerProjects";
-    public static final String JSON_FILENAME = "WingProject.json";
 
 	// =====================================
 	// Input
 	// =====================================
-	private Double halfSpanLength = 0.0;
+    private Boolean isDirty = false;
+    
+    private String projectName = "";
+    private String baseProfilePath = "";
+    private String tipProfilePath ="";
+	
+    private Double halfSpanLength = 0.0;
 	private Double baseCordLength = 0.0;
 	private Double tipCordLength = 0.0;
 	private Double baseMeltingLoss = 0.0;
@@ -72,7 +72,7 @@ public class Project {
      * .
      */
     public Project() {
-        logger.fine("Initializing...");
+        logger.fine("Initializing project ...");
 
     }
 
@@ -80,7 +80,14 @@ public class Project {
     // ==================
 	// Get / Set
 	// ==================
-	public void setBaseCordLength(Double aValue) { this.baseCordLength = aValue; }
+	public void setIsDirty(Boolean aValue) { this.isDirty = aValue; }
+	
+	public void setProjectName(String aValue) { this.projectName = aValue; }
+	public void setBaseProfilePath(String aValue) { this.baseProfilePath = aValue; }
+	public void setTipProfilePath(String aValue) { this.tipProfilePath = aValue; }
+
+    
+    public void setBaseCordLength(Double aValue) { this.baseCordLength = aValue; }
 	public void setTipCordLength(Double aValue) { this.tipCordLength = aValue; }
 	public void setBaseMeltingLoss(Double aValue) { this.baseMeltingLoss = aValue; }
 	public void setTipMeltingLoss(Double aValue) { this.tipMeltingLoss = aValue; }
@@ -98,6 +105,13 @@ public class Project {
 	public void setSparWidthBottom(Double aValue) { this.sparWidthBottom = aValue; }
 	public void setSparHeightBottom(Double aValue) { this.sparHeightBottom = aValue; }
 	// ==================
+	public Boolean getIsDirty() { return this.isDirty; }
+	
+	public String getProjectName() { return this.projectName; }
+	public String getBaseProfilePath() { return this.baseProfilePath; }
+	public String getTipProfilePath() { return this.tipProfilePath; }
+	
+	
 	public Double getHalfSpanLength() {return this.halfSpanLength;};
 	public Double getTipCordLength(Double aValue) { return this.tipCordLength; }
 	public Double getBaseMeltingLoss(Double aValue) { return this.baseMeltingLoss; }
