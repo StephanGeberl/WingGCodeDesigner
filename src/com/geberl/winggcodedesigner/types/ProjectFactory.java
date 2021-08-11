@@ -46,31 +46,20 @@ public class ProjectFactory {
     }
 
     
- /*   
-    public static Project loadProject() {
-        if (project == null) {
-            // the defaults are now in the settings bean
-            File projectFile = getProjectFile();
+    
+    public static Project loadProject(File jsonFile) {
 
-            if (!projectFile.exists()) {
-                project = new Project();
-            } else {
-                try {
-                    logger.log(Level.INFO, "Log location: {0}", projectFile.getAbsolutePath());
-                    logger.info("Loading settings.");
-                    project = new Gson().fromJson(new FileReader(projectFile), Project.class);
-                } catch (FileNotFoundException ex) {
-                     logger.log(Level.SEVERE, "Can't load project file.", ex);
-                }
-            }
-        }
-
-        if (project == null) {
-        	project = new Project();
+        try {
+            logger.log(Level.INFO, "Log location: {0}", jsonFile.getAbsolutePath());
+            logger.info("Loading project.");
+            project = new Gson().fromJson(new FileReader(jsonFile), Project.class);
+        } catch (FileNotFoundException ex) {
+             logger.log(Level.SEVERE, "Can't load project file.", ex);
         }
         return project;
     }
-*/
+
+    
     public static void saveProject(Project project, File jsonFile) {
         logger.info("Saving project.");
         try {

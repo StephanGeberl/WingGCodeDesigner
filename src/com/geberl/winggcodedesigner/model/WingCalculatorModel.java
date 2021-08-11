@@ -30,6 +30,7 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 
+import org.apache.commons.io.FilenameUtils;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
@@ -818,8 +819,27 @@ public class WingCalculatorModel {
 	// Project - File
 	
 	public void loadProject() {
-		SettingsFactory.saveSettings(settings);
 
+		JFileChooser projectFileChooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+		projectFileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+		projectFileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		projectFileChooser.addChoosableFileFilter(new FileNameExtensionFilter("JSON Files", "json"));
+		projectFileChooser.setAcceptAllFileFilterUsed(false);
+		
+		int returnVal = projectFileChooser.showOpenDialog(null);
+		
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			try {
+				File fileToOpen = projectFileChooser.getSelectedFile();
+			
+				this.project = ProjectFactory.loadProject(fileToOpen);
+			} catch (Exception ex) {
+				GUIHelpers.displayErrorDialog("Problem saving project file: " + ex.getMessage());
+			}
+		}
+
+		
+		
 	}
 	
 	public void saveProject() {
@@ -831,9 +851,17 @@ public class WingCalculatorModel {
 		projectFileChooser.setAcceptAllFileFilterUsed(false);
 		
 		int returnVal = projectFileChooser.showSaveDialog(null);
+		
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			try {
 				File fileToSave = projectFileChooser.getSelectedFile();
+				
+				if (FilenameUtils.getExtension(fileToSave.getName()).equalsIgnoreCase("json")) {
+				    // filename is OK as-is
+				} else {
+					fileToSave = new File(fileToSave.getParentFile(), FilenameUtils.getBaseName(fileToSave.getName())+".json");
+				}
+				
 				ProjectFactory.saveProject(this.project, fileToSave);
 			} catch (Exception ex) {
 				GUIHelpers.displayErrorDialog("Problem saving project file: " + ex.getMessage());
