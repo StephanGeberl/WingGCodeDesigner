@@ -20,9 +20,7 @@ package com.geberl.winggcodedesigner.uielements;
 
 import java.awt.Dimension;
 //import javax.annotation.PostConstruct;
-
 import javax.swing.JPanel;
-
 import javax.swing.JButton;
 
 
