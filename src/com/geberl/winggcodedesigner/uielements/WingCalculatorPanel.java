@@ -25,7 +25,7 @@ import javax.swing.JPanel;
 
 import javax.swing.JButton;
 
-
+// init
 import com.geberl.winggcodedesigner.eventing.WingCalculatorEvent;
 import com.geberl.winggcodedesigner.eventing.WingCalculatorEventListener;
 import com.geberl.winggcodedesigner.model.WingCalculatorModel;
