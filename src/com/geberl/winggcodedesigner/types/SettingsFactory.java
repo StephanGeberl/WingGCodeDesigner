@@ -50,7 +50,7 @@ public class SettingsFactory {
                 settings = new Settings();
             } else {
                 try {
-                    logger.log(Level.INFO, "Log location: {0}", settingsFile.getAbsolutePath());
+                    logger.log(Level.INFO, "Settings location: {0}", settingsFile.getAbsolutePath());
                     logger.info("Loading settings.");
                     settings = new Gson().fromJson(new FileReader(settingsFile), Settings.class);
                 } catch (FileNotFoundException ex) {
