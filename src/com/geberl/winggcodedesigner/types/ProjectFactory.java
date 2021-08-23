@@ -50,7 +50,7 @@ public class ProjectFactory {
     public static Project loadProject(File jsonFile) {
 
         try {
-            logger.log(Level.INFO, "Log location: {0}", jsonFile.getAbsolutePath());
+            logger.log(Level.INFO, "Project location: {0}", jsonFile.getAbsolutePath());
             logger.info("Loading project.");
             project = new Gson().fromJson(new FileReader(jsonFile), Project.class);
         } catch (FileNotFoundException ex) {

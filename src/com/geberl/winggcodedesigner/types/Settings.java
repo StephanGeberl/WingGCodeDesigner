@@ -25,13 +25,15 @@ public class Settings {
     private static final Logger logger = Logger.getLogger(Settings.class.getName());
 
 
-    private double wireLength = 800.0;
-    private double startDistance = 20.0;
-    private double saveHeight = 50.0;
-    private double pause = 2.0;
-    private double wireSpeed = 100.0;
-    private double travelSpeed = 1000.0;
-    private boolean cutBaseFirst = false;
+    private Double wireLength = 800.0;
+    private Double startDistance = 20.0;
+    private Double saveHeight = 50.0;
+    private Double pause = 2.0;
+    private Double wireSpeed = 100.0;
+    private Double travelSpeed = 1000.0;
+    private Boolean cutBaseFirst = false;
+    private String projectDefaultPath = System.getProperty("user.home");
+    private String profileDefaultPath = System.getProperty("user.home");
 
 
     /**
@@ -51,6 +53,8 @@ public class Settings {
 	public void setWireSpeed(Double aValue) { this.wireSpeed = aValue; }
 	public void setTravelSpeed(Double aValue) { this.travelSpeed = aValue; }
 	public void setCutBaseFirst(Boolean aValue) { this.cutBaseFirst = aValue; }
+	public void setProjectDefaultPath(String aValue) { this.projectDefaultPath = aValue; }
+	public void setProfileDefaultPath(String aValue) { this.profileDefaultPath = aValue; }
 	// ==================
 
 	public Double getWireLength() {return this.wireLength;}
@@ -60,6 +64,8 @@ public class Settings {
 	public Double getWireSpeed() {return this.wireSpeed;}
 	public Double getTravelSpeed() {return this.travelSpeed;}
 	public Boolean getCutBaseFirst() {return this.cutBaseFirst;}
+	public String getProjectDefaultPath() { return this.projectDefaultPath; }
+	public String getProfileDefaultPath() { return this.profileDefaultPath; }
 
 	// ==================
 

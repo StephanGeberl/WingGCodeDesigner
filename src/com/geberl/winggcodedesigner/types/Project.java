@@ -43,7 +43,7 @@ public class Project {
 	// =====================================
 	// Input
 	// =====================================
-    private Boolean isDirty = false;
+    private transient Boolean isDirty = false;
     
     private String projectName = "";
     private String baseProfilePath = "";

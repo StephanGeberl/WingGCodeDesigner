@@ -25,6 +25,7 @@ import javax.swing.JPanel;
 
 import javax.swing.JButton;
 
+// init
 import com.geberl.winggcodedesigner.eventing.WingCalculatorEvent;
 import com.geberl.winggcodedesigner.eventing.WingCalculatorEventListener;
 import com.geberl.winggcodedesigner.model.WingCalculatorModel;
@@ -76,6 +77,8 @@ public class WingCalculatorPanel extends JPanel implements WingCalculatorEventLi
 	public WingCalculatorPanel(WingCalculatorModel anWingDesignerModel) {
 		
 		this.wingCalculatorModel = anWingDesignerModel;
+		
+		// Test
 		
 		
 		setForeground(Color.LIGHT_GRAY);
