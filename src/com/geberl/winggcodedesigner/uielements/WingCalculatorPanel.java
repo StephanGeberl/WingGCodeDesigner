@@ -78,6 +78,8 @@ public class WingCalculatorPanel extends JPanel implements WingCalculatorEventLi
 		
 		this.wingCalculatorModel = anWingDesignerModel;
 		
+		// Test
+		
 		
 		setForeground(Color.LIGHT_GRAY);
 		this.setLayout(null);
