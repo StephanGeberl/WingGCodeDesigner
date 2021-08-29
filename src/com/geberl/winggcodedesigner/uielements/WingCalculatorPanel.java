@@ -194,84 +194,6 @@ public class WingCalculatorPanel extends JPanel implements WingCalculatorEventLi
 		// ------------------------------------------
 		// ============= Parameter ===================
 
-		JFormattedTextField inputWireLength = new JFormattedTextField(integerFormatter);
-		inputWireLength.setText(String.valueOf(wingCalculatorModel.settings.getWireLength()));
-		inputWireLength.addPropertyChangeListener(new PropertyChangeListener() {
-			public void propertyChange(PropertyChangeEvent evt) {
-				if (inputWireLength.getValue() != null) { wingCalculatorModel.settings.setWireLength( Double.parseDouble(inputWireLength.getText()) ); }
-			}
-		});
-		inputWireLength.setBounds(139, 286, 75, 25);
-		add(inputWireLength);
-		// ------------------------------------------
-		JFormattedTextField inputStartDistance = new JFormattedTextField(integerFormatter);
-		inputStartDistance.setText(String.valueOf(wingCalculatorModel.settings.getStartDistance()));
-		inputStartDistance.addPropertyChangeListener(new PropertyChangeListener() {
-			public void propertyChange(PropertyChangeEvent evt) {
-				if (inputStartDistance.getValue() != null) { wingCalculatorModel.settings.setStartDistance( Double.parseDouble(inputStartDistance.getText()) ); }
-			}
-		});
-		inputStartDistance.setBounds(139, 311, 75, 25);
-		add(inputStartDistance);
-		// ------------------------------------------
-		JFormattedTextField inputSaveHeight = new JFormattedTextField(integerFormatter);
-		inputSaveHeight.setText(String.valueOf(wingCalculatorModel.settings.getSaveHeight()));
-		inputSaveHeight.addPropertyChangeListener(new PropertyChangeListener() {
-			public void propertyChange(PropertyChangeEvent evt) {
-				if (inputSaveHeight.getValue() != null) { wingCalculatorModel.settings.setSaveHeight( Double.parseDouble(inputSaveHeight.getText()) ); }
-			}
-		});
-		inputSaveHeight.setBounds(139, 335, 75, 25);
-		add(inputSaveHeight);
-		// ------------------------------------------
-		JFormattedTextField inputPause = new JFormattedTextField(integerFormatter);
-		inputPause.setText(String.valueOf(wingCalculatorModel.settings.getPause()));
-		inputPause.addPropertyChangeListener(new PropertyChangeListener() {
-			public void propertyChange(PropertyChangeEvent evt) {
-				if (inputPause.getValue() != null) { wingCalculatorModel.settings.setPause( Double.parseDouble(inputPause.getText()) ); }
-			}
-		});
-		inputPause.setBounds(139, 362, 75, 25);
-		add(inputPause);
-		// ------------------------------------------
-		JFormattedTextField inputWireSpeed = new JFormattedTextField(integerFormatter);
-		inputWireSpeed.setText(String.valueOf(wingCalculatorModel.settings.getWireSpeed()));
-		inputWireSpeed.addPropertyChangeListener(new PropertyChangeListener() {
-			public void propertyChange(PropertyChangeEvent evt) {
-				if (inputWireSpeed.getValue() != null) { wingCalculatorModel.settings.setWireSpeed( Double.parseDouble(inputWireSpeed.getText()) ); }
-			}
-		});
-		inputWireSpeed.setBounds(139, 387, 75, 25);
-		add(inputWireSpeed);
-		// ------------------------------------------
-		JFormattedTextField inputTravelSpeed = new JFormattedTextField(integerFormatter);
-		inputTravelSpeed.setText(String.valueOf(wingCalculatorModel.settings.getTravelSpeed()));
-		inputTravelSpeed.addPropertyChangeListener(new PropertyChangeListener() {
-			public void propertyChange(PropertyChangeEvent evt) {
-				if (inputTravelSpeed.getValue() != null) { wingCalculatorModel.settings.setTravelSpeed( Double.parseDouble(inputTravelSpeed.getText()) ); }
-			}
-		});
-		inputTravelSpeed.setBounds(139, 412, 75, 25);
-		add(inputTravelSpeed);
-		// ------------------------------------------
-		JCheckBox cbxCutBaseFirst = new JCheckBox("Cut base first");
-		cbxCutBaseFirst.setSelected(wingCalculatorModel.settings.getCutBaseFirst());
-		cbxCutBaseFirst.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				wingCalculatorModel.settings.setCutBaseFirst(cbxCutBaseFirst.isSelected());
-			}
-		});
-		cbxCutBaseFirst.setBounds(6, 445, 208, 18);
-		add(cbxCutBaseFirst);
-		// ------------------------------------------
-		JButton btnSaveParameters = new JButton("Save Parameters");
-		btnSaveParameters.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				wingCalculatorModel.saveSettings();
-				}
-		});
-		btnSaveParameters.setBounds(6, 471, 208, 27);
-		add(btnSaveParameters);
 		// ============= Parameter Ende ===================
 
 		// ============= Manage Projects ===================
@@ -522,12 +444,6 @@ public class WingCalculatorPanel extends JPanel implements WingCalculatorEventLi
 			// ------------------------------------------
 		
 		setPanelEnabled(bottomSparePanel, chckbxSparWingBottom.isSelected());
-		// ===============================================================
-		
-		
-		JLabel lblInputWireLength = new JLabel("Wire length [mm]");
-		lblInputWireLength.setBounds(6, 285, 128, 25);
-		add(lblInputWireLength);
 		
 		JLabel lblInputHalfspanLength = new JLabel("Half wingspan [mm]");
 		lblInputHalfspanLength.setBounds(6, 6, 149, 25);
@@ -549,14 +465,6 @@ public class WingCalculatorPanel extends JPanel implements WingCalculatorEventLi
 		lblInputHalfspanLength_1_3.setBounds(6, 106, 149, 25);
 		add(lblInputHalfspanLength_1_3);
 		
-		JLabel lblInputStartDistance = new JLabel("X-Distance [mm]");
-		lblInputStartDistance.setBounds(6, 310, 128, 25);
-		add(lblInputStartDistance);
-		
-		JLabel lblInputSaveHeight = new JLabel("Save Height [mm]");
-		lblInputSaveHeight.setBounds(6, 334, 128, 25);
-		add(lblInputSaveHeight);
-		
 		JLabel lblInputHalfspanLength_1_3_1 = new JLabel("Wing sweep [deg]");
 		lblInputHalfspanLength_1_3_1.setBounds(6, 131, 128, 25);
 		add(lblInputHalfspanLength_1_3_1);
@@ -564,22 +472,6 @@ public class WingCalculatorPanel extends JPanel implements WingCalculatorEventLi
 		JLabel lblInputHalfspanLength_1_3_2 = new JLabel("Wing tip offset [deg]");
 		lblInputHalfspanLength_1_3_2.setBounds(6, 156, 141, 25);
 		add(lblInputHalfspanLength_1_3_2);
-		
-		JLabel lblInputCordOffset_1 = new JLabel("Cut speed [m/s]");
-		lblInputCordOffset_1.setBounds(6, 386, 115, 25);
-		add(lblInputCordOffset_1);
-		
-		JLabel lblTitleMachine = new JLabel("<html><b>Parameters</b></html>");
-		lblTitleMachine.setBounds(6, 261, 193, 25);
-		add(lblTitleMachine);
-		
-		JLabel lblInputCordOffset_2 = new JLabel("Pause [s]");
-		lblInputCordOffset_2.setBounds(6, 361, 115, 25);
-		add(lblInputCordOffset_2);
-
-		JLabel lblInputCordOffset_1_1 = new JLabel("Travel speed [m/s]");
-		lblInputCordOffset_1_1.setBounds(6, 412, 115, 25);
-		add(lblInputCordOffset_1_1);
 		
 		// =========== Status Message ===========================
 		statusMessage.setBounds(509, 196, 403, 25);

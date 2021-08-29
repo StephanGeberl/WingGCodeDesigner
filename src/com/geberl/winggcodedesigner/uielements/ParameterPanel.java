@@ -25,6 +25,8 @@ import javax.swing.JButton;
 
 
 import com.geberl.winggcodedesigner.model.WingCalculatorModel;
+import com.geberl.winggcodedesigner.types.ProjectFactory;
+import com.geberl.winggcodedesigner.utils.GUIHelpers;
 
 import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
@@ -33,11 +35,15 @@ import java.text.NumberFormat;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
 import javax.swing.JCheckBox;
+import javax.swing.JFileChooser;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.filechooser.FileSystemView;
 import javax.swing.text.NumberFormatter;
 import java.beans.PropertyChangeListener;
+import java.io.File;
 import java.beans.PropertyChangeEvent;
 import javax.swing.JSeparator;
 
@@ -49,7 +55,6 @@ public class ParameterPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
  
 	private WingCalculatorModel wingCalculatorModel;
-	private JTextField inputProjectName;
 
 	public ParameterPanel(WingCalculatorModel anWingDesignerModel) {
 		
@@ -58,7 +63,7 @@ public class ParameterPanel extends JPanel {
 		
 		setForeground(Color.LIGHT_GRAY);
 		this.setLayout(null);
-		this.setPreferredSize(new Dimension(700, 600));
+		this.setPreferredSize(new Dimension(826, 367));
 		
 		this.createControls();
 	}
@@ -113,7 +118,7 @@ public class ParameterPanel extends JPanel {
 				if (inputWireLength.getValue() != null) { wingCalculatorModel.settings.setWireLength( Double.parseDouble(inputWireLength.getText()) ); }
 			}
 		});
-		inputWireLength.setBounds(195, 12, 75, 25);
+		inputWireLength.setBounds(195, 6, 98, 25);
 		add(inputWireLength);
 		// ------------------------------------------
 		JFormattedTextField inputStartDistance = new JFormattedTextField(integerFormatter);
@@ -123,7 +128,7 @@ public class ParameterPanel extends JPanel {
 				if (inputStartDistance.getValue() != null) { wingCalculatorModel.settings.setStartDistance( Double.parseDouble(inputStartDistance.getText()) ); }
 			}
 		});
-		inputStartDistance.setBounds(195, 38, 75, 25);
+		inputStartDistance.setBounds(195, 37, 98, 25);
 		add(inputStartDistance);
 		// ------------------------------------------
 		JFormattedTextField inputSaveHeight = new JFormattedTextField(integerFormatter);
@@ -133,7 +138,7 @@ public class ParameterPanel extends JPanel {
 				if (inputSaveHeight.getValue() != null) { wingCalculatorModel.settings.setSaveHeight( Double.parseDouble(inputSaveHeight.getText()) ); }
 			}
 		});
-		inputSaveHeight.setBounds(195, 64, 75, 25);
+		inputSaveHeight.setBounds(195, 68, 98, 25);
 		add(inputSaveHeight);
 		// ------------------------------------------
 		JFormattedTextField inputPause = new JFormattedTextField(integerFormatter);
@@ -143,7 +148,7 @@ public class ParameterPanel extends JPanel {
 				if (inputPause.getValue() != null) { wingCalculatorModel.settings.setPause( Double.parseDouble(inputPause.getText()) ); }
 			}
 		});
-		inputPause.setBounds(195, 95, 75, 25);
+		inputPause.setBounds(195, 99, 98, 25);
 		add(inputPause);
 		// ------------------------------------------
 		JFormattedTextField inputWireSpeed = new JFormattedTextField(integerFormatter);
@@ -153,7 +158,7 @@ public class ParameterPanel extends JPanel {
 				if (inputWireSpeed.getValue() != null) { wingCalculatorModel.settings.setWireSpeed( Double.parseDouble(inputWireSpeed.getText()) ); }
 			}
 		});
-		inputWireSpeed.setBounds(195, 135, 75, 25);
+		inputWireSpeed.setBounds(195, 130, 98, 25);
 		add(inputWireSpeed);
 		// ------------------------------------------
 		JFormattedTextField inputTravelSpeed = new JFormattedTextField(integerFormatter);
@@ -163,7 +168,7 @@ public class ParameterPanel extends JPanel {
 				if (inputTravelSpeed.getValue() != null) { wingCalculatorModel.settings.setTravelSpeed( Double.parseDouble(inputTravelSpeed.getText()) ); }
 			}
 		});
-		inputTravelSpeed.setBounds(195, 172, 75, 25);
+		inputTravelSpeed.setBounds(195, 161, 98, 25);
 		add(inputTravelSpeed);
 		// ------------------------------------------
 		JCheckBox cbxCutBaseFirst = new JCheckBox("Cut base first");
@@ -173,8 +178,43 @@ public class ParameterPanel extends JPanel {
 				wingCalculatorModel.settings.setCutBaseFirst(cbxCutBaseFirst.isSelected());
 			}
 		});
-		cbxCutBaseFirst.setBounds(43, 203, 208, 18);
+		cbxCutBaseFirst.setBounds(16, 203, 167, 18);
 		add(cbxCutBaseFirst);
+		// ------------------------------------------
+		JTextField inputDefaultProjectDirectory = new JTextField();
+		inputDefaultProjectDirectory.setEditable(false);
+		inputDefaultProjectDirectory.setText(wingCalculatorModel.settings.getProjectDefaultPath());
+		inputDefaultProjectDirectory.setBounds(195, 240, 432, 25);
+		add(inputDefaultProjectDirectory);
+		// ------------------------------------------
+		JTextField inputDefaultProfileDirectory = new JTextField();
+		inputDefaultProfileDirectory.setEditable(false);
+		inputDefaultProfileDirectory.setText(wingCalculatorModel.settings.getProfileDefaultPath());
+		inputDefaultProfileDirectory.setBounds(195, 272, 432, 25);
+		add(inputDefaultProfileDirectory);
+		// ------------------------------------------
+		// ------------------------------------------
+		JButton btnChangeProjectDirectory = new JButton("Set ...");
+		btnChangeProjectDirectory.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String aNewPath = getDefaultPath( inputDefaultProjectDirectory.getText() );
+				inputDefaultProjectDirectory.setText(aNewPath);
+				wingCalculatorModel.settings.setProjectDefaultPath(aNewPath);	
+			}
+		});
+		btnChangeProjectDirectory.setBounds(639, 240, 65, 27);
+		add(btnChangeProjectDirectory);
+		// ------------------------------------------
+		JButton btnChangeProfileDirectory = new JButton("Set ...");
+		btnChangeProfileDirectory.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String aNewPath = getDefaultPath( inputDefaultProfileDirectory.getText() );
+				inputDefaultProfileDirectory.setText(aNewPath);
+				wingCalculatorModel.settings.setProfileDefaultPath(aNewPath);	
+			}
+		});
+		btnChangeProfileDirectory.setBounds(639, 272, 65, 27);
+		add(btnChangeProfileDirectory);
 		// ------------------------------------------
 		JButton btnSaveParameters = new JButton("Save Parameters");
 		btnSaveParameters.addActionListener(new ActionListener() {
@@ -182,59 +222,80 @@ public class ParameterPanel extends JPanel {
 				wingCalculatorModel.saveSettings();
 				}
 		});
-		btnSaveParameters.setBounds(20, 229, 208, 27);
+		btnSaveParameters.setBounds(16, 318, 208, 27);
 		add(btnSaveParameters);
-		
-		inputProjectName = new JTextField();
-		inputProjectName.setBounds(70, 574, 229, 25);
-		add(inputProjectName);
-		inputProjectName.setColumns(10);
-		inputProjectName.setEditable(false);
-		inputProjectName.setBackground(Color.LIGHT_GRAY);
 		// ===============================================================
 		
 		
 		JLabel lblInputWireLength = new JLabel("Wire length [mm]");
-		lblInputWireLength.setBounds(6, 12, 128, 25);
+		lblInputWireLength.setBounds(16, 6, 167, 25);
 		add(lblInputWireLength);
 		
-		JLabel lblInputStartDistance = new JLabel("X-Distance [mm]");
-		lblInputStartDistance.setBounds(6, 49, 128, 25);
+		JLabel lblInputStartDistance = new JLabel("X-Start-Distance [mm]");
+		lblInputStartDistance.setBounds(16, 68, 167, 25);
 		add(lblInputStartDistance);
 		
 		JLabel lblInputSaveHeight = new JLabel("Save Height [mm]");
-		lblInputSaveHeight.setBounds(6, 38, 128, 25);
+		lblInputSaveHeight.setBounds(16, 37, 167, 25);
 		add(lblInputSaveHeight);
 		
 		JLabel lblInputCordOffset_1 = new JLabel("Cut speed [m/s]");
-		lblInputCordOffset_1.setBounds(16, 120, 115, 25);
+		lblInputCordOffset_1.setBounds(16, 130, 167, 25);
 		add(lblInputCordOffset_1);
 		
-		JLabel lblInputCordOffset_2 = new JLabel("Pause [s]");
-		lblInputCordOffset_2.setBounds(6, 75, 115, 25);
+		JLabel lblInputCordOffset_2 = new JLabel("Cut-Pause [s]");
+		lblInputCordOffset_2.setBounds(16, 99, 167, 25);
 		add(lblInputCordOffset_2);
 
 		JLabel lblInputCordOffset_1_1 = new JLabel("Travel speed [m/s]");
-		lblInputCordOffset_1_1.setBounds(20, 157, 115, 25);
+		lblInputCordOffset_1_1.setBounds(16, 161, 167, 25);
 		add(lblInputCordOffset_1_1);
 		
 		JSeparator separator = new JSeparator();
 		separator.setBounds(16, 219, 1, 2);
 		add(separator);
 		
+		JLabel lblInputCordOffset_1_1_1 = new JLabel("Default project directory");
+		lblInputCordOffset_1_1_1.setBounds(16, 240, 167, 25);
+		add(lblInputCordOffset_1_1_1);
 		
-
-		
-		
-		
-		
-
-		
-		
-		
-
-		
+		JLabel lblInputCordOffset_1_1_1_1 = new JLabel("Default profile directory");
+		lblInputCordOffset_1_1_1_1.setBounds(16, 272, 167, 25);
+		add(lblInputCordOffset_1_1_1_1);
 		
 	}
-	
+    
+    
+	private String getDefaultPath(String dirPath) {
+
+		String newPath = "";
+		JFileChooser projectFileChooser = new JFileChooser(dirPath);
+		projectFileChooser.setDialogTitle("Select Directory");
+		projectFileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		projectFileChooser.setAcceptAllFileFilterUsed(false);
+
+		
+		int returnVal = projectFileChooser.showOpenDialog(this);
+		
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			try {
+				File fileReturn = projectFileChooser.getSelectedFile();
+				newPath = fileReturn.getAbsolutePath();
+			
+			} catch (Exception ex) {
+				GUIHelpers.displayErrorDialog("Problem saving project file: " + ex.getMessage());
+				newPath = dirPath;
+			}
+		}
+		else {
+			newPath = dirPath;
+		}
+
+		return newPath;
+		
+	}    
+    
+    
+    
+    
 }

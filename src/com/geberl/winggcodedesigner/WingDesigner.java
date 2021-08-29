@@ -21,6 +21,8 @@ package com.geberl.winggcodedesigner;
 
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Font;
+
 import javax.swing.*;
 
 
@@ -30,7 +32,9 @@ import java.awt.Toolkit;
 import com.geberl.winggcodedesigner.model.WingCalculatorModel;
 import com.geberl.winggcodedesigner.types.Settings;
 import com.geberl.winggcodedesigner.types.SettingsFactory;
+import com.geberl.winggcodedesigner.uielements.ParameterPanel;
 import com.geberl.winggcodedesigner.uielements.WingCalculatorPanel;
+import com.geberl.winggcodedesigner.utils.GUIHelpers;
 
 
 /**
@@ -42,9 +46,6 @@ public class WingDesigner extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private javax.swing.JScrollPane wingCalculatorScrollPanel;
-	private WingCalculatorPanel wingCalculatorPanel;
-	private WingCalculatorModel wingCalculatorModel;
 
 	/** starts MainWindow */
 	public static void main(String[] args) { new WingDesigner(); }
@@ -55,27 +56,33 @@ public class WingDesigner extends JFrame {
 
         super("GCode Designer for Foam Wings");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-         
-        this.wingCalculatorModel = new WingCalculatorModel();
-        this.wingCalculatorPanel = new WingCalculatorPanel(this.wingCalculatorModel);
-        
-        this.wingCalculatorModel.addWingCalculatorEventListener(this.wingCalculatorPanel);
 
-        
-        Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
-        int x = (d.width - getSize().width) / 2;
-        int y = (d.height - getSize().height) / 2 ;
-        int frameWidth = d.width/2 - 60;
-        int frameHeight = d.height/2;
-        frameWidth = 1000;
-        frameHeight = 900;
+        int frameWidth = 1200;
+        int frameHeight = 1000;
         setSize(frameWidth, frameHeight);
-        setLocation(20, 60);
+        setMinimumSize(new java.awt.Dimension(500, 200));
+        setLocation(60, 60);
 
-        wingCalculatorScrollPanel = new javax.swing.JScrollPane(wingCalculatorPanel, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         Container cp = getContentPane();
         cp.setLayout(new BorderLayout());
-        cp.add(wingCalculatorScrollPanel, BorderLayout.CENTER);
+        
+        WingCalculatorModel wingCalculatorModel = new WingCalculatorModel();
+        WingCalculatorPanel wingCalculatorPanel = new WingCalculatorPanel(wingCalculatorModel);
+        ParameterPanel parameterPanel = new ParameterPanel(wingCalculatorModel);
+       
+        wingCalculatorModel.addWingCalculatorEventListener(wingCalculatorPanel);
+        
+        
+        JTabbedPane tabbedPanelMain = new JTabbedPane();
+        tabbedPanelMain.setFont(new Font("DejaVu Sans", Font.BOLD, 14));
+        // tabbedPanelMain.setBorder(javax.swing.BorderFactory.createLoweredBevelBorder());
+        // tabbedPanelMain.setBounds(190,0,610,480);
+        javax.swing.JScrollPane wingCalculatorScrollPanel = new javax.swing.JScrollPane(wingCalculatorPanel, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        javax.swing.JScrollPane parameterPanelScrollPanel = new javax.swing.JScrollPane(parameterPanel, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        tabbedPanelMain.addTab("Project",wingCalculatorScrollPanel);
+        tabbedPanelMain.addTab("Settings",parameterPanelScrollPanel);
+        
+        cp.add(tabbedPanelMain, BorderLayout.CENTER);
         
 
         /** look and feel */

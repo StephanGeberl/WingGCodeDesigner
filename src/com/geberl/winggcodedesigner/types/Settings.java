@@ -21,9 +21,12 @@ package com.geberl.winggcodedesigner.types;
 
 import java.util.logging.Logger;
 
+import com.geberl.winggcodedesigner.utils.GUIHelpers;
+
 public class Settings {
     private static final Logger logger = Logger.getLogger(Settings.class.getName());
 
+    private transient Boolean isDirty = false;
 
     private Double wireLength = 800.0;
     private Double startDistance = 20.0;
@@ -46,15 +49,15 @@ public class Settings {
 	// ==================
 	// Parameter
 	// ==================
-	public void setWireLength(Double aValue) { this.wireLength = aValue; }
-	public void setStartDistance(Double aValue) { this.startDistance = aValue; }
-	public void setSaveHeight(Double aValue) { this.saveHeight = aValue; }
-	public void setPause(Double aValue) { this.pause = aValue; }
-	public void setWireSpeed(Double aValue) { this.wireSpeed = aValue; }
-	public void setTravelSpeed(Double aValue) { this.travelSpeed = aValue; }
-	public void setCutBaseFirst(Boolean aValue) { this.cutBaseFirst = aValue; }
-	public void setProjectDefaultPath(String aValue) { this.projectDefaultPath = aValue; }
-	public void setProfileDefaultPath(String aValue) { this.profileDefaultPath = aValue; }
+	public void setWireLength(Double aValue) { this.wireLength = aValue; isDirty = true; }
+	public void setStartDistance(Double aValue) { this.startDistance = aValue; isDirty = true; }
+	public void setSaveHeight(Double aValue) { this.saveHeight = aValue; isDirty = true; }
+	public void setPause(Double aValue) { this.pause = aValue; isDirty = true; }
+	public void setWireSpeed(Double aValue) { this.wireSpeed = aValue; isDirty = true; }
+	public void setTravelSpeed(Double aValue) { this.travelSpeed = aValue; isDirty = true; }
+	public void setCutBaseFirst(Boolean aValue) { this.cutBaseFirst = aValue; isDirty = true; }
+	public void setProjectDefaultPath(String aValue) { this.projectDefaultPath = aValue; isDirty = true; }
+	public void setProfileDefaultPath(String aValue) { this.profileDefaultPath = aValue; isDirty = true; }
 	// ==================
 
 	public Double getWireLength() {return this.wireLength;}
@@ -66,6 +69,8 @@ public class Settings {
 	public Boolean getCutBaseFirst() {return this.cutBaseFirst;}
 	public String getProjectDefaultPath() { return this.projectDefaultPath; }
 	public String getProfileDefaultPath() { return this.profileDefaultPath; }
+	
+	public Boolean isDirty() { return isDirty; }
 
 	// ==================
 
