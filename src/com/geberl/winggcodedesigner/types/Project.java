@@ -66,6 +66,11 @@ public class Project {
 	private Double sparOffsetBottom = 0.0;
 	private Double sparWidthBottom = 0.0;
 	private Double sparHeightBottom = 0.0;
+	
+	private Boolean isHollowed = false;
+	private Double wallThickness = 0.0;
+	private Double crosspieceWidth = 0.0;
+	private Double crossperceOffset = 0.0;
 
 
     /**
