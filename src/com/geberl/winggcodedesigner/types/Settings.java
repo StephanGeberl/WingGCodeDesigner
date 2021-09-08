@@ -49,15 +49,15 @@ public class Settings {
 	// ==================
 	// Parameter
 	// ==================
-	public void setWireLength(Double aValue) { this.wireLength = aValue; isDirty = true; }
-	public void setStartDistance(Double aValue) { this.startDistance = aValue; isDirty = true; }
-	public void setSaveHeight(Double aValue) { this.saveHeight = aValue; isDirty = true; }
-	public void setPause(Double aValue) { this.pause = aValue; isDirty = true; }
-	public void setWireSpeed(Double aValue) { this.wireSpeed = aValue; isDirty = true; }
-	public void setTravelSpeed(Double aValue) { this.travelSpeed = aValue; isDirty = true; }
-	public void setCutBaseFirst(Boolean aValue) { this.cutBaseFirst = aValue; isDirty = true; }
-	public void setProjectDefaultPath(String aValue) { this.projectDefaultPath = aValue; isDirty = true; }
-	public void setProfileDefaultPath(String aValue) { this.profileDefaultPath = aValue; isDirty = true; }
+	public void setWireLength(Double aValue) { this.wireLength = aValue; this.isDirty = true; }
+	public void setStartDistance(Double aValue) { this.startDistance = aValue; this.isDirty = true; }
+	public void setSaveHeight(Double aValue) { this.saveHeight = aValue; this.isDirty = true; }
+	public void setPause(Double aValue) { this.pause = aValue; this.isDirty = true; }
+	public void setWireSpeed(Double aValue) { this.wireSpeed = aValue; this.isDirty = true; }
+	public void setTravelSpeed(Double aValue) { this.travelSpeed = aValue; this.isDirty = true; }
+	public void setCutBaseFirst(Boolean aValue) { this.cutBaseFirst = aValue; this.isDirty = true; }
+	public void setProjectDefaultPath(String aValue) { this.projectDefaultPath = aValue; this.isDirty = true; }
+	public void setProfileDefaultPath(String aValue) { this.profileDefaultPath = aValue; this.isDirty = true; }
 	// ==================
 
 	public Double getWireLength() {return this.wireLength;}
