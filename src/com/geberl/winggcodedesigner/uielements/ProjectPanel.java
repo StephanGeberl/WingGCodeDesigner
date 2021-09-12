@@ -61,10 +61,8 @@ public class ProjectPanel extends JPanel {
 	private JTextField inputBaseProfileNumberPoints;
 	private JTextField inputTipProfileName;
 	private JTextField inputTipProfileNumberPoints;
-	private JTextField inputProjectName;
 	private JPanel topSparePanel = new JPanel();
 	private JPanel bottomSparePanel = new JPanel();
-	private JLabel statusMessage = new JLabel("<html><b>Idle</b></html>");
 	
 	private JFormattedTextField sMiddleCordLength;
 	private JFormattedTextField sBaseCordWireBase;
@@ -89,7 +87,7 @@ public class ProjectPanel extends JPanel {
 		
 		setForeground(Color.LIGHT_GRAY);
 		this.setLayout(null);
-		this.setPreferredSize(new Dimension(826, 367));
+		this.setPreferredSize(new Dimension(972, 357));
 		
 		this.createControls();
 	}
@@ -143,18 +141,18 @@ public class ProjectPanel extends JPanel {
 		loadBaseWingProfile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) { wingCalculatorModel.loadBaseProfileData(); }
 		});
-		loadBaseWingProfile.setBounds(509, 6, 170, 25);
+		loadBaseWingProfile.setBounds(774, 6, 170, 25);
 		add(loadBaseWingProfile);
 		
 		inputBaseProfileName = new JTextField();
-		inputBaseProfileName.setBounds(509, 31, 122, 25);
+		inputBaseProfileName.setBounds(774, 31, 122, 25);
 		add(inputBaseProfileName);
 		inputBaseProfileName.setColumns(10);
 		inputBaseProfileName.setEditable(false);
 		inputBaseProfileName.setBackground(Color.LIGHT_GRAY);
 		
 		inputBaseProfileNumberPoints = new JTextField();
-		inputBaseProfileNumberPoints.setBounds(630, 31, 49, 25);
+		inputBaseProfileNumberPoints.setBounds(895, 31, 49, 25);
 		add(inputBaseProfileNumberPoints);
 		inputBaseProfileNumberPoints.setColumns(10);
 		inputBaseProfileNumberPoints.setEditable(false);
@@ -164,18 +162,18 @@ public class ProjectPanel extends JPanel {
 		loadTipWingProfile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) { wingCalculatorModel.loadTipProfileData(); }
 		});
-		loadTipWingProfile.setBounds(509, 90, 170, 25);
+		loadTipWingProfile.setBounds(774, 81, 170, 25);
 		add(loadTipWingProfile);
 		
 		inputTipProfileName = new JTextField();
-		inputTipProfileName.setBounds(509, 116, 122, 25);
+		inputTipProfileName.setBounds(774, 106, 122, 25);
 		add(inputTipProfileName);
 		inputTipProfileName.setColumns(10);
 		inputTipProfileName.setEditable(false);
 		inputTipProfileName.setBackground(Color.LIGHT_GRAY);
 		
 		inputTipProfileNumberPoints = new JTextField();
-		inputTipProfileNumberPoints.setBounds(630, 116, 49, 25);
+		inputTipProfileNumberPoints.setBounds(895, 106, 49, 25);
 		add(inputTipProfileNumberPoints);
 		inputTipProfileNumberPoints.setColumns(10);
 		inputTipProfileNumberPoints.setEditable(false);
@@ -186,7 +184,7 @@ public class ProjectPanel extends JPanel {
 		chckbxChangeBaseDirection.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) { wingCalculatorModel.changeBaseProfileDirection(chckbxChangeBaseDirection.isSelected()); }
 		});
-		chckbxChangeBaseDirection.setBounds(509, 55, 175, 23);
+		chckbxChangeBaseDirection.setBounds(774, 57, 175, 23);
 		add(chckbxChangeBaseDirection);
 		
 		JCheckBox chckbxChangeTipDirection = new JCheckBox("Change Direction (Tip)");
@@ -194,7 +192,7 @@ public class ProjectPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) { wingCalculatorModel.changeBaseProfileDirection(chckbxChangeTipDirection.isSelected()); }
 		});
 		chckbxChangeTipDirection.setSelected(true);
-		chckbxChangeTipDirection.setBounds(509, 139, 170, 23);
+		chckbxChangeTipDirection.setBounds(774, 132, 170, 23);
 		add(chckbxChangeTipDirection);
 		// ================================================
 		
@@ -211,31 +209,24 @@ public class ProjectPanel extends JPanel {
 				wingCalculatorModel.saveProject();
 				}
 		});
-		btnSaveProject.setBounds(742, 44, 170, 27);
+		btnSaveProject.setBounds(774, 206, 170, 27);
 		add(btnSaveProject);
 		// ------------------------------------------
 		JButton btnLoadProject = new JButton("Load Project");
 		btnLoadProject.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				wingCalculatorModel.loadProject();
-				inputProjectName.setText(wingCalculatorModel.project.getProjectName());
+				// inputProjectName.setText(wingCalculatorModel.project.getProjectName());
 				}
 		});
-		btnLoadProject.setBounds(742, 5, 170, 27);
+		btnLoadProject.setBounds(774, 180, 170, 27);
 		add(btnLoadProject);
-		
-		inputProjectName = new JTextField();
-		inputProjectName.setBounds(6, 212, 229, 25);
-		add(inputProjectName);
-		inputProjectName.setColumns(10);
-		inputProjectName.setEditable(false);
-		inputProjectName.setBackground(Color.LIGHT_GRAY);
 
 		
 		
 		JFormattedTextField sProjectName = new JFormattedTextField();
 		sProjectName.setEditable(false);
-		sProjectName.setBounds(6, 212, 229, 25);
+		sProjectName.setBounds(47, 6, 200, 25);
 		add(sProjectName);
 		
 		
@@ -250,7 +241,7 @@ public class ProjectPanel extends JPanel {
 				if (inputHalfspanLength.getValue() != null) { wingCalculatorModel.setHalfSpanLength( Double.parseDouble(inputHalfspanLength.getText()) ); }
 			}
 		});
-		inputHalfspanLength.setBounds(160, 6, 75, 25);
+		inputHalfspanLength.setBounds(172, 31, 75, 25);
 		add(inputHalfspanLength);
 		// ------------------------------------------
 		JFormattedTextField inputBaseCordLength = new JFormattedTextField(doubleFormatter);
@@ -260,7 +251,7 @@ public class ProjectPanel extends JPanel {
 				if (inputBaseCordLength.getValue() != null) { wingCalculatorModel.setBaseCordLength( Double.parseDouble(inputBaseCordLength.getText()) ); }
 			}
 		});
-		inputBaseCordLength.setBounds(160, 30, 75, 25);
+		inputBaseCordLength.setBounds(172, 55, 75, 25);
 		add(inputBaseCordLength);
 		// ------------------------------------------
 		JFormattedTextField inputTipCordLength = new JFormattedTextField(doubleFormatter);
@@ -270,7 +261,7 @@ public class ProjectPanel extends JPanel {
 				if (inputTipCordLength.getValue() != null) { wingCalculatorModel.setTipCordLength( Double.parseDouble(inputTipCordLength.getText()) ); }
 			}
 		});
-		inputTipCordLength.setBounds(160, 56, 75, 25);
+		inputTipCordLength.setBounds(172, 81, 75, 25);
 		add(inputTipCordLength);
 		// ------------------------------------------
 		JFormattedTextField inputBaseMeltingLoss = new JFormattedTextField(doubleFormatter);
@@ -280,7 +271,7 @@ public class ProjectPanel extends JPanel {
 				if (inputBaseMeltingLoss.getValue() != null) { wingCalculatorModel.setBaseMeltingLoss( Double.parseDouble(inputBaseMeltingLoss.getText()) ); }
 			}
 		});
-		inputBaseMeltingLoss.setBounds(160, 81, 75, 25);
+		inputBaseMeltingLoss.setBounds(172, 106, 75, 25);
 		add(inputBaseMeltingLoss);
 		// ------------------------------------------
 		JFormattedTextField inputTipMeltingLoss = new JFormattedTextField(doubleFormatter);
@@ -290,7 +281,7 @@ public class ProjectPanel extends JPanel {
 				if (inputTipMeltingLoss.getValue() != null) { wingCalculatorModel.setTipMeltingLoss( Double.parseDouble(inputTipMeltingLoss.getText()) ); }
 			}
 		});
-		inputTipMeltingLoss.setBounds(160, 106, 75, 25);
+		inputTipMeltingLoss.setBounds(172, 131, 75, 25);
 		add(inputTipMeltingLoss);
 		// ------------------------------------------
 		JFormattedTextField inputWingSweep = new JFormattedTextField(degreeFormatter);
@@ -300,7 +291,7 @@ public class ProjectPanel extends JPanel {
 				if (inputWingSweep.getValue() != null) { wingCalculatorModel.setWingSweep( Double.parseDouble(inputWingSweep.getText()) ); }
 			}
 		});
-		inputWingSweep.setBounds(160, 131, 75, 25);
+		inputWingSweep.setBounds(172, 156, 75, 25);
 		add(inputWingSweep);
 		// ------------------------------------------
 		JFormattedTextField inputWingTipOffset = new JFormattedTextField(degreeFormatter);
@@ -310,7 +301,7 @@ public class ProjectPanel extends JPanel {
 				if (inputWingTipOffset.getValue() != null) { wingCalculatorModel.setWingTipOffset( Double.parseDouble(inputWingTipOffset.getText()) ); }
 			}
 		});
-		inputWingTipOffset.setBounds(160, 156, 75, 25);
+		inputWingTipOffset.setBounds(172, 181, 75, 25);
 		add(inputWingTipOffset);
 		// ------------------------------------------
 		JFormattedTextField inputWingTipYOffset = new JFormattedTextField(decimalFormater);
@@ -320,7 +311,7 @@ public class ProjectPanel extends JPanel {
 				if (inputWingTipYOffset.getValue() != null) { wingCalculatorModel.setWingTipYOffset( Double.parseDouble(inputWingTipYOffset.getText()) ); }
 			}
 		});
-		inputWingTipYOffset.setBounds(160, 182, 75, 25);
+		inputWingTipYOffset.setBounds(172, 207, 75, 25);
 		add(inputWingTipYOffset);
 		
 		
@@ -334,19 +325,8 @@ public class ProjectPanel extends JPanel {
 				setPanelEnabled(topSparePanel, chckbxSparWingTop.isSelected());
 			}
 		});
-		chckbxSparWingTop.setBounds(259, 9, 115, 18);
+		chckbxSparWingTop.setBounds(282, 9, 193, 18);
 		add(chckbxSparWingTop);
-		
-		JCheckBox chckbxSparWingBottom = new JCheckBox("Spar wing bottom");
-		chckbxSparWingBottom.setSelected(false);
-		chckbxSparWingBottom.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				wingCalculatorModel.setHasSparBottom(chckbxSparWingBottom.isSelected());
-				setPanelEnabled(bottomSparePanel, chckbxSparWingBottom.isSelected());
-			}
-		});
-		chckbxSparWingBottom.setBounds(259, 109, 149, 18);
-		add(chckbxSparWingBottom);
 		
 		// ===============================================================
 		topSparePanel.setBounds(282, 30, 193, 76);
@@ -355,7 +335,7 @@ public class ProjectPanel extends JPanel {
 		
 			// ------------------------------------------
 			JFormattedTextField inputSparOffsetTop = new JFormattedTextField(doubleFormatter);
-			inputSparOffsetTop.setBounds(119, 0, 75, 25);
+			inputSparOffsetTop.setBounds(128, 1, 75, 25);
 			topSparePanel.add(inputSparOffsetTop);
 			inputSparOffsetTop.setText("0.0");
 			inputSparOffsetTop.addPropertyChangeListener(new PropertyChangeListener() {
@@ -365,7 +345,7 @@ public class ProjectPanel extends JPanel {
 			});
 			// ------------------------------------------
 			JFormattedTextField inputSparWidthTop = new JFormattedTextField(doubleFormatter);
-			inputSparWidthTop.setBounds(119, 26, 75, 25);
+			inputSparWidthTop.setBounds(128, 26, 75, 25);
 			topSparePanel.add(inputSparWidthTop);
 			inputSparWidthTop.setText("0.0");
 			inputSparWidthTop.addPropertyChangeListener(new PropertyChangeListener() {
@@ -375,7 +355,7 @@ public class ProjectPanel extends JPanel {
 			});
 			// ------------------------------------------
 			JFormattedTextField inputSparHeightTop = new JFormattedTextField(doubleFormatter);
-			inputSparHeightTop.setBounds(119, 51, 75, 25);
+			inputSparHeightTop.setBounds(128, 51, 75, 25);
 			topSparePanel.add(inputSparHeightTop);
 			inputSparHeightTop.setText("0.0");
 			inputSparHeightTop.addPropertyChangeListener(new PropertyChangeListener() {
@@ -408,7 +388,7 @@ public class ProjectPanel extends JPanel {
 		
 			// ------------------------------------------
 			JFormattedTextField inputSparOffsetBottom = new JFormattedTextField(doubleFormatter);
-			inputSparOffsetBottom.setBounds(119, 0, 75, 25);
+			inputSparOffsetBottom.setBounds(129, 25, 75, 25);
 			bottomSparePanel.add(inputSparOffsetBottom);
 			inputSparOffsetBottom.setText("0.0");
 			inputSparOffsetBottom.addPropertyChangeListener(new PropertyChangeListener() {
@@ -418,7 +398,7 @@ public class ProjectPanel extends JPanel {
 			});
 			// ------------------------------------------
 			JFormattedTextField inputSparWidthBottom = new JFormattedTextField(doubleFormatter);
-			inputSparWidthBottom.setBounds(119, 26, 75, 25);
+			inputSparWidthBottom.setBounds(129, 50, 75, 25);
 			bottomSparePanel.add(inputSparWidthBottom);
 			inputSparWidthBottom.setText("0.0");
 			inputSparWidthBottom.addPropertyChangeListener(new PropertyChangeListener() {
@@ -426,87 +406,57 @@ public class ProjectPanel extends JPanel {
 					if (inputSparWidthBottom.getValue() != null) { wingCalculatorModel.setSparWidthBottom( Double.parseDouble(inputSparWidthBottom.getText()) ); }
 				}
 			});
-			// ------------------------------------------
-			JFormattedTextField inputSparHeightBottom = new JFormattedTextField(doubleFormatter);
-			inputSparHeightBottom.setBounds(119, 51, 75, 25);
-			bottomSparePanel.add(inputSparHeightBottom);
-			inputSparHeightBottom.setText("0.0");
-			inputSparHeightBottom.addPropertyChangeListener(new PropertyChangeListener() {
-				public void propertyChange(PropertyChangeEvent evt) {
-					if (inputSparHeightBottom.getValue() != null) { wingCalculatorModel.setSparHeightBottom( Double.parseDouble(inputSparHeightBottom.getText()) ); }
-				}
-			});
 		
 			// ------------------------------------------
 			JLabel lblInputHalfspanLength_1_3_2_1_1_1_1 = new JLabel("Spar offset [%]");
-			lblInputHalfspanLength_1_3_2_1_1_1_1.setBounds(0, 0, 127, 25);
+			lblInputHalfspanLength_1_3_2_1_1_1_1.setBounds(0, 25, 127, 25);
 			bottomSparePanel.add(lblInputHalfspanLength_1_3_2_1_1_1_1);
 			// ------------------------------------------
 			JLabel lblInputHalfspanLength_1_3_2_1_1_1_1_1 = new JLabel("Spar width [mm]");
-			lblInputHalfspanLength_1_3_2_1_1_1_1_1.setBounds(0, 25, 127, 25);
+			lblInputHalfspanLength_1_3_2_1_1_1_1_1.setBounds(0, 50, 127, 25);
 			bottomSparePanel.add(lblInputHalfspanLength_1_3_2_1_1_1_1_1);
-			// ------------------------------------------
-			JLabel lblInputHalfspanLength_1_3_2_1_1_1_1_2 = new JLabel("Spar height [mm]");
-			lblInputHalfspanLength_1_3_2_1_1_1_1_2.setBounds(0, 47, 127, 25);
-			bottomSparePanel.add(lblInputHalfspanLength_1_3_2_1_1_1_1_2);
-			// ------------------------------------------
+		
+		JCheckBox chckbxSparWingBottom = new JCheckBox("Spar wing bottom");
+		chckbxSparWingBottom.setBounds(0, 0, 193, 26);
+		bottomSparePanel.add(chckbxSparWingBottom);
+		chckbxSparWingBottom.setSelected(false);
+		chckbxSparWingBottom.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				wingCalculatorModel.setHasSparBottom(chckbxSparWingBottom.isSelected());
+				setPanelEnabled(bottomSparePanel, chckbxSparWingBottom.isSelected());
+			}
+		});
+		// ------------------------------------------
 		
 		setPanelEnabled(bottomSparePanel, chckbxSparWingBottom.isSelected());
 		
 		JLabel lblInputHalfspanLength = new JLabel("Half wingspan [mm]");
-		lblInputHalfspanLength.setBounds(6, 6, 149, 25);
+		lblInputHalfspanLength.setBounds(6, 31, 170, 25);
 		add(lblInputHalfspanLength);
 		
 		JLabel lblInputHalfspanLength_1 = new JLabel("Base cord [mm]");
-		lblInputHalfspanLength_1.setBounds(6, 30, 149, 25);
+		lblInputHalfspanLength_1.setBounds(6, 55, 170, 25);
 		add(lblInputHalfspanLength_1);
 		
 		JLabel lblInputHalfspanLength_1_1 = new JLabel("Tip cord [mm]");
-		lblInputHalfspanLength_1_1.setBounds(6, 56, 149, 25);
+		lblInputHalfspanLength_1_1.setBounds(6, 81, 170, 25);
 		add(lblInputHalfspanLength_1_1);
 		
 		JLabel lblInputHalfspanLength_1_2 = new JLabel("Melting loss base [mm]");
-		lblInputHalfspanLength_1_2.setBounds(6, 81, 157, 25);
+		lblInputHalfspanLength_1_2.setBounds(6, 106, 170, 25);
 		add(lblInputHalfspanLength_1_2);
 		
 		JLabel lblInputHalfspanLength_1_3 = new JLabel("Melting loss tip [mm]");
-		lblInputHalfspanLength_1_3.setBounds(6, 106, 149, 25);
+		lblInputHalfspanLength_1_3.setBounds(6, 131, 170, 25);
 		add(lblInputHalfspanLength_1_3);
 		
 		JLabel lblInputHalfspanLength_1_3_1 = new JLabel("Wing sweep [deg]");
-		lblInputHalfspanLength_1_3_1.setBounds(6, 131, 128, 25);
+		lblInputHalfspanLength_1_3_1.setBounds(6, 156, 170, 25);
 		add(lblInputHalfspanLength_1_3_1);
 		
 		JLabel lblInputHalfspanLength_1_3_2 = new JLabel("Wing tip offset [deg]");
-		lblInputHalfspanLength_1_3_2.setBounds(6, 156, 141, 25);
+		lblInputHalfspanLength_1_3_2.setBounds(6, 181, 170, 25);
 		add(lblInputHalfspanLength_1_3_2);
-		
-		// =========== Status Message ===========================
-		statusMessage.setBounds(509, 196, 403, 25);
-		add(statusMessage);
-		// =======================================================
-		
-		// =========== Action Buttons ============================
-		JButton btnSaveRightGcode = new JButton("Save right GCode");
-		btnSaveRightGcode.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) { wingCalculatorModel.saveRightGcodeList(); }
-		});
-		btnSaveRightGcode.setBounds(742, 115, 170, 27);
-		add(btnSaveRightGcode);
-
-		JButton btnSaveLeftGcode = new JButton("Save left GCode");
-		btnSaveLeftGcode.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) { wingCalculatorModel.saveLeftGcodeList(); }
-		});
-		btnSaveLeftGcode.setBounds(742, 80, 170, 27);
-		add(btnSaveLeftGcode);
-		
-		JButton btnDrawDraft = new JButton("Draw draft");
-		btnDrawDraft.addActionListener(new ActionListener() { 
-			public void actionPerformed(ActionEvent e) { wingCalculatorModel.drawDraft(); }
-		});
-		btnDrawDraft.setBounds(742, 155, 170, 27);
-		add(btnDrawDraft);
 		
 		JLabel lblInputHalfspanLength_1_3_2_2 = new JLabel("Mid cord length [mm]");
 		lblInputHalfspanLength_1_3_2_2.setBounds(6, 533, 157, 25);
@@ -603,24 +553,27 @@ public class ProjectPanel extends JPanel {
 		add(lblInputHalfspanLength_1_3_2_2_1_3_3);
 		
 		JLabel lblInputWingTipYOffset = new JLabel("Wing y offset [mm]");
-		lblInputWingTipYOffset.setBounds(6, 182, 141, 25);
+		lblInputWingTipYOffset.setBounds(6, 207, 170, 25);
 		add(lblInputWingTipYOffset);
+		// ------------------------------------------
+		JLabel lblInputHalfspanLength_1_3_2_1_1_1_1_2 = new JLabel("Spar height [mm]");
+		lblInputHalfspanLength_1_3_2_1_1_1_1_2.setBounds(282, 207, 127, 25);
+		add(lblInputHalfspanLength_1_3_2_1_1_1_1_2);
+		// ------------------------------------------
+		JFormattedTextField inputSparHeightBottom = new JFormattedTextField(doubleFormatter);
+		inputSparHeightBottom.setBounds(410, 207, 65, 25);
+		add(inputSparHeightBottom);
+		inputSparHeightBottom.setText("0.0");
+		
+		JLabel lblName = new JLabel("Name");
+		lblName.setBounds(6, 6, 49, 25);
+		add(lblName);
+		inputSparHeightBottom.addPropertyChangeListener(new PropertyChangeListener() {
+			public void propertyChange(PropertyChangeEvent evt) {
+				if (inputSparHeightBottom.getValue() != null) { wingCalculatorModel.setSparHeightBottom( Double.parseDouble(inputSparHeightBottom.getText()) ); }
+			}
+		});
 		// =======================================================
-		
-		ProfilesDrawPanel profilePanel = new ProfilesDrawPanel(wingCalculatorModel);
-		profilePanel.setBounds(259, 241, 660, 210);
-		add(profilePanel);
-		wingCalculatorModel.addWingCalculatorEventListener(profilePanel);
-		
-		
-		
-		WingDrawPanel wingPanel = new WingDrawPanel(wingCalculatorModel);
-		wingPanel.setBounds(259, 463, 660, 210);
-		add(wingPanel);
-		wingCalculatorModel.addWingCalculatorEventListener(wingPanel);
-				
-		
-		
 		
 		
 		
@@ -676,8 +629,4 @@ public class ProjectPanel extends JPanel {
 	        component.setEnabled(isEnabled);
 	    }
 	}
-    
-    
-    
-    
 }
