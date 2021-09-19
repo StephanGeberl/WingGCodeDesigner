@@ -33,6 +33,7 @@ public class Project {
 	// Input
 	// =====================================
     private transient Boolean isDirty = false;
+    private transient String projectPath = "";
     
     private String projectName = "";
     private String baseProfilePath = "";
@@ -41,6 +42,7 @@ public class Project {
 	private Integer tipProfileNumberPoints;
 	private Boolean baseDirection = true;
 	private Boolean tipDirection = true;
+	private Boolean cutBaseFirst = false;
 
 	
     private Double halfSpanLength = 0.0;
@@ -81,49 +83,61 @@ public class Project {
     // ==================
 	// Get / Set
 	// ==================
-	
-	public void setProjectName(String aValue) { this.projectName = aValue; this.isDirty = true; }
-	public void setBaseProfilePath(String aValue) { this.baseProfilePath = aValue; this.isDirty = true; }
-	public void setTipProfilePath(String aValue) { this.tipProfilePath = aValue; this.isDirty = true; }
+	public void setIsDirty(Boolean aValue) {
+		this.isDirty = aValue;
+	}
 
     
-    public void setBaseCordLength(Double aValue) { this.baseCordLength = aValue; this.isDirty = true; }
-	public void setTipCordLength(Double aValue) { this.tipCordLength = aValue; this.isDirty = true; }
-	public void setBaseMeltingLoss(Double aValue) { this.baseMeltingLoss = aValue; this.isDirty = true; }
-	public void setTipMeltingLoss(Double aValue) { this.tipMeltingLoss = aValue; this.isDirty = true; }
+    
+	public void setProjectName(String aValue) { this.projectName = aValue; this.setIsDirty(true); }
+	public void setBaseProfilePath(String aValue) { this.baseProfilePath = aValue; this.setIsDirty(true); }
+	public void setTipProfilePath(String aValue) { this.tipProfilePath = aValue; this.setIsDirty(true); }
 
-	public void setWingSweep(Double aValue) { this.wingSweep = aValue; this.isDirty = true; }
-	public void setWingTipOffset(Double aValue) { this.wingTipOffset = aValue; this.isDirty = true; }
-	public void setWingTipYOffset(Double aValue) { this.wingTipYOffset = aValue; this.isDirty = true; }
+	public void setCutBaseFirst(Boolean aValue) { this.cutBaseFirst = aValue; this.setIsDirty(true); }
 
-	public void setHasSparTop(Boolean aValue) { this.hasSparTop = aValue; this.isDirty = true; }
-	public void setHasSparBottom(Boolean aValue) { this.hasSparBottom = aValue; this.isDirty = true; }
-	public void setSparOffsetTop(Double aValue) { this.sparOffsetTop = aValue; this.isDirty = true; }
-	public void setSparWidthTop(Double aValue) { this.sparWidthTop = aValue; this.isDirty = true; }
-	public void setSparHeightTop(Double aValue) { this.sparHeightTop = aValue; this.isDirty = true; }
-	public void setSparOffsetBottom(Double aValue) { this.sparOffsetBottom = aValue; this.isDirty = true; }
-	public void setSparWidthBottom(Double aValue) { this.sparWidthBottom = aValue; this.isDirty = true; }
-	public void setSparHeightBottom(Double aValue) { this.sparHeightBottom = aValue; this.isDirty = true; }
 	
-	public void setIsHollowed(Boolean aValue) { this.isHollowed = aValue; this.isDirty = true; }
-	public void setIsHollowedFrontOnly(Boolean aValue) { this.isHollowedFrontOnly = aValue; this.isDirty = true; }
-	public void setWallThickness(Double aValue) { this.wallThickness = aValue; this.isDirty = true; }
-	public void setCrosspieceWidth(Double aValue) { this.crosspieceWidth = aValue; this.isDirty = true; }
-	public void setCrosspieceOffset(Double aValue) { this.crosspieceOffset = aValue; this.isDirty = true; }
-	public void setFrontHollowOffset(Double aValue) { this.frontHollowOffset = aValue; this.isDirty = true; }
-	public void setBackHollowOffset(Double aValue) { this.backHollowOffset = aValue; this.isDirty = true; }
+    public void setHalfSpanLength(Double aValue) { this.halfSpanLength = aValue; this.setIsDirty(true); }
+    public void setBaseCordLength(Double aValue) { this.baseCordLength = aValue; this.setIsDirty(true); }
+	public void setTipCordLength(Double aValue) { this.tipCordLength = aValue; this.setIsDirty(true); }
+	public void setBaseMeltingLoss(Double aValue) { this.baseMeltingLoss = aValue; this.setIsDirty(true); }
+	public void setTipMeltingLoss(Double aValue) { this.tipMeltingLoss = aValue; this.setIsDirty(true); }
 
-	public void setBaseDirection(Boolean aValue) { this.baseDirection = aValue; this.isDirty = true; }
-	public void setTipDirection(Boolean aValue) { this.tipDirection = aValue; this.isDirty = true; }
+	public void setWingSweep(Double aValue) { this.wingSweep = aValue; this.setIsDirty(true); }
+	public void setWingTipOffset(Double aValue) { this.wingTipOffset = aValue; this.setIsDirty(true); }
+	public void setWingTipYOffset(Double aValue) { this.wingTipYOffset = aValue; this.setIsDirty(true); }
+
+	public void setHasSparTop(Boolean aValue) { this.hasSparTop = aValue; this.setIsDirty(true); }
+	public void setHasSparBottom(Boolean aValue) { this.hasSparBottom = aValue; this.setIsDirty(true); }
+	public void setSparOffsetTop(Double aValue) { this.sparOffsetTop = aValue; this.setIsDirty(true); }
+	public void setSparWidthTop(Double aValue) { this.sparWidthTop = aValue; this.setIsDirty(true); }
+	public void setSparHeightTop(Double aValue) { this.sparHeightTop = aValue; this.setIsDirty(true); }
+	public void setSparOffsetBottom(Double aValue) { this.sparOffsetBottom = aValue; this.setIsDirty(true); }
+	public void setSparWidthBottom(Double aValue) { this.sparWidthBottom = aValue; this.setIsDirty(true); }
+	public void setSparHeightBottom(Double aValue) { this.sparHeightBottom = aValue; this.setIsDirty(true); }
+	
+	public void setIsHollowed(Boolean aValue) { this.isHollowed = aValue; this.setIsDirty(true); }
+	public void setIsHollowedFrontOnly(Boolean aValue) { this.isHollowedFrontOnly = aValue; this.setIsDirty(true); }
+	public void setWallThickness(Double aValue) { this.wallThickness = aValue; this.setIsDirty(true); }
+	public void setCrosspieceWidth(Double aValue) { this.crosspieceWidth = aValue; this.setIsDirty(true); }
+	public void setCrosspieceOffset(Double aValue) { this.crosspieceOffset = aValue; this.setIsDirty(true); }
+	public void setFrontHollowOffset(Double aValue) { this.frontHollowOffset = aValue; this.setIsDirty(true); }
+	public void setBackHollowOffset(Double aValue) { this.backHollowOffset = aValue; this.setIsDirty(true); }
+
+	public void setBaseDirection(Boolean aValue) { this.baseDirection = aValue; this.setIsDirty(true); }
+	public void setTipDirection(Boolean aValue) { this.tipDirection = aValue; this.setIsDirty(true); }
 
 	// ==================
 	public Boolean getIsDirty() { return this.isDirty; }
+	public String getProjectPath() { return this.projectPath; }
 	
 	public String getProjectName() { return this.projectName; }
 	public String getBaseProfilePath() { return this.baseProfilePath; }
 	public String getTipProfilePath() { return this.tipProfilePath; }
 	
+	public Boolean setCutBaseFirst() { return this.cutBaseFirst; }
+
 	public Double getHalfSpanLength() {return this.halfSpanLength;};
+	public Double getBaseCordLength() { return this.baseCordLength; }
 	public Double getTipCordLength() { return this.tipCordLength; }
 	public Double getBaseMeltingLoss() { return this.baseMeltingLoss; }
 	public Double getTipMeltingLoss() { return this.tipMeltingLoss; }
