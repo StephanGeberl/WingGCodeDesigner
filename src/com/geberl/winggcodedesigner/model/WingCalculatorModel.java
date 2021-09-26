@@ -38,10 +38,6 @@ import javax.swing.filechooser.FileSystemView;
 import com.geberl.winggcodedesigner.utils.GUIHelpers;
 import com.geberl.winggcodedesigner.eventing.WingCalculatorEvent;
 import com.geberl.winggcodedesigner.eventing.WingCalculatorEventListener;
-import com.geberl.winggcodedesigner.types.Project;
-import com.geberl.winggcodedesigner.types.ProjectFactory;
-import com.geberl.winggcodedesigner.types.Settings;
-import com.geberl.winggcodedesigner.types.SettingsFactory;
  
 
 /**
@@ -818,7 +814,7 @@ public class WingCalculatorModel {
 
 	// Project - File
 	
-	public void loadProject() {
+	public Project loadProject() {
 
 		JFileChooser projectFileChooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
 		projectFileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
@@ -838,7 +834,7 @@ public class WingCalculatorModel {
 			}
 		}
 
-		
+		return this.project;
 		
 	}
 	

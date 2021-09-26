@@ -24,10 +24,9 @@ import javax.swing.JPanel;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 
-
+import com.geberl.winggcodedesigner.model.Project;
+import com.geberl.winggcodedesigner.model.ProjectFactory;
 import com.geberl.winggcodedesigner.model.WingCalculatorModel;
-import com.geberl.winggcodedesigner.types.Project;
-import com.geberl.winggcodedesigner.types.ProjectFactory;
 import com.geberl.winggcodedesigner.utils.GUIHelpers;
 
 import java.awt.event.ActionListener;
@@ -232,8 +231,10 @@ public class ProjectPanel extends JPanel {
 		JButton btnLoadProject = new JButton("Load Project");
 		btnLoadProject.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				wingCalculatorModel.loadProject();
+				project = wingCalculatorModel.loadProject();
+				
 				// inputProjectName.setText(wingCalculatorModel.project.getProjectName());
+				setPanelValues();
 				}
 		});
 		btnLoadProject.setBounds(755, 217, 170, 27);
@@ -626,44 +627,23 @@ public class ProjectPanel extends JPanel {
 		// ------------------------------------------
 		// =======================================================
 		
+    }
 		
 		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+	public void setPanelValues() {
+			
+			inputHalfSpanLength.setValue(project.getHalfSpanLength());
+
 	}
+		
+		
+		
+		
+		
+		
+		
+		
+
     
     
 	// Hilfsfunktion

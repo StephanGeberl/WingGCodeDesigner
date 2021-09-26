@@ -16,7 +16,7 @@
     You should have received a copy of the GNU General Public License
     along with WingGCodeDesigner.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.geberl.winggcodedesigner.types;
+package com.geberl.winggcodedesigner.model;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -61,6 +61,20 @@ public class ProjectFactory {
 
     
     public static void saveProject(Project project, File jsonFile) {
+        logger.info("Saving project.");
+        try {
+            // Save json file.
+            try (FileWriter fileWriter = new FileWriter(jsonFile)) {
+                Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                fileWriter.write(gson.toJson(project, Project.class));
+            }
+         } catch (Exception e) {
+            e.printStackTrace();
+            logger.warning("Can't save project!");
+        }
+    }
+
+    public static void saveProjectAs(Project project, File jsonFile) {
         logger.info("Saving project.");
         try {
             // Save json file.

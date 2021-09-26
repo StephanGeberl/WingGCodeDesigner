@@ -29,9 +29,9 @@ import javax.swing.*;
 import java.awt.BorderLayout;
 import java.awt.Toolkit;
 
+import com.geberl.winggcodedesigner.model.Settings;
+import com.geberl.winggcodedesigner.model.SettingsFactory;
 import com.geberl.winggcodedesigner.model.WingCalculatorModel;
-import com.geberl.winggcodedesigner.types.Settings;
-import com.geberl.winggcodedesigner.types.SettingsFactory;
 import com.geberl.winggcodedesigner.uielements.ParameterPanel;
 import com.geberl.winggcodedesigner.uielements.WingCalculatorPanel;
 import com.geberl.winggcodedesigner.utils.GUIHelpers;

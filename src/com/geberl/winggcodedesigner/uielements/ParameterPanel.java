@@ -23,9 +23,8 @@ import java.awt.Dimension;
 import javax.swing.JPanel;
 import javax.swing.JButton;
 
-
+import com.geberl.winggcodedesigner.model.ProjectFactory;
 import com.geberl.winggcodedesigner.model.WingCalculatorModel;
-import com.geberl.winggcodedesigner.types.ProjectFactory;
 import com.geberl.winggcodedesigner.utils.GUIHelpers;
 
 import java.awt.event.ActionListener;

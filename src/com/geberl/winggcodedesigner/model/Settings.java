@@ -17,7 +17,7 @@
     along with WingGCodeDesigner.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.geberl.winggcodedesigner.types;
+package com.geberl.winggcodedesigner.model;
 
 import java.util.logging.Logger;
 

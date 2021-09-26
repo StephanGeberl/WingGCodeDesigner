@@ -16,7 +16,7 @@
     You should have received a copy of the GNU General Public License
     along with WingGCodeDesigner.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.geberl.winggcodedesigner.types;
+package com.geberl.winggcodedesigner.model;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
