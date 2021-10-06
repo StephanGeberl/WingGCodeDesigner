@@ -29,6 +29,8 @@ import javax.swing.*;
 import java.awt.BorderLayout;
 import java.awt.Toolkit;
 
+import com.geberl.winggcodedesigner.model.Project;
+import com.geberl.winggcodedesigner.model.ProjectFactory;
 import com.geberl.winggcodedesigner.model.Settings;
 import com.geberl.winggcodedesigner.model.SettingsFactory;
 import com.geberl.winggcodedesigner.model.WingCalculatorModel;
@@ -55,6 +57,10 @@ public class WingDesigner extends JFrame {
     public WingDesigner() {
 
         super("GCode Designer for Foam Wings");
+        
+        Settings settings;
+        Project project;
+
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         int frameWidth = 1200;
@@ -66,7 +72,11 @@ public class WingDesigner extends JFrame {
         Container cp = getContentPane();
         cp.setLayout(new BorderLayout());
         
-        WingCalculatorModel wingCalculatorModel = new WingCalculatorModel();
+        settings = SettingsFactory.loadSettings();
+        ProjectFactory.setSettings(settings);
+        project = ProjectFactory.newProject();
+        
+        WingCalculatorModel wingCalculatorModel = new WingCalculatorModel(project,settings);
         WingCalculatorPanel wingCalculatorPanel = new WingCalculatorPanel(wingCalculatorModel);
         ParameterPanel parameterPanel = new ParameterPanel(wingCalculatorModel);
        

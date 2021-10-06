@@ -22,7 +22,7 @@ import java.awt.Dimension;
 //import javax.annotation.PostConstruct;
 
 import javax.swing.JPanel;
-
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 
 // init
@@ -139,7 +139,8 @@ public class WingCalculatorPanel extends JPanel implements WingCalculatorEventLi
 		// ===============================================================
 
 		ProjectPanel projectPanel = new ProjectPanel(wingCalculatorModel);
-		projectPanel.setBounds(5, 5, 937, 283);
+		projectPanel.setBounds(5, 5, 940, 320);
+		projectPanel.setBorder(BorderFactory.createLoweredBevelBorder());
 		add(projectPanel);
 		
 		// ===============================================================

@@ -26,6 +26,7 @@ import javax.swing.JButton;
 
 import com.geberl.winggcodedesigner.model.Project;
 import com.geberl.winggcodedesigner.model.ProjectFactory;
+import com.geberl.winggcodedesigner.model.SettingsFactory;
 import com.geberl.winggcodedesigner.model.WingCalculatorModel;
 import com.geberl.winggcodedesigner.utils.GUIHelpers;
 
@@ -33,6 +34,7 @@ import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
+import java.util.logging.Logger;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
 import java.awt.Component;
@@ -50,11 +52,13 @@ import java.io.File;
 import java.beans.PropertyChangeEvent;
 import javax.swing.JSeparator;
 
+
 public class ProjectPanel extends JPanel {
 
 	/**
 	 * 
 	 */
+    private static final Logger logger = Logger.getLogger(SettingsFactory.class.getName());
 	private static final long serialVersionUID = 1L;
 
 	private WingCalculatorModel wingCalculatorModel;
@@ -64,10 +68,14 @@ public class ProjectPanel extends JPanel {
 	private JPanel bottomSparePanel = new JPanel();
 	private JPanel hollowProfilePanel = new JPanel();
 
-	private JTextField inputProjectName;
-
-	private JCheckBox inputCutBaseFirst;
+	private JButton btnSaveProject = null;
+	private JButton btnNewProject = null;
+	private JButton btnSaveAsProject = null;
+	private JButton btnLoadProject = null;
+	
 	private JTextField inputProjectPath;
+	private JTextField inputProjectName;
+	private JCheckBox inputCutBaseFirst;
 
 	private JTextField inputBaseProfileName;
 	private JTextField inputBaseProfileNumberPoints;
@@ -84,6 +92,7 @@ public class ProjectPanel extends JPanel {
 	private JFormattedTextField inputWingSweep;
 	private JFormattedTextField inputWingTipOffset;
 	private JFormattedTextField inputWingTipYOffset;
+	private JFormattedTextField inputShiftCenter;
 	
 	private JCheckBox inputHasSparTop;
 	private JCheckBox inputHasSparBottom;
@@ -107,13 +116,19 @@ public class ProjectPanel extends JPanel {
 	public ProjectPanel(WingCalculatorModel anWingDesignerModel) {
 		
 		this.wingCalculatorModel = anWingDesignerModel;
+		this.project = anWingDesignerModel.project;
 		
-		
-		setForeground(Color.LIGHT_GRAY);
+		// setForeground(Color.LIGHT_GRAY);
 		this.setLayout(null);
-		this.setPreferredSize(new Dimension(937, 283));
+		this.setPreferredSize(new Dimension(937, 429));
 		
 		this.createControls();
+		
+		btnSaveProject.setEnabled(false);
+		// inputProjectPath.setText("");
+		setPanelValues();
+
+		
 	}
 
 	//	@PostConstruct
@@ -185,6 +200,7 @@ public class ProjectPanel extends JPanel {
 		inputTipProfileNumberPoints.setEditable(false);
 		inputTipProfileNumberPoints.setBackground(Color.LIGHT_GRAY);
 		
+		
 		inputBaseDirection = new JCheckBox("Change Direction (Base)");
 		inputBaseDirection.setSelected(true);
 		inputBaseDirection.addActionListener(new ActionListener() {
@@ -219,59 +235,95 @@ public class ProjectPanel extends JPanel {
 		// ============= Daten erfassen ===================
 
 		// ============= Manage Projects ===================
-		JButton btnSaveProject = new JButton("Save Project");
-		btnSaveProject.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				wingCalculatorModel.saveProject();
-				}
-		});
-		btnSaveProject.setBounds(755, 246, 170, 27);
-		add(btnSaveProject);
-		// ------------------------------------------
-		JButton btnLoadProject = new JButton("Load Project");
+		btnLoadProject = new JButton("Load (Project)");
 		btnLoadProject.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				project = wingCalculatorModel.loadProject();
-				
-				// inputProjectName.setText(wingCalculatorModel.project.getProjectName());
+				project = ProjectFactory.loadProject();
 				setPanelValues();
+				inputProjectPath.setText(project.getProjectPath());
+				btnSaveProject.setEnabled(true);
+
 				}
 		});
-		btnLoadProject.setBounds(755, 217, 170, 27);
+		btnLoadProject.setBounds(755, 204, 170, 27);
 		add(btnLoadProject);
 		// ------------------------------------------
+		btnNewProject = new JButton("New (Project)");
+		btnNewProject.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				project = ProjectFactory.newProject();
+				
+				setPanelValues();
+				inputProjectPath.setText("");
+				btnSaveProject.setEnabled(false);
+				}
+		});
+		btnNewProject.setBounds(755, 233, 170, 27);
+		add(btnNewProject);
+		// ------------------------------------------
+		btnSaveProject = new JButton("Save (Project)");
+		btnSaveProject.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ProjectFactory.saveProject();
+				setPanelValues();
+				inputProjectPath.setText(project.getProjectPath());
+				}
+		});
+		btnSaveProject.setBounds(755, 261, 170, 27);
+		add(btnSaveProject);
+		// ------------------------------------------
+		btnSaveAsProject = new JButton("Save as (Project)");
+		btnSaveAsProject.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ProjectFactory.saveProjectAs();
+				setPanelValues();
+				inputProjectPath.setText(project.getProjectPath());
+				btnSaveProject.setEnabled(true);
+				}
+		});
+		btnSaveAsProject.setBounds(755, 289, 170, 27);
+		add(btnSaveAsProject);
+		// ------------------------------------------
 		inputProjectPath = new JFormattedTextField();
+		inputProjectPath.setBackground(Color.LIGHT_GRAY);
 		inputProjectPath.setEditable(false);
-		inputProjectPath.setBounds(47, 6, 200, 25);
+		inputProjectPath.setBounds(270, 261, 469, 25);
 		add(inputProjectPath);
+		// ------------------------------------------
 		// ============= Manage Projects Ende ===================
 		
+		inputProjectName = new JFormattedTextField();
+		inputProjectName.setEditable(true);
+		inputProjectName.addPropertyChangeListener(new PropertyChangeListener() {
+			public void propertyChange(PropertyChangeEvent evt) {
+				if (project != null) { project.setProjectName( inputProjectName.getText() ); }
+			}
+		});
+		inputProjectName.setBounds(47, 9, 200, 25);
+		add(inputProjectName);
 		// ------------------------------------------
 		inputHalfSpanLength = new JFormattedTextField(doubleFormatter);
-		inputHalfSpanLength.setText("0.0");
 		inputHalfSpanLength.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent evt) {
-				if (inputHalfSpanLength.getValue() != null) { project.setHalfSpanLength( Double.parseDouble(inputHalfSpanLength.getText()) ); }
+				if (project != null) { project.setHalfSpanLength( Double.parseDouble(inputHalfSpanLength.getText()) ); }
 			}
 		});
 		inputHalfSpanLength.setBounds(172, 47, 75, 25);
 		add(inputHalfSpanLength);
 		// ------------------------------------------
 		inputBaseCordLength = new JFormattedTextField(doubleFormatter);
-		inputBaseCordLength.setText("0.0");
 		inputBaseCordLength.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent evt) {
-				if (inputBaseCordLength.getValue() != null) { project.setBaseCordLength( Double.parseDouble(inputBaseCordLength.getText()) ); }
+				if (project != null) { project.setBaseCordLength( Double.parseDouble(inputBaseCordLength.getText()) );  }
 			}
 		});
 		inputBaseCordLength.setBounds(172, 73, 75, 25);
 		add(inputBaseCordLength);
 		// ------------------------------------------
 		inputTipCordLength = new JFormattedTextField(doubleFormatter);
-		inputTipCordLength.setText("0.0");
 		inputTipCordLength.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent evt) {
-				if (inputTipCordLength.getValue() != null) { project.setTipCordLength( Double.parseDouble(inputTipCordLength.getText()) ); }
+				if (project != null) { project.setTipCordLength( Double.parseDouble(inputTipCordLength.getText()) ); }
 			}
 		});
 		inputTipCordLength.setBounds(172, 97, 75, 25);
@@ -279,71 +331,71 @@ public class ProjectPanel extends JPanel {
 		// ------------------------------------------
 		
 		inputBaseMeltingLoss = new JFormattedTextField(doubleFormatter);
-		inputBaseMeltingLoss.setText("0.0");
 		inputBaseMeltingLoss.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent evt) {
-				if (inputBaseMeltingLoss.getValue() != null) { project.setBaseMeltingLoss( Double.parseDouble(inputBaseMeltingLoss.getText()) ); }
+				if (project != null) { project.setBaseMeltingLoss( Double.parseDouble(inputBaseMeltingLoss.getText()) ); }
 			}
 		});
 		inputBaseMeltingLoss.setBounds(172, 122, 75, 25);
 		add(inputBaseMeltingLoss);
 		// ------------------------------------------
 		inputTipMeltingLoss = new JFormattedTextField(doubleFormatter);
-		inputTipMeltingLoss.setText("0.0");
 		inputTipMeltingLoss.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent evt) {
-				if (inputTipMeltingLoss.getValue() != null) { project.setTipMeltingLoss( Double.parseDouble(inputTipMeltingLoss.getText()) ); }
+				if (project != null) { project.setTipMeltingLoss( Double.parseDouble(inputTipMeltingLoss.getText()) ); }
 			}
 		});
 		inputTipMeltingLoss.setBounds(172, 146, 75, 25);
 		add(inputTipMeltingLoss);
 		// ------------------------------------------
 		inputWingSweep = new JFormattedTextField(degreeFormatter);
-		inputWingSweep.setText("+0.0");
 		inputWingSweep.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent evt) {
-				if (inputWingSweep.getValue() != null) { project.setWingSweep( Double.parseDouble(inputWingSweep.getText()) ); }
+				if (project != null) { project.setWingSweep( Double.parseDouble(inputWingSweep.getText()) ); }
 			}
 		});
 		inputWingSweep.setBounds(172, 172, 75, 25);
 		add(inputWingSweep);
 		// ------------------------------------------
 		inputWingTipOffset = new JFormattedTextField(degreeFormatter);
-		inputWingTipOffset.setText("+0.0");
 		inputWingTipOffset.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent evt) {
-				if (inputWingTipOffset.getValue() != null) { project.setWingTipOffset( Double.parseDouble(inputWingTipOffset.getText()) ); }
+				if (project != null) { project.setWingTipOffset( Double.parseDouble(inputWingTipOffset.getText()) ); }
 			}
 		});
 		inputWingTipOffset.setBounds(172, 197, 75, 25);
 		add(inputWingTipOffset);
 		// ------------------------------------------
 		inputWingTipYOffset = new JFormattedTextField(decimalFormater);
-		inputWingTipYOffset.setText("+0.0");
 		inputWingTipYOffset.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent evt) {
-				if (inputWingTipYOffset.getValue() != null) { project.setWingTipYOffset( Double.parseDouble(inputWingTipYOffset.getText()) ); }
+				if (project != null) { project.setWingTipYOffset( Double.parseDouble(inputWingTipYOffset.getText()) ); }
 			}
 		});
 		inputWingTipYOffset.setBounds(172, 223, 75, 25);
 		add(inputWingTipYOffset);
-		
-		
+		// ------------------------------------------
 		inputCutBaseFirst = new JCheckBox("Cut Profile base first");
 		inputCutBaseFirst.setSelected(false);
-		inputCutBaseFirst.setBounds(6, 255, 193, 18);
+		inputCutBaseFirst.setBounds(6, 281, 193, 18);
 		add(inputCutBaseFirst);
 		inputCutBaseFirst.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				project.setCutBaseFirst(inputCutBaseFirst.isSelected());
 			}
 		});
-
-		JFormattedTextField sProjectName_1 = new JFormattedTextField();
-		sProjectName_1.setBackground(Color.LIGHT_GRAY);
-		sProjectName_1.setEditable(false);
-		sProjectName_1.setBounds(274, 252, 469, 25);
-		add(sProjectName_1);
+		// ------------------------------------------
+		
+		inputShiftCenter = new JFormattedTextField(decimalFormater);
+		inputShiftCenter.addPropertyChangeListener(new PropertyChangeListener() {
+			public void propertyChange(PropertyChangeEvent evt) {
+				if (project != null) { project.setShiftCenter( Double.parseDouble(inputShiftCenter.getText()) ); }
+			}
+		});
+		inputShiftCenter.setBounds(172, 248, 75, 25);
+		add(inputShiftCenter);
+		
+		
 		
 		
 		// ===============================================================
@@ -371,30 +423,27 @@ public class ProjectPanel extends JPanel {
 		inputSparOffsetTop = new JFormattedTextField(doubleFormatter);
 		inputSparOffsetTop.setBounds(134, 7, 75, 25);
 		topSparePanel.add(inputSparOffsetTop);
-		inputSparOffsetTop.setText("0.0");
 		inputSparOffsetTop.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent evt) {
-				if (inputSparOffsetTop.getValue() != null) { project.setSparOffsetTop( Double.parseDouble(inputSparOffsetTop.getText()) ); }
+				if (project != null) { project.setSparOffsetTop( Double.parseDouble(inputSparOffsetTop.getText()) ); }
 			}
 		});
 		// ------------------------------------------
 		inputSparWidthTop = new JFormattedTextField(doubleFormatter);
 		inputSparWidthTop.setBounds(134, 32, 75, 25);
 		topSparePanel.add(inputSparWidthTop);
-		inputSparWidthTop.setText("0.0");
 		inputSparWidthTop.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent evt) {
-				if (inputSparWidthTop.getValue() != null) { project.setSparWidthTop( Double.parseDouble(inputSparWidthTop.getText()) ); }
+				if (project != null) { project.setSparWidthTop( Double.parseDouble(inputSparWidthTop.getText()) ); }
 			}
 		});
 		// ------------------------------------------
 		inputSparHeightTop = new JFormattedTextField(doubleFormatter);
 		inputSparHeightTop.setBounds(134, 57, 75, 25);
 		topSparePanel.add(inputSparHeightTop);
-		inputSparHeightTop.setText("0.0");
 		inputSparHeightTop.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent evt) {
-				if (inputSparHeightTop.getValue() != null) { project.setSparHeightTop( Double.parseDouble(inputSparHeightTop.getText()) ); }
+				if (project != null) { project.setSparHeightTop( Double.parseDouble(inputSparHeightTop.getText()) ); }
 			}
 		});
 		// ------------------------------------------
@@ -418,7 +467,7 @@ public class ProjectPanel extends JPanel {
 		inputHasSparBottom.setSelected(false);
 		inputHasSparBottom.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				project.setHasSparTop(inputHasSparBottom.isSelected());
+				project.setHasSparBottom(inputHasSparBottom.isSelected());
 				setPanelEnabled(bottomSparePanel, inputHasSparBottom.isSelected());
 			}
 		});
@@ -436,20 +485,27 @@ public class ProjectPanel extends JPanel {
 		inputSparOffsetBottom = new JFormattedTextField(doubleFormatter);
 		inputSparOffsetBottom.setBounds(135, 6, 75, 25);
 		bottomSparePanel.add(inputSparOffsetBottom);
-		inputSparOffsetBottom.setText("0.0");
 		inputSparOffsetBottom.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent evt) {
-				if (inputSparOffsetBottom.getValue() != null) { project.setSparOffsetBottom( Double.parseDouble(inputSparOffsetBottom.getText()) ); }
+				if (project != null) { project.setSparOffsetBottom( Double.parseDouble(inputSparOffsetBottom.getText()) ); }
 			}
 		});
 		// ------------------------------------------
 		inputSparWidthBottom = new JFormattedTextField(doubleFormatter);
 		inputSparWidthBottom.setBounds(135, 31, 75, 25);
 		bottomSparePanel.add(inputSparWidthBottom);
-		inputSparWidthBottom.setText("0.0");
 		inputSparWidthBottom.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent evt) {
-				if (inputSparWidthBottom.getValue() != null) { project.setSparWidthBottom( Double.parseDouble(inputSparWidthBottom.getText()) ); }
+				if (project != null) { project.setSparWidthBottom( Double.parseDouble(inputSparWidthBottom.getText()) ); }
+			}
+		});
+		// ------------------------------------------
+		inputSparHeightBottom = new JFormattedTextField(doubleFormatter);
+		inputSparHeightBottom.setBounds(134, 56, 76, 25);
+		bottomSparePanel.add(inputSparHeightBottom);
+		inputSparHeightBottom.addPropertyChangeListener(new PropertyChangeListener() {
+			public void propertyChange(PropertyChangeEvent evt) {
+				if (project != null) { project.setSparHeightBottom( Double.parseDouble(inputSparHeightBottom.getText()) ); }
 			}
 		});
 		
@@ -465,62 +521,82 @@ public class ProjectPanel extends JPanel {
 		JLabel lblInputHalfspanLength_1_3_2_1_1_1_1_2 = new JLabel("Spar height [mm]");
 		lblInputHalfspanLength_1_3_2_1_1_1_1_2.setBounds(6, 56, 127, 25);
 		bottomSparePanel.add(lblInputHalfspanLength_1_3_2_1_1_1_1_2);
-		// ------------------------------------------
-		inputSparHeightBottom = new JFormattedTextField(doubleFormatter);
-		inputSparHeightBottom.setBounds(134, 56, 76, 25);
-		bottomSparePanel.add(inputSparHeightBottom);
-		inputSparHeightBottom.setText("0.0");
-		
-		inputSparHeightBottom.addPropertyChangeListener(new PropertyChangeListener() {
-			public void propertyChange(PropertyChangeEvent evt) {
-				if (inputSparHeightBottom.getValue() != null) { project.setSparHeightBottom( Double.parseDouble(inputSparHeightBottom.getText()) ); }
-			}
-		});
 		
 		// ===============================================================
 		// Data for hollowed Profile
 		// ===============================================================
 
 		// ------------------------------------------
-		inputIsHollowed = new JCheckBox("Wing is hollowed");
-		inputIsHollowed.setSelected(false);
-		inputIsHollowed.setBounds(509, 9, 193, 18);
-		add(inputIsHollowed);
-		// ------------------------------------------
 		hollowProfilePanel.setBounds(503, 31, 236, 217);
 		add(hollowProfilePanel);
 		hollowProfilePanel.setLayout(null);
 		hollowProfilePanel.setBorder(BorderFactory.createLineBorder(Color.darkGray));
 		// ------------------------------------------
+		inputIsHollowed = new JCheckBox("Wing is hollowed");
+		inputIsHollowed.setSelected(false);
+		inputIsHollowed.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				project.setIsHollowed(inputIsHollowed.isSelected());
+				setPanelEnabled(hollowProfilePanel, inputIsHollowed.isSelected());
+			}
+		});
+		inputIsHollowed.setBounds(509, 9, 193, 18);
+		add(inputIsHollowed);
+		// ------------------------------------------
 		inputIsHollowedFrontOnly = new JCheckBox("Front only");
+		inputIsHollowedFrontOnly.setSelected(false);
+		inputIsHollowedFrontOnly.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				project.setIsHollowedFrontOnly(inputIsHollowedFrontOnly.isSelected());
+			}
+		});
 		inputIsHollowedFrontOnly.setBounds(6, 9, 193, 18);
 		hollowProfilePanel.add(inputIsHollowedFrontOnly);
-		inputIsHollowedFrontOnly.setSelected(false);
 		// ------------------------------------------
 		inputWallThickness = new JFormattedTextField(doubleFormatter);
 		inputWallThickness.setBounds(154, 31, 75, 25);
 		hollowProfilePanel.add(inputWallThickness);
-		inputWallThickness.setText("0.0");
+		inputWallThickness.addPropertyChangeListener(new PropertyChangeListener() {
+			public void propertyChange(PropertyChangeEvent evt) {
+				if (project != null) { project.setWallThickness( Double.parseDouble(inputWallThickness.getText()) ); }
+			}
+		});
 		// ------------------------------------------
 		inputCrosspieceWidth = new JFormattedTextField(doubleFormatter);
 		inputCrosspieceWidth.setBounds(154, 56, 75, 25);
 		hollowProfilePanel.add(inputCrosspieceWidth);
-		inputCrosspieceWidth.setText("0.0");
+		inputCrosspieceWidth.addPropertyChangeListener(new PropertyChangeListener() {
+			public void propertyChange(PropertyChangeEvent evt) {
+				if (project != null) { project.setCrosspieceWidth( Double.parseDouble(inputCrosspieceWidth.getText()) ); }
+			}
+		});
 		// ------------------------------------------
 		inputCrosspieceOffset = new JFormattedTextField(doubleFormatter);
 		inputCrosspieceOffset.setBounds(154, 81, 75, 25);
 		hollowProfilePanel.add(inputCrosspieceOffset);
-		inputCrosspieceOffset.setText("0.0");
+		inputCrosspieceOffset.addPropertyChangeListener(new PropertyChangeListener() {
+			public void propertyChange(PropertyChangeEvent evt) {
+				if (project != null) { project.setCrosspieceOffset( Double.parseDouble(inputCrosspieceOffset.getText()) ); }
+			}
+		});
 		// ------------------------------------------
 		inputFrontHollowOffset = new JFormattedTextField(doubleFormatter);
 		inputFrontHollowOffset.setBounds(154, 105, 75, 25);
 		hollowProfilePanel.add(inputFrontHollowOffset);
-		inputFrontHollowOffset.setText("0.0");
+		inputFrontHollowOffset.addPropertyChangeListener(new PropertyChangeListener() {
+			public void propertyChange(PropertyChangeEvent evt) {
+				if (project != null) { project.setFrontHollowOffset( Double.parseDouble(inputFrontHollowOffset.getText()) ); }
+			}
+		});
 		// ------------------------------------------
 		inputBackHollowOffset = new JFormattedTextField(doubleFormatter);
 		inputBackHollowOffset.setBounds(154, 131, 75, 25);
 		hollowProfilePanel.add(inputBackHollowOffset);
-		inputBackHollowOffset.setText("0.0");
+		inputBackHollowOffset.addPropertyChangeListener(new PropertyChangeListener() {
+			public void propertyChange(PropertyChangeEvent evt) {
+				if (project != null) { project.setBackHollowOffset( Double.parseDouble(inputBackHollowOffset.getText()) ); }
+			}
+		});
 		// ------------------------------------------
 		JLabel lblInputHalfspanLength_1_3_2_1_1_2 = new JLabel("Wall thickness [mm]");
 		lblInputHalfspanLength_1_3_2_1_1_2.setBounds(6, 31, 148, 25);
@@ -547,7 +623,7 @@ public class ProjectPanel extends JPanel {
 		// ===============================================================
 		
 		JLabel lblName = new JLabel("Name");
-		lblName.setBounds(6, 6, 49, 25);
+		lblName.setBounds(6, 10, 49, 25);
 		add(lblName);
 		
 		JLabel lblInputHalfspanLength = new JLabel("Half wingspan [mm]");
@@ -620,6 +696,11 @@ public class ProjectPanel extends JPanel {
 		lblInputWingTipYOffset.setBounds(6, 223, 170, 25);
 		add(lblInputWingTipYOffset);
 		
+		JLabel lblShiftCentermm = new JLabel("Shift center [mm]");
+		lblShiftCentermm.setBounds(6, 248, 170, 25);
+		add(lblShiftCentermm);
+
+		
 		// ------------------------------------------
 		
 		// ===============================================================
@@ -632,8 +713,50 @@ public class ProjectPanel extends JPanel {
 		
 	public void setPanelValues() {
 			
+		if (project != null) {
+		
+			inputProjectName.setText(project.getProjectName());	
 			inputHalfSpanLength.setValue(project.getHalfSpanLength());
+			
+			inputCutBaseFirst.setSelected(project.getCutBaseFirst());
+			
+			inputBaseCordLength.setValue(project.getBaseCordLength());
+			inputTipCordLength.setValue(project.getTipCordLength());
+			inputBaseMeltingLoss.setValue(project.getBaseMeltingLoss());
+			inputTipMeltingLoss.setValue(project.getTipMeltingLoss());
+			inputWingSweep.setValue(project.getWingSweep());
+			inputWingTipOffset.setValue(project.getWingTipOffset());
+			inputWingTipYOffset.setValue(project.getWingTipYOffset());
+			inputShiftCenter.setValue(project.getShiftCenter());
+			
+			inputHasSparTop.setSelected(project.getHasSparTop());
+			inputHasSparBottom.setSelected(project.getHasSparBottom());
+			
+			inputSparOffsetTop.setValue(project.getSparOffsetTop());
+			inputSparWidthTop.setValue(project.getSparWidthTop());
+			inputSparHeightTop.setValue(project.getSparHeightTop());
+			inputSparOffsetBottom.setValue(project.getSparOffsetBottom());
+			inputSparWidthBottom.setValue(project.getSparWidthBottom());
+			inputSparHeightBottom.setValue(project.getSparHeightBottom());
+			
+			inputIsHollowed.setSelected(project.getIsHollowed());
+			inputIsHollowedFrontOnly.setSelected(project.getIsHollowedFrontOnly());
+			
+			inputWallThickness.setValue(project.getWallThickness());
+			inputCrosspieceWidth.setValue(project.getCrosspieceWidth());
+			inputCrosspieceOffset.setValue(project.getCrosspieceOffset());
+			inputFrontHollowOffset.setValue(project.getFrontHollowOffset());
+			inputBackHollowOffset.setValue(project.getBackHollowOffset());
+			
+			
+			inputBaseDirection.setSelected(project.getBaseDirection());
+			inputTipDirection.setSelected(project.getTipDirection());
 
+			setPanelEnabled(topSparePanel, project.getHasSparTop());
+			setPanelEnabled(bottomSparePanel, project.getHasSparBottom());
+			setPanelEnabled(hollowProfilePanel, project.getIsHollowed());
+		
+		}
 	}
 		
 		

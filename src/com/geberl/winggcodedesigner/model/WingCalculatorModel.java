@@ -125,11 +125,16 @@ public class WingCalculatorModel {
 	
 	
 	public WingCalculatorModel() {
-        this.settings = SettingsFactory.loadSettings();
-        this.newProject();
+        this.settings = null;
+        this.project = null;
+        
 
     }
 
+	public WingCalculatorModel(Project project, Settings settings) {
+        this.settings = settings;
+        this.project = project;
+    }
 
 
 	// ==================
@@ -812,67 +817,5 @@ public class WingCalculatorModel {
 
 	}
 
-	// Project - File
-	
-	public Project loadProject() {
-
-		JFileChooser projectFileChooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
-		projectFileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
-		projectFileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-		projectFileChooser.addChoosableFileFilter(new FileNameExtensionFilter("JSON Files", "json"));
-		projectFileChooser.setAcceptAllFileFilterUsed(false);
-		
-		int returnVal = projectFileChooser.showOpenDialog(null);
-		
-		if (returnVal == JFileChooser.APPROVE_OPTION) {
-			try {
-				File fileToOpen = projectFileChooser.getSelectedFile();
-			
-				this.project = ProjectFactory.loadProject(fileToOpen);
-			} catch (Exception ex) {
-				GUIHelpers.displayErrorDialog("Problem saving project file: " + ex.getMessage());
-			}
-		}
-
-		return this.project;
-		
-	}
-	
-	public void saveProject() {
-
-		JFileChooser projectFileChooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
-		projectFileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
-		projectFileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-		projectFileChooser.addChoosableFileFilter(new FileNameExtensionFilter("JSON Files", "json"));
-		projectFileChooser.setAcceptAllFileFilterUsed(false);
-		
-		int returnVal = projectFileChooser.showSaveDialog(null);
-		
-		if (returnVal == JFileChooser.APPROVE_OPTION) {
-			try {
-				File fileToSave = projectFileChooser.getSelectedFile();
-				
-				if (FilenameUtils.getExtension(fileToSave.getName()).equalsIgnoreCase("json")) {
-				    // filename is OK as-is
-				} else {
-					fileToSave = new File(fileToSave.getParentFile(), FilenameUtils.getBaseName(fileToSave.getName())+".json");
-				}
-				
-				ProjectFactory.saveProject(this.project, fileToSave);
-			} catch (Exception ex) {
-				GUIHelpers.displayErrorDialog("Problem saving project file: " + ex.getMessage());
-			}
-		}
-
-	}
-	
-	public void newProject() {
-		this.project = ProjectFactory.newProject();
-	}
-
-
-	
-	
-	
 
 }

@@ -14,12 +14,12 @@
     You should have received a copy of the GNU General Public License.
     If not, see <http://www.gnu.org/licenses/>.
  */
+
 package com.geberl.winggcodedesigner.eventing;
 
-/**
- *
- * @author Stephan Geberl
- */
-public interface WingCalculatorEventListener {
-    void WingCalculatorEvent(WingCalculatorEvent evt);
+public interface ProjectChangeListener {
+
+	void projectLoaded();
+	void projectSaved();
+
 }

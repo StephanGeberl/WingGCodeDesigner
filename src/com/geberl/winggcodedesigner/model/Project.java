@@ -20,10 +20,8 @@
 package com.geberl.winggcodedesigner.model;
 
 
+import java.io.File;
 import java.util.logging.Logger;
-
-import javax.swing.JTextField;
-
 
 
 public class Project {
@@ -34,6 +32,7 @@ public class Project {
 	// =====================================
     private transient Boolean isDirty = false;
     private transient String projectPath = "";
+    private transient File file = null;
     
     private String projectName = "";
     private String baseProfilePath = "";
@@ -43,6 +42,7 @@ public class Project {
 	private Boolean baseDirection = true;
 	private Boolean tipDirection = true;
 	private Boolean cutBaseFirst = false;
+	private Double shiftCenter = 0.0;
 
 	
     private Double halfSpanLength = 0.0;
@@ -83,12 +83,11 @@ public class Project {
     // ==================
 	// Get / Set
 	// ==================
-	public void setIsDirty(Boolean aValue) {
-		this.isDirty = aValue;
-	}
+	public void setIsDirty(Boolean aValue) { this.isDirty = aValue; }
+	public void setProjectPath(String aValue) { this.projectPath = aValue; }
+	public void setFile(File aValue) { this.file = aValue; }
 
-    
-    
+	
 	public void setProjectName(String aValue) { this.projectName = aValue; this.setIsDirty(true); }
 	public void setBaseProfilePath(String aValue) { this.baseProfilePath = aValue; this.setIsDirty(true); }
 	public void setTipProfilePath(String aValue) { this.tipProfilePath = aValue; this.setIsDirty(true); }
@@ -101,6 +100,7 @@ public class Project {
 	public void setTipCordLength(Double aValue) { this.tipCordLength = aValue; this.setIsDirty(true); }
 	public void setBaseMeltingLoss(Double aValue) { this.baseMeltingLoss = aValue; this.setIsDirty(true); }
 	public void setTipMeltingLoss(Double aValue) { this.tipMeltingLoss = aValue; this.setIsDirty(true); }
+	public void setShiftCenter(Double aValue) { this.shiftCenter = aValue; this.setIsDirty(true); }
 
 	public void setWingSweep(Double aValue) { this.wingSweep = aValue; this.setIsDirty(true); }
 	public void setWingTipOffset(Double aValue) { this.wingTipOffset = aValue; this.setIsDirty(true); }
@@ -129,29 +129,31 @@ public class Project {
 	// ==================
 	public Boolean getIsDirty() { return this.isDirty; }
 	public String getProjectPath() { return this.projectPath; }
+	public File getFile() { return this.file; }
 	
 	public String getProjectName() { return this.projectName; }
 	public String getBaseProfilePath() { return this.baseProfilePath; }
 	public String getTipProfilePath() { return this.tipProfilePath; }
 	
-	public Boolean setCutBaseFirst() { return this.cutBaseFirst; }
+	public Boolean getCutBaseFirst() { return this.cutBaseFirst; }
 
 	public Double getHalfSpanLength() {return this.halfSpanLength;};
 	public Double getBaseCordLength() { return this.baseCordLength; }
 	public Double getTipCordLength() { return this.tipCordLength; }
 	public Double getBaseMeltingLoss() { return this.baseMeltingLoss; }
 	public Double getTipMeltingLoss() { return this.tipMeltingLoss; }
+	public Double getShiftCenter() { return this.shiftCenter; }
 
 	public Double getWingSweep() { return this.wingSweep; }
-	public Double getWingTipOffget() { return this.wingTipOffset; }
-	public Double getWingTipYOffget() { return this.wingTipYOffset; }
+	public Double getWingTipOffset() { return this.wingTipOffset; }
+	public Double getWingTipYOffset() { return this.wingTipYOffset; }
 
 	public Boolean getHasSparTop() { return this.hasSparTop; }
 	public Boolean getHasSparBottom() { return this.hasSparBottom; }
-	public Double getSparOffgetTop() { return this.sparOffsetTop; }
+	public Double getSparOffsetTop() { return this.sparOffsetTop; }
 	public Double getSparWidthTop() { return this.sparWidthTop; }
 	public Double getSparHeightTop() { return this.sparHeightTop; }
-	public Double getSparOffgetBottom() { return this.sparOffsetBottom; }
+	public Double getSparOffsetBottom() { return this.sparOffsetBottom; }
 	public Double getSparWidthBottom() { return this.sparWidthBottom; }
 	public Double getSparHeightBottom() { return this.sparHeightBottom; }
 	
@@ -170,7 +172,5 @@ public class Project {
 	public Boolean getBaseDirection() { return this.baseDirection; }
 
 	// ==================
-
-    
     
 }
