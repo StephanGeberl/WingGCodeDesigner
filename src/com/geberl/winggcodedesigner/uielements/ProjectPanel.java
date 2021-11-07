@@ -127,6 +127,7 @@ public class ProjectPanel extends JPanel {
 		btnSaveProject.setEnabled(false);
 		// inputProjectPath.setText("");
 		setPanelValues();
+		setProfileValues();
 
 		
 	}
@@ -219,8 +220,7 @@ public class ProjectPanel extends JPanel {
 		loadTipWingProfile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ProjectFactory.loadProfileData(2);
-				inputTipProfileName.setText(project.tipProfileName);
-				inputTipProfileNumberPoints.setValue(project.tipProfileNumberPoints);
+				setProfileValues();
 			}
 		});
 		loadTipWingProfile.setBounds(755, 108, 170, 27);
@@ -230,8 +230,7 @@ public class ProjectPanel extends JPanel {
 		loadBaseWingProfile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ProjectFactory.loadProfileData(1);
-				inputBaseProfileName.setText(project.baseProfileName);
-				inputBaseProfileNumberPoints.setValue(project.baseProfileNumberPoints);
+				setProfileValues();
 				
 			}
 		});
@@ -247,6 +246,7 @@ public class ProjectPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				project = ProjectFactory.loadProject();
 				setPanelValues();
+				setProfileValues();
 				inputProjectPath.setText(project.getProjectPath());
 				btnSaveProject.setEnabled(true);
 
@@ -261,6 +261,7 @@ public class ProjectPanel extends JPanel {
 				project = ProjectFactory.newProject();
 				
 				setPanelValues();
+				setProfileValues();
 				inputProjectPath.setText("");
 				btnSaveProject.setEnabled(false);
 				}
@@ -273,6 +274,7 @@ public class ProjectPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				ProjectFactory.saveProject();
 				setPanelValues();
+				setProfileValues();
 				inputProjectPath.setText(project.getProjectPath());
 				}
 		});
@@ -284,6 +286,7 @@ public class ProjectPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				ProjectFactory.saveProjectAs();
 				setPanelValues();
+				setProfileValues();
 				inputProjectPath.setText(project.getProjectPath());
 				btnSaveProject.setEnabled(true);
 				}
@@ -765,6 +768,20 @@ public class ProjectPanel extends JPanel {
 		}
 	}
 		
+	public void setProfileValues() {
+		
+		if (project != null) {
+			
+			inputBaseProfileName.setText(project.getBaseProfileName());
+			inputBaseProfileNumberPoints.setValue(project.getBaseProfileNumberPoints());
+			inputBaseDirection.setSelected(project.getBaseDirection());
+
+			inputTipProfileName.setText(project.getTipProfileName());
+			inputTipProfileNumberPoints.setValue(project.getTipProfileNumberPoints());
+			inputTipDirection.setSelected(project.getTipDirection());
+		
+		}
+	}
 		
 		
 		

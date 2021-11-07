@@ -224,8 +224,6 @@ public class ProjectFactory {
 					};
 				};
 				
-				if (profileTypeCode == 1) { project.setBaseProfilePath(fileToOpen.getAbsolutePath()); };
-				if (profileTypeCode == 2) { project.setTipProfilePath(fileToOpen.getAbsolutePath()); };
 				
 				if (profileTypeCode == 1) { project.baseProfileNumberPoints = pointNum -1; };
 				if (profileTypeCode == 2) { project.tipProfileNumberPoints = pointNum -1; };

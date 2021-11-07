@@ -45,8 +45,6 @@ public class Project {
 
     
     private String projectName = "";
-    private String baseProfilePath = "";
-    private String tipProfilePath ="";
 	private Boolean baseDirection = true;
 	private Boolean tipDirection = true;
 	private Boolean cutBaseFirst = false;
@@ -97,8 +95,6 @@ public class Project {
 
 	
 	public void setProjectName(String aValue) { this.projectName = aValue; this.setIsDirty(true); }
-	public void setBaseProfilePath(String aValue) { this.baseProfilePath = aValue; this.setIsDirty(true); }
-	public void setTipProfilePath(String aValue) { this.tipProfilePath = aValue; this.setIsDirty(true); }
 	public void setBaseProfileName(String aValue) { this.baseProfileName = aValue; this.setIsDirty(true); }
 	public void setTipProfileName(String aValue) { this.tipProfileName = aValue; this.setIsDirty(true); }
 	public void setBaseProfileNumberPoints(Integer aValue) { this.baseProfileNumberPoints = aValue; this.setIsDirty(true); }
@@ -144,8 +140,6 @@ public class Project {
 	public File getFile() { return this.file; }
 	
 	public String getProjectName() { return this.projectName; }
-	public String getBaseProfilePath() { return this.baseProfilePath; }
-	public String getTipProfilePath() { return this.tipProfilePath; }
 	public String getBaseProfileName() { return this.baseProfileName; }
 	public String getTipProfileName() { return this.tipProfileName; }
 	public Integer getBaseProfileNumberPoints() { return this.baseProfileNumberPoints; }
