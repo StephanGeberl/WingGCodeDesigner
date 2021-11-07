@@ -78,10 +78,10 @@ public class ProjectPanel extends JPanel {
 	private JCheckBox inputCutBaseFirst;
 
 	private JTextField inputBaseProfileName;
-	private JTextField inputBaseProfileNumberPoints;
+	private JFormattedTextField inputBaseProfileNumberPoints;
 	private JCheckBox inputBaseDirection;
 	private JTextField inputTipProfileName;
-	private JTextField inputTipProfileNumberPoints;
+	private JFormattedTextField inputTipProfileNumberPoints;
 	private JCheckBox inputTipDirection;
 
 	private JFormattedTextField inputHalfSpanLength;
@@ -179,10 +179,9 @@ public class ProjectPanel extends JPanel {
 		inputBaseProfileName.setEditable(false);
 		inputBaseProfileName.setBackground(Color.LIGHT_GRAY);
 		
-		inputBaseProfileNumberPoints = new JTextField();
+		inputBaseProfileNumberPoints = new JFormattedTextField(integerFormatter);
 		inputBaseProfileNumberPoints.setBounds(876, 44, 49, 25);
 		add(inputBaseProfileNumberPoints);
-		inputBaseProfileNumberPoints.setColumns(10);
 		inputBaseProfileNumberPoints.setEditable(false);
 		inputBaseProfileNumberPoints.setBackground(Color.LIGHT_GRAY);
 		
@@ -193,10 +192,9 @@ public class ProjectPanel extends JPanel {
 		inputTipProfileName.setEditable(false);
 		inputTipProfileName.setBackground(Color.LIGHT_GRAY);
 		
-		inputTipProfileNumberPoints = new JTextField();
+		inputTipProfileNumberPoints = new JFormattedTextField(integerFormatter);
 		inputTipProfileNumberPoints.setBounds(876, 143, 49, 25);
 		add(inputTipProfileNumberPoints);
-		inputTipProfileNumberPoints.setColumns(10);
 		inputTipProfileNumberPoints.setEditable(false);
 		inputTipProfileNumberPoints.setBackground(Color.LIGHT_GRAY);
 		
@@ -219,14 +217,23 @@ public class ProjectPanel extends JPanel {
 		// ================================================
 		JButton loadTipWingProfile = new JButton("Load Tip Wing Profile");
 		loadTipWingProfile.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) { wingCalculatorModel.loadTipProfileData(); }
+			public void actionPerformed(ActionEvent e) {
+				ProjectFactory.loadProfileData(2);
+				inputTipProfileName.setText(project.tipProfileName);
+				inputTipProfileNumberPoints.setValue(project.tipProfileNumberPoints);
+			}
 		});
 		loadTipWingProfile.setBounds(755, 108, 170, 27);
 		add(loadTipWingProfile);
 		
 		JButton loadBaseWingProfile = new JButton("Load Base Wing Profile");
 		loadBaseWingProfile.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) { wingCalculatorModel.loadBaseProfileData(); }
+			public void actionPerformed(ActionEvent e) {
+				ProjectFactory.loadProfileData(1);
+				inputBaseProfileName.setText(project.baseProfileName);
+				inputBaseProfileNumberPoints.setValue(project.baseProfileNumberPoints);
+				
+			}
 		});
 		loadBaseWingProfile.setBounds(755, 9, 170, 27);
 		add(loadBaseWingProfile);
@@ -747,7 +754,6 @@ public class ProjectPanel extends JPanel {
 			inputCrosspieceOffset.setValue(project.getCrosspieceOffset());
 			inputFrontHollowOffset.setValue(project.getFrontHollowOffset());
 			inputBackHollowOffset.setValue(project.getBackHollowOffset());
-			
 			
 			inputBaseDirection.setSelected(project.getBaseDirection());
 			inputTipDirection.setSelected(project.getTipDirection());

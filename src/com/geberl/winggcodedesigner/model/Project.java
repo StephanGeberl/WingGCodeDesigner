@@ -21,6 +21,7 @@ package com.geberl.winggcodedesigner.model;
 
 
 import java.io.File;
+import java.util.LinkedHashSet;
 import java.util.logging.Logger;
 
 
@@ -34,11 +35,18 @@ public class Project {
     private transient String projectPath = "";
     private transient File file = null;
     
+	public LinkedHashSet<ProfileCoordinate> baseProfileSet = new LinkedHashSet<ProfileCoordinate>();
+	public LinkedHashSet<ProfileCoordinate> tipProfileSet = new LinkedHashSet<ProfileCoordinate>();
+	
+	public Integer baseProfileNumberPoints = 0;
+	public Integer tipProfileNumberPoints = 0;
+	public String baseProfileName = "";
+	public String tipProfileName = "";
+
+    
     private String projectName = "";
     private String baseProfilePath = "";
     private String tipProfilePath ="";
-	private Integer baseProfileNumberPoints;
-	private Integer tipProfileNumberPoints;
 	private Boolean baseDirection = true;
 	private Boolean tipDirection = true;
 	private Boolean cutBaseFirst = false;
@@ -91,6 +99,10 @@ public class Project {
 	public void setProjectName(String aValue) { this.projectName = aValue; this.setIsDirty(true); }
 	public void setBaseProfilePath(String aValue) { this.baseProfilePath = aValue; this.setIsDirty(true); }
 	public void setTipProfilePath(String aValue) { this.tipProfilePath = aValue; this.setIsDirty(true); }
+	public void setBaseProfileName(String aValue) { this.baseProfileName = aValue; this.setIsDirty(true); }
+	public void setTipProfileName(String aValue) { this.tipProfileName = aValue; this.setIsDirty(true); }
+	public void setBaseProfileNumberPoints(Integer aValue) { this.baseProfileNumberPoints = aValue; this.setIsDirty(true); }
+	public void setTipProfileNumberPoints(Integer aValue) { this.tipProfileNumberPoints = aValue; this.setIsDirty(true); }
 
 	public void setCutBaseFirst(Boolean aValue) { this.cutBaseFirst = aValue; this.setIsDirty(true); }
 
@@ -134,6 +146,11 @@ public class Project {
 	public String getProjectName() { return this.projectName; }
 	public String getBaseProfilePath() { return this.baseProfilePath; }
 	public String getTipProfilePath() { return this.tipProfilePath; }
+	public String getBaseProfileName() { return this.baseProfileName; }
+	public String getTipProfileName() { return this.tipProfileName; }
+	public Integer getBaseProfileNumberPoints() { return this.baseProfileNumberPoints; }
+	public Integer getTipProfileNumberPoints() { return this.tipProfileNumberPoints; }
+
 	
 	public Boolean getCutBaseFirst() { return this.cutBaseFirst; }
 
@@ -164,9 +181,6 @@ public class Project {
 	public Double getCrosspieceOffset() { return this.crosspieceOffset; }
 	public Double getFrontHollowOffset() { return this.frontHollowOffset; }
 	public Double getBackHollowOffset() { return this.backHollowOffset; }
-
-	public Integer getBaseProfileNumberPoints() { return this.baseProfileNumberPoints; }
-	public Integer getTipProfileNumberPoints() { return this.tipProfileNumberPoints; }
 
 	public Boolean getTipDirection() { return this.tipDirection; }
 	public Boolean getBaseDirection() { return this.baseDirection; }

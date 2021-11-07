@@ -19,6 +19,7 @@
 package com.geberl.winggcodedesigner.model;
 
 import com.geberl.winggcodedesigner.eventing.ProjectChangeListener;
+import com.geberl.winggcodedesigner.eventing.WingCalculatorEvent;
 import com.geberl.winggcodedesigner.utils.GUIHelpers;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -173,4 +174,72 @@ public class ProjectFactory {
             this.listeners.removeIf(l -> l.equals(listener));
         }
     }
+    
+
+	// ==================
+	// Profilkoordinaten laden
+    // 1 ... Base
+    // 2 ... Tip
+	// ==================
+	public static void loadProfileData(Integer profileTypeCode) {
+		
+		JFileChooser profileFileChooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+
+    	if (settings == null) {
+    		profileFileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+    	}
+    	else {
+    		profileFileChooser.setCurrentDirectory(new File(settings.getProfileDefaultPath()));    		
+    	}
+		
+    	profileFileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+    	profileFileChooser.addChoosableFileFilter(new FileNameExtensionFilter("DAT Files (Profile)", "dat"));
+    	profileFileChooser.setAcceptAllFileFilterUsed(false);
+		
+		int returnVal = profileFileChooser.showOpenDialog(null);
+		
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			try {
+				File fileToOpen = profileFileChooser.getSelectedFile();
+			
+
+				String oldProfileLine = "";
+				String profileLine = "";
+				Integer pointNum = 0;
+				BufferedReader profileReader = new BufferedReader(new FileReader(fileToOpen.getAbsolutePath())); 
+				
+				while ((profileLine = profileReader.readLine()) != null) {
+					// just skip empty Lines
+					if (!(profileLine.trim()).contentEquals("")) {
+						profileLine = profileLine.trim();
+						if (pointNum == 0) {
+							if (profileTypeCode == 1) { project.baseProfileName = profileLine; };
+							if (profileTypeCode == 2) { project.tipProfileName = profileLine; };
+						} else {
+							if (profileTypeCode == 1) { project.baseProfileSet.add(new ProfileCoordinate(profileLine, oldProfileLine)); };
+							if (profileTypeCode == 2) { project.tipProfileSet.add(new ProfileCoordinate(profileLine, oldProfileLine)); };
+							oldProfileLine = profileLine;
+						}
+						pointNum = pointNum + 1;
+					};
+				};
+				
+				if (profileTypeCode == 1) { project.setBaseProfilePath(fileToOpen.getAbsolutePath()); };
+				if (profileTypeCode == 2) { project.setTipProfilePath(fileToOpen.getAbsolutePath()); };
+				
+				if (profileTypeCode == 1) { project.baseProfileNumberPoints = pointNum -1; };
+				if (profileTypeCode == 2) { project.tipProfileNumberPoints = pointNum -1; };
+				
+	            logger.log(Level.INFO, "Profile location: {0}", fileToOpen.getAbsolutePath());
+	            logger.info("Loading project.");
+				
+			} catch (Exception ex) {
+				GUIHelpers.displayErrorDialog("Problem loading profile file: " + ex.getMessage());
+			}
+		}
+	}
+
+    
+    
+    
 }
