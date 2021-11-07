@@ -20,13 +20,19 @@
 package com.geberl.winggcodedesigner.model;
 
 
+import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedHashSet;
-import java.util.logging.Logger;
+
+import com.geberl.winggcodedesigner.eventing.ProjectChangeEvent;
+import com.geberl.winggcodedesigner.eventing.ProjectChangeListener;
+// import com.geberl.winggcodedesigner.eventing.WingCalculatorEvent;
 
 
 public class Project {
-    private static final Logger logger = Logger.getLogger(Project.class.getName());
+	private transient final Collection<ProjectChangeListener> projectChangeListener = new ArrayList<>();
 
 	// =====================================
 	// Input
@@ -82,14 +88,24 @@ public class Project {
      * .
      */
     public Project() {
-        logger.fine("Initializing project ...");
+
+    
     }
 
     
     // ==================
 	// Get / Set
 	// ==================
-	public void setIsDirty(Boolean aValue) { this.isDirty = aValue; }
+	public void setIsDirty(Boolean aValue) {
+		this.isDirty = aValue; 
+		if (aValue) {
+			new ProjectChangeEvent(ProjectChangeEvent.EventType.PROJECT_CHANGED_DIRTY_EVENT);
+		}
+		else {
+			new ProjectChangeEvent(ProjectChangeEvent.EventType.PROJECT_CHANGED_CLEAN_EVENT);
+		};
+	}
+	
 	public void setProjectPath(String aValue) { this.projectPath = aValue; }
 	public void setFile(File aValue) { this.file = aValue; }
 
@@ -180,5 +196,25 @@ public class Project {
 	public Boolean getBaseDirection() { return this.baseDirection; }
 
 	// ==================
-    
+
+	
+	// ==================
+	// Eventing
+	// ==================
+
+	public void addProjectChangeListener(ProjectChangeListener listener) {
+		if (!projectChangeListener.contains(listener)) {
+			projectChangeListener.add(listener);
+		}
+	}
+
+	public void removeProjectChangeListener(ProjectChangeListener listener) {
+		if (projectChangeListener.contains(listener)) {
+			projectChangeListener.remove(listener);
+		}
+	}
+
+	
+	
+	
 }

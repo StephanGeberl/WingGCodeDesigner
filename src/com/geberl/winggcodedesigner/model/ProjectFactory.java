@@ -18,14 +18,11 @@
  */
 package com.geberl.winggcodedesigner.model;
 
-import com.geberl.winggcodedesigner.eventing.ProjectChangeListener;
-import com.geberl.winggcodedesigner.eventing.WingCalculatorEvent;
 import com.geberl.winggcodedesigner.utils.GUIHelpers;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -44,7 +41,6 @@ public class ProjectFactory {
 
     private static Project project;
     private static Settings settings;
-    private ArrayList<ProjectChangeListener> listeners;
 
     public static void setSettings(Settings aValue) { settings = aValue; }
 
@@ -157,22 +153,6 @@ public class ProjectFactory {
 				GUIHelpers.displayErrorDialog("Problem saving project file: " + ex.getMessage());
 			}
 		}
-    }
-
-
-    public void addListener(ProjectChangeListener listener) {
-        if (!this.listeners.contains(listener)) {
-            this.listeners.add(listener);
-        }
-    }
-
-
-    public void removeListener(ProjectChangeListener listener) {
-        if (this.listeners.contains(listener)) {
-            // Needs to be removed with thread safe operation,
-            // will otherwise result in ConcurrentModifificationException
-            this.listeners.removeIf(l -> l.equals(listener));
-        }
     }
     
 

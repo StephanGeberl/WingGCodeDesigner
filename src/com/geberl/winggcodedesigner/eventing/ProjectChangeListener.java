@@ -19,7 +19,6 @@ package com.geberl.winggcodedesigner.eventing;
 
 public interface ProjectChangeListener {
 
-	void projectLoaded();
-	void projectSaved();
+	void ProjectValuesChangedEvent(ProjectChangeEvent evt);
 
 }

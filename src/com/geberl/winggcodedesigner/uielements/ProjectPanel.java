@@ -24,45 +24,47 @@ import javax.swing.JPanel;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 
+import com.geberl.winggcodedesigner.eventing.ProjectChangeEvent;
+import com.geberl.winggcodedesigner.eventing.ProjectChangeListener;
 import com.geberl.winggcodedesigner.model.Project;
 import com.geberl.winggcodedesigner.model.ProjectFactory;
-import com.geberl.winggcodedesigner.model.SettingsFactory;
+//import com.geberl.winggcodedesigner.model.SettingsFactory;
 import com.geberl.winggcodedesigner.model.WingCalculatorModel;
-import com.geberl.winggcodedesigner.utils.GUIHelpers;
+// import com.geberl.winggcodedesigner.utils.GUIHelpers;
 
 import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
-import java.util.logging.Logger;
+//import java.util.logging.Logger;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
 import java.awt.Component;
 
 import javax.swing.JCheckBox;
-import javax.swing.JFileChooser;
+//import javax.swing.JFileChooser;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
-import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.filechooser.FileSystemView;
+//import javax.swing.filechooser.FileNameExtensionFilter;
+//import javax.swing.filechooser.FileSystemView;
 import javax.swing.text.NumberFormatter;
 import java.beans.PropertyChangeListener;
-import java.io.File;
+//import java.io.File;
 import java.beans.PropertyChangeEvent;
 import javax.swing.JSeparator;
 
 
-public class ProjectPanel extends JPanel {
+public class ProjectPanel extends JPanel implements ProjectChangeListener {
 
 	/**
 	 * 
 	 */
-    private static final Logger logger = Logger.getLogger(SettingsFactory.class.getName());
+//    private static final Logger logger = Logger.getLogger(SettingsFactory.class.getName());
 	private static final long serialVersionUID = 1L;
 
-	private WingCalculatorModel wingCalculatorModel;
-	public Project project = null;
+//	private WingCalculatorModel wingCalculatorModel;
+	private Project project = null;
 
 	private JPanel topSparePanel = new JPanel();
 	private JPanel bottomSparePanel = new JPanel();
@@ -115,8 +117,9 @@ public class ProjectPanel extends JPanel {
 
 	public ProjectPanel(WingCalculatorModel anWingDesignerModel) {
 		
-		this.wingCalculatorModel = anWingDesignerModel;
-		this.project = anWingDesignerModel.project;
+//		this.wingCalculatorModel = anWingDesignerModel;
+//		this.project = anWingDesignerModel.project;
+		this.project = new Project();
 		
 		// setForeground(Color.LIGHT_GRAY);
 		this.setLayout(null);
@@ -245,21 +248,22 @@ public class ProjectPanel extends JPanel {
 		btnLoadProject.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				project = ProjectFactory.loadProject();
+				project.addProjectChangeListener((ProjectChangeListener)this);
 				setPanelValues();
 				setProfileValues();
 				inputProjectPath.setText(project.getProjectPath());
-				btnSaveProject.setEnabled(true);
+				btnSaveProject.setEnabled(false);
 
 				}
 		});
 		btnLoadProject.setBounds(755, 204, 170, 27);
 		add(btnLoadProject);
 		// ------------------------------------------
-		btnNewProject = new JButton("New (Project)");
+		btnNewProject = new JButton("New Project");
 		btnNewProject.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				project = ProjectFactory.newProject();
-				
+				project.addProjectChangeListener((ProjectChangeListener)this);
 				setPanelValues();
 				setProfileValues();
 				inputProjectPath.setText("");
@@ -269,26 +273,27 @@ public class ProjectPanel extends JPanel {
 		btnNewProject.setBounds(755, 233, 170, 27);
 		add(btnNewProject);
 		// ------------------------------------------
-		btnSaveProject = new JButton("Save (Project)");
+		btnSaveProject = new JButton("Save Project");
 		btnSaveProject.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ProjectFactory.saveProject();
 				setPanelValues();
 				setProfileValues();
 				inputProjectPath.setText(project.getProjectPath());
+				btnSaveProject.setEnabled(false);
 				}
 		});
 		btnSaveProject.setBounds(755, 261, 170, 27);
 		add(btnSaveProject);
 		// ------------------------------------------
-		btnSaveAsProject = new JButton("Save as (Project)");
+		btnSaveAsProject = new JButton("Save as Project");
 		btnSaveAsProject.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ProjectFactory.saveProjectAs();
 				setPanelValues();
 				setProfileValues();
 				inputProjectPath.setText(project.getProjectPath());
-				btnSaveProject.setEnabled(true);
+				btnSaveProject.setEnabled(false);
 				}
 		});
 		btnSaveAsProject.setBounds(755, 289, 170, 27);
@@ -782,17 +787,10 @@ public class ProjectPanel extends JPanel {
 		
 		}
 	}
-		
-		
-		
-		
-		
-		
-		
-
     
     
 	// Hilfsfunktion
+	// enable/disable Panels
 	private void setPanelEnabled(JPanel panel, Boolean isEnabled) {
 	    panel.setEnabled(isEnabled);
 
@@ -804,5 +802,18 @@ public class ProjectPanel extends JPanel {
 	        }
 	        component.setEnabled(isEnabled);
 	    }
+	}
+
+	@Override
+	public void ProjectValuesChangedEvent(ProjectChangeEvent evt) {
+		// TODO Auto-generated method stub
+		if(evt.isProjectChangedCleanEvent()) {
+			btnSaveProject.setEnabled(false);
+		};
+		if(evt.isProjectChangedDirtyEvent()) {
+			btnSaveProject.setEnabled(true);	
+		};
+		
+		
 	}
 }
