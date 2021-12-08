@@ -57,6 +57,7 @@ public class Project {
 	private Boolean baseDirection = true;
 	private Boolean tipDirection = true;
 	private Boolean cutBaseFirst = false;
+	private Boolean cutTopOnly = false;
 	private Double shiftCenter = 0.0;
 
 	
@@ -119,6 +120,7 @@ public class Project {
 	public void setTipProfileNumberPoints(Integer aValue) { this.tipProfileNumberPoints = aValue; this.setIsDirty(true); }
 
 	public void setCutBaseFirst(Boolean aValue) { this.cutBaseFirst = aValue; this.setIsDirty(true); }
+	public void setCutTopOnly(Boolean aValue) { this.cutTopOnly = aValue; this.setIsDirty(true); }
 
 	
     public void setHalfSpanLength(Double aValue) { this.halfSpanLength = aValue; this.setIsDirty(true); }
@@ -162,9 +164,9 @@ public class Project {
 	public String getTipProfileName() { return this.tipProfileName; }
 	public Integer getBaseProfileNumberPoints() { return this.baseProfileNumberPoints; }
 	public Integer getTipProfileNumberPoints() { return this.tipProfileNumberPoints; }
-
 	
 	public Boolean getCutBaseFirst() { return this.cutBaseFirst; }
+	public Boolean getCutTopOnly() { return this.cutTopOnly; }
 
 	public Double getHalfSpanLength() {return this.halfSpanLength;};
 	public Double getBaseCordLength() { return this.baseCordLength; }

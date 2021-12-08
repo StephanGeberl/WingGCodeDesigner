@@ -63,7 +63,6 @@ public class ProjectPanel extends JPanel implements ProjectChangeEventListener {
     private static final Logger logger = Logger.getLogger(SettingsFactory.class.getName());
 	private static final long serialVersionUID = 1L;
 
-//	private WingCalculatorModel wingCalculatorModel;
 	private Project project = null;
 
 	private JPanel topSparePanel = new JPanel();
@@ -72,12 +71,12 @@ public class ProjectPanel extends JPanel implements ProjectChangeEventListener {
 
 	private JButton btnSaveProject = null;
 	private JButton btnNewProject = null;
-	private JButton btnSaveAsProject = null;
 	private JButton btnLoadProject = null;
 	
 	private JTextField inputProjectPath;
 	private JTextField inputProjectName;
 	private JCheckBox inputCutBaseFirst;
+	private JCheckBox inputCutTopOnly;
 
 	private JTextField inputBaseProfileName;
 	private JFormattedTextField inputBaseProfileNumberPoints;
@@ -122,14 +121,9 @@ public class ProjectPanel extends JPanel implements ProjectChangeEventListener {
 		
 		// setForeground(Color.LIGHT_GRAY);
 		this.setLayout(null);
-		this.setPreferredSize(new Dimension(937, 429));
+		this.setPreferredSize(new Dimension(937, 344));
 		
 		this.createControls();
-		
-		btnSaveProject.setEnabled(false);
-		setPanelValues();
-		setProfileValues();
-
 		
 	}
 
@@ -188,14 +182,14 @@ public class ProjectPanel extends JPanel implements ProjectChangeEventListener {
 		inputBaseProfileNumberPoints.setBackground(Color.LIGHT_GRAY);
 		
 		inputTipProfileName = new JTextField();
-		inputTipProfileName.setBounds(755, 143, 122, 25);
+		inputTipProfileName.setBounds(755, 155, 122, 25);
 		add(inputTipProfileName);
 		inputTipProfileName.setColumns(10);
 		inputTipProfileName.setEditable(false);
 		inputTipProfileName.setBackground(Color.LIGHT_GRAY);
 		
 		inputTipProfileNumberPoints = new JFormattedTextField(integerFormatter);
-		inputTipProfileNumberPoints.setBounds(876, 143, 49, 25);
+		inputTipProfileNumberPoints.setBounds(876, 155, 49, 25);
 		add(inputTipProfileNumberPoints);
 		inputTipProfileNumberPoints.setEditable(false);
 		inputTipProfileNumberPoints.setBackground(Color.LIGHT_GRAY);
@@ -214,8 +208,10 @@ public class ProjectPanel extends JPanel implements ProjectChangeEventListener {
 			public void actionPerformed(ActionEvent e) { project.setTipDirection(inputTipDirection.isSelected()); }
 		});
 		inputTipDirection.setSelected(true);
-		inputTipDirection.setBounds(755, 169, 170, 23);
+		inputTipDirection.setBounds(755, 181, 170, 23);
 		add(inputTipDirection);
+		
+		
 		// ================================================
 		JButton loadTipWingProfile = new JButton("Load Tip Wing Profile");
 		loadTipWingProfile.addActionListener(new ActionListener() {
@@ -224,7 +220,7 @@ public class ProjectPanel extends JPanel implements ProjectChangeEventListener {
 				setProfileValues();
 			}
 		});
-		loadTipWingProfile.setBounds(755, 108, 170, 27);
+		loadTipWingProfile.setBounds(755, 120, 170, 27);
 		add(loadTipWingProfile);
 		
 		JButton loadBaseWingProfile = new JButton("Load Base Wing Profile");
@@ -242,7 +238,7 @@ public class ProjectPanel extends JPanel implements ProjectChangeEventListener {
 		// ============= Daten erfassen ===================
 
 		// ============= Manage Projects ===================
-		btnLoadProject = new JButton("Load (Project)");
+		btnLoadProject = new JButton("Load Project");
 		btnLoadProject.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				project = ProjectFactory.loadProject();
@@ -250,11 +246,11 @@ public class ProjectPanel extends JPanel implements ProjectChangeEventListener {
 				setPanelValues();
 				setProfileValues();
 				inputProjectPath.setText(project.getProjectPath());
-				btnSaveProject.setEnabled(false);
+				// btnSaveProject.setEnabled(false);
 
 				}
 		});
-		btnLoadProject.setBounds(755, 204, 170, 27);
+		btnLoadProject.setBounds(755, 232, 170, 27);
 		add(btnLoadProject);
 		// ------------------------------------------
 		btnNewProject = new JButton("New Project");
@@ -265,42 +261,28 @@ public class ProjectPanel extends JPanel implements ProjectChangeEventListener {
 				setPanelValues();
 				setProfileValues();
 				inputProjectPath.setText("");
-				btnSaveProject.setEnabled(false);
+				// btnSaveProject.setEnabled(false);
 				}
 		});
-		btnNewProject.setBounds(755, 233, 170, 27);
+		btnNewProject.setBounds(755, 261, 170, 27);
 		add(btnNewProject);
 		// ------------------------------------------
-		btnSaveProject = new JButton("Save Project");
+		btnSaveProject = new JButton("Save and Calc Project");
 		btnSaveProject.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				ProjectFactory.saveProject();
-				setPanelValues();
-				setProfileValues();
-				inputProjectPath.setText(project.getProjectPath());
-				btnSaveProject.setEnabled(false);
-				}
-		});
-		btnSaveProject.setBounds(755, 261, 170, 27);
-		add(btnSaveProject);
-		// ------------------------------------------
-		btnSaveAsProject = new JButton("Save as Project");
-		btnSaveAsProject.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ProjectFactory.saveProjectAs();
 				setPanelValues();
 				setProfileValues();
 				inputProjectPath.setText(project.getProjectPath());
-				btnSaveProject.setEnabled(false);
 				}
 		});
-		btnSaveAsProject.setBounds(755, 289, 170, 27);
-		add(btnSaveAsProject);
+		btnSaveProject.setBounds(755, 289, 170, 27);
+		add(btnSaveProject);
 		// ------------------------------------------
 		inputProjectPath = new JFormattedTextField();
 		inputProjectPath.setBackground(Color.LIGHT_GRAY);
 		inputProjectPath.setEditable(false);
-		inputProjectPath.setBounds(270, 261, 469, 25);
+		inputProjectPath.setBounds(275, 290, 469, 25);
 		add(inputProjectPath);
 		// ------------------------------------------
 		// ============= Manage Projects Ende ===================
@@ -321,7 +303,7 @@ public class ProjectPanel extends JPanel implements ProjectChangeEventListener {
 				if (project != null) { project.setHalfSpanLength( Double.parseDouble(inputHalfSpanLength.getText()) ); }
 			}
 		});
-		inputHalfSpanLength.setBounds(172, 47, 75, 25);
+		inputHalfSpanLength.setBounds(172, 44, 75, 25);
 		add(inputHalfSpanLength);
 		// ------------------------------------------
 		inputBaseCordLength = new JFormattedTextField(doubleFormatter);
@@ -330,7 +312,7 @@ public class ProjectPanel extends JPanel implements ProjectChangeEventListener {
 				if (project != null) { project.setBaseCordLength( Double.parseDouble(inputBaseCordLength.getText()) );  }
 			}
 		});
-		inputBaseCordLength.setBounds(172, 73, 75, 25);
+		inputBaseCordLength.setBounds(172, 70, 75, 25);
 		add(inputBaseCordLength);
 		// ------------------------------------------
 		inputTipCordLength = new JFormattedTextField(doubleFormatter);
@@ -339,7 +321,7 @@ public class ProjectPanel extends JPanel implements ProjectChangeEventListener {
 				if (project != null) { project.setTipCordLength( Double.parseDouble(inputTipCordLength.getText()) ); }
 			}
 		});
-		inputTipCordLength.setBounds(172, 97, 75, 25);
+		inputTipCordLength.setBounds(172, 94, 75, 25);
 		add(inputTipCordLength);
 		// ------------------------------------------
 		
@@ -349,7 +331,7 @@ public class ProjectPanel extends JPanel implements ProjectChangeEventListener {
 				if (project != null) { project.setBaseMeltingLoss( Double.parseDouble(inputBaseMeltingLoss.getText()) ); }
 			}
 		});
-		inputBaseMeltingLoss.setBounds(172, 122, 75, 25);
+		inputBaseMeltingLoss.setBounds(172, 119, 75, 25);
 		add(inputBaseMeltingLoss);
 		// ------------------------------------------
 		inputTipMeltingLoss = new JFormattedTextField(doubleFormatter);
@@ -358,7 +340,7 @@ public class ProjectPanel extends JPanel implements ProjectChangeEventListener {
 				if (project != null) { project.setTipMeltingLoss( Double.parseDouble(inputTipMeltingLoss.getText()) ); }
 			}
 		});
-		inputTipMeltingLoss.setBounds(172, 146, 75, 25);
+		inputTipMeltingLoss.setBounds(172, 143, 75, 25);
 		add(inputTipMeltingLoss);
 		// ------------------------------------------
 		inputWingSweep = new JFormattedTextField(degreeFormatter);
@@ -367,7 +349,7 @@ public class ProjectPanel extends JPanel implements ProjectChangeEventListener {
 				if (project != null) { project.setWingSweep( Double.parseDouble(inputWingSweep.getText()) ); }
 			}
 		});
-		inputWingSweep.setBounds(172, 172, 75, 25);
+		inputWingSweep.setBounds(172, 169, 75, 25);
 		add(inputWingSweep);
 		// ------------------------------------------
 		inputWingTipOffset = new JFormattedTextField(degreeFormatter);
@@ -376,7 +358,7 @@ public class ProjectPanel extends JPanel implements ProjectChangeEventListener {
 				if (project != null) { project.setWingTipOffset( Double.parseDouble(inputWingTipOffset.getText()) ); }
 			}
 		});
-		inputWingTipOffset.setBounds(172, 197, 75, 25);
+		inputWingTipOffset.setBounds(172, 194, 75, 25);
 		add(inputWingTipOffset);
 		// ------------------------------------------
 		inputWingTipYOffset = new JFormattedTextField(decimalFormater);
@@ -385,27 +367,37 @@ public class ProjectPanel extends JPanel implements ProjectChangeEventListener {
 				if (project != null) { project.setWingTipYOffset( Double.parseDouble(inputWingTipYOffset.getText()) ); }
 			}
 		});
-		inputWingTipYOffset.setBounds(172, 223, 75, 25);
+		inputWingTipYOffset.setBounds(172, 220, 75, 25);
 		add(inputWingTipYOffset);
 		// ------------------------------------------
 		inputCutBaseFirst = new JCheckBox("Cut Profile base first");
 		inputCutBaseFirst.setSelected(false);
-		inputCutBaseFirst.setBounds(6, 281, 193, 18);
+		inputCutBaseFirst.setBounds(6, 275, 193, 18);
 		add(inputCutBaseFirst);
 		inputCutBaseFirst.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				project.setCutBaseFirst(inputCutBaseFirst.isSelected());
 			}
 		});
+
 		// ------------------------------------------
-		
+		inputCutTopOnly = new JCheckBox("Cut only profile top");
+		inputCutTopOnly.setSelected(false);
+		inputCutTopOnly.setBounds(6, 298, 193, 18);
+		add(inputCutTopOnly);
+		inputCutTopOnly.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				project.setCutTopOnly(inputCutTopOnly.isSelected());
+			}
+		});
+		// ------------------------------------------
 		inputShiftCenter = new JFormattedTextField(decimalFormater);
 		inputShiftCenter.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent evt) {
 				if (project != null) { project.setShiftCenter( Double.parseDouble(inputShiftCenter.getText()) ); }
 			}
 		});
-		inputShiftCenter.setBounds(172, 248, 75, 25);
+		inputShiftCenter.setBounds(172, 245, 75, 25);
 		add(inputShiftCenter);
 		
 		
@@ -640,31 +632,31 @@ public class ProjectPanel extends JPanel implements ProjectChangeEventListener {
 		add(lblName);
 		
 		JLabel lblInputHalfspanLength = new JLabel("Half wingspan [mm]");
-		lblInputHalfspanLength.setBounds(6, 47, 170, 25);
+		lblInputHalfspanLength.setBounds(6, 44, 170, 25);
 		add(lblInputHalfspanLength);
 		
 		JLabel lblInputHalfspanLength_1 = new JLabel("Base cord [mm]");
-		lblInputHalfspanLength_1.setBounds(6, 71, 170, 25);
+		lblInputHalfspanLength_1.setBounds(6, 68, 170, 25);
 		add(lblInputHalfspanLength_1);
 		
 		JLabel lblInputHalfspanLength_1_1 = new JLabel("Tip cord [mm]");
-		lblInputHalfspanLength_1_1.setBounds(6, 97, 170, 25);
+		lblInputHalfspanLength_1_1.setBounds(6, 94, 170, 25);
 		add(lblInputHalfspanLength_1_1);
 		
 		JLabel lblInputHalfspanLength_1_2 = new JLabel("Melting loss base [mm]");
-		lblInputHalfspanLength_1_2.setBounds(6, 122, 170, 25);
+		lblInputHalfspanLength_1_2.setBounds(6, 119, 170, 25);
 		add(lblInputHalfspanLength_1_2);
 		
 		JLabel lblInputHalfspanLength_1_3 = new JLabel("Melting loss tip [mm]");
-		lblInputHalfspanLength_1_3.setBounds(6, 147, 170, 25);
+		lblInputHalfspanLength_1_3.setBounds(6, 144, 170, 25);
 		add(lblInputHalfspanLength_1_3);
 		
 		JLabel lblInputHalfspanLength_1_3_1 = new JLabel("Wing sweep [deg]");
-		lblInputHalfspanLength_1_3_1.setBounds(6, 172, 170, 25);
+		lblInputHalfspanLength_1_3_1.setBounds(6, 169, 170, 25);
 		add(lblInputHalfspanLength_1_3_1);
 		
 		JLabel lblInputHalfspanLength_1_3_2 = new JLabel("Wing tip offset [deg]");
-		lblInputHalfspanLength_1_3_2.setBounds(6, 197, 170, 25);
+		lblInputHalfspanLength_1_3_2.setBounds(6, 194, 170, 25);
 		add(lblInputHalfspanLength_1_3_2);
 		
 		JLabel lblInputHalfspanLength_1_3_2_2 = new JLabel("Mid cord length [mm]");
@@ -706,11 +698,11 @@ public class ProjectPanel extends JPanel implements ProjectChangeEventListener {
 		add(lblInputHalfspanLength_1_3_2_2_1_3_3);
 		
 		JLabel lblInputWingTipYOffset = new JLabel("Wing y offset [mm]");
-		lblInputWingTipYOffset.setBounds(6, 223, 170, 25);
+		lblInputWingTipYOffset.setBounds(6, 220, 170, 25);
 		add(lblInputWingTipYOffset);
 		
 		JLabel lblShiftCentermm = new JLabel("Shift center [mm]");
-		lblShiftCentermm.setBounds(6, 248, 170, 25);
+		lblShiftCentermm.setBounds(6, 245, 170, 25);
 		add(lblShiftCentermm);
 
 		
@@ -720,6 +712,9 @@ public class ProjectPanel extends JPanel implements ProjectChangeEventListener {
 		
 		// ------------------------------------------
 		// =======================================================
+
+		setPanelValues();
+		setProfileValues();
 		
     }
 		
@@ -732,6 +727,7 @@ public class ProjectPanel extends JPanel implements ProjectChangeEventListener {
 			inputHalfSpanLength.setValue(project.getHalfSpanLength());
 			
 			inputCutBaseFirst.setSelected(project.getCutBaseFirst());
+			inputCutTopOnly.setSelected(project.getCutTopOnly());
 			
 			inputBaseCordLength.setValue(project.getBaseCordLength());
 			inputTipCordLength.setValue(project.getTipCordLength());
@@ -787,7 +783,7 @@ public class ProjectPanel extends JPanel implements ProjectChangeEventListener {
 	}
     
 	private void addMeAsProjectValuesChangedListener() {
-		logger.info("Add one: ");
+
 		project.addProjectChangeListener(this);
 	}
 	
@@ -810,10 +806,10 @@ public class ProjectPanel extends JPanel implements ProjectChangeEventListener {
 	@Override
 	public void ProjectValuesChangedEvent(ProjectChangeEvent evt) {
 		if(evt.isProjectChangedCleanEvent()) {
-			btnSaveProject.setEnabled(false);
+			// btnSaveProject.setEnabled(false);
 		};
 		if(evt.isProjectChangedDirtyEvent()) {
-			btnSaveProject.setEnabled(true);	
+			// btnSaveProject.setEnabled(true);	
 		};
 	}
 }
