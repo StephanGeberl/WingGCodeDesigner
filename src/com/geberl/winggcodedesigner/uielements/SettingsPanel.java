@@ -23,6 +23,8 @@ import java.awt.Dimension;
 import javax.swing.JPanel;
 import javax.swing.JButton;
 
+import com.geberl.winggcodedesigner.eventing.SettingsChangeEvent;
+import com.geberl.winggcodedesigner.eventing.SettingsChangeEventListener;
 import com.geberl.winggcodedesigner.model.Settings;
 import com.geberl.winggcodedesigner.model.SettingsFactory;
 import com.geberl.winggcodedesigner.utils.GUIHelpers;
@@ -42,7 +44,7 @@ import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.beans.PropertyChangeEvent;
 
-public class SettingsPanel extends JPanel {
+public class SettingsPanel extends JPanel implements SettingsChangeEventListener {
 
 	/**
 	 * 
@@ -50,11 +52,12 @@ public class SettingsPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
  
 	private Settings settings;
+	
+	JButton btnSaveParameters = null;
 
 	public SettingsPanel(Settings aSettings) {
 		
 		this.settings = aSettings;
-		
 		
 		setForeground(Color.LIGHT_GRAY);
 		this.setLayout(null);
@@ -223,7 +226,8 @@ public class SettingsPanel extends JPanel {
 		btnChangeProfileDirectory.setBounds(639, 233, 100, 27);
 		add(btnChangeProfileDirectory);
 		// ------------------------------------------
-		JButton btnSaveParameters = new JButton("Save Parameters");
+		
+		btnSaveParameters = new JButton("Save Parameters");
 		btnSaveParameters.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				SettingsFactory.saveSettings();
@@ -231,12 +235,20 @@ public class SettingsPanel extends JPanel {
 		});
 		btnSaveParameters.setBounds(16, 270, 208, 27);
 		add(btnSaveParameters);
+		btnSaveParameters.setEnabled(false);
 		// ===============================================================
-		
 		
 		JLabel lblInputWireLength = new JLabel("Wire length [mm]");
 		lblInputWireLength.setBounds(16, 6, 167, 25);
 		add(lblInputWireLength);
+		
+		JLabel lblXaxisMaxmm = new JLabel("X-Axis max [mm]");
+		lblXaxisMaxmm.setBounds(16, 31, 167, 25);
+		add(lblXaxisMaxmm);
+		
+		JLabel lblInputWireLength_1_1 = new JLabel("Y-Axis max [mm]");
+		lblInputWireLength_1_1.setBounds(16, 57, 167, 25);
+		add(lblInputWireLength_1_1);
 		
 		JLabel lblInputStartDistance = new JLabel("X-Start-Distance [mm]");
 		lblInputStartDistance.setBounds(16, 108, 167, 25);
@@ -265,14 +277,6 @@ public class SettingsPanel extends JPanel {
 		JLabel lblInputCordOffset_1_1_1_1 = new JLabel("Default profile directory");
 		lblInputCordOffset_1_1_1_1.setBounds(16, 233, 167, 25);
 		add(lblInputCordOffset_1_1_1_1);
-		
-		JLabel lblXaxisMaxmm = new JLabel("X-Axis max [mm]");
-		lblXaxisMaxmm.setBounds(16, 31, 167, 25);
-		add(lblXaxisMaxmm);
-		
-		JLabel lblInputWireLength_1_1 = new JLabel("Y-Axis max [mm]");
-		lblInputWireLength_1_1.setBounds(16, 57, 167, 25);
-		add(lblInputWireLength_1_1);
 		
 		
 	}
@@ -305,5 +309,15 @@ public class SettingsPanel extends JPanel {
 
 		return newPath;
 		
+	}
+
+	@Override
+	public void SettingsValuesChangedEvent(SettingsChangeEvent evt) {
+		if(evt.isSettingsChangedDirtyEvent()) {
+			btnSaveParameters.setEnabled(true);
+		};
+		if(evt.isSettingsChangedCleanEvent()) {
+			btnSaveParameters.setEnabled(false);	
+		};
 	}    
 }

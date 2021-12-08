@@ -19,15 +19,17 @@
 
 package com.geberl.winggcodedesigner.model;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.logging.Logger;
 
-import com.geberl.winggcodedesigner.eventing.ProjectChangeEvent;
-import com.geberl.winggcodedesigner.utils.GUIHelpers;
+import com.geberl.winggcodedesigner.eventing.SettingsChangeEvent;
+import com.geberl.winggcodedesigner.eventing.SettingsChangeEventListener;
 
 public class Settings {
 	
+	private transient final Collection<SettingsChangeEventListener> settingsChangeEventListener = new ArrayList<>();
     private static final Logger logger = Logger.getLogger(Settings.class.getName());
-
     private transient Boolean isDirty = false;
 
     private Double wireLength = 800.0;
@@ -54,23 +56,23 @@ public class Settings {
 	public void setIsDirty(Boolean aValue) {
 		this.isDirty = aValue; 
 		if (aValue) {
-			// this.sendProjectChangeEvent(new ProjectChangeEvent(ProjectChangeEvent.EventType.PROJECT_CHANGED_DIRTY_EVENT));
+			this.sendSettingsChangeEvent(new SettingsChangeEvent(SettingsChangeEvent.EventType.SETTINGS_CHANGED_DIRTY_EVENT));
 		}
 		else {
-			// this.sendProjectChangeEvent(new ProjectChangeEvent(ProjectChangeEvent.EventType.PROJECT_CHANGED_CLEAN_EVENT));
+			this.sendSettingsChangeEvent(new SettingsChangeEvent(SettingsChangeEvent.EventType.SETTINGS_CHANGED_CLEAN_EVENT));
 		};
 	}
 	
-	public void setWireLength(Double aValue) { this.wireLength = aValue; this.isDirty = true; }
-	public void setXAxisMax(Double aValue) { this.xAxisMax = aValue; this.isDirty = true; }
-	public void setYAxisMax(Double aValue) { this.yAxisMax = aValue; this.isDirty = true; }
-	public void setStartDistance(Double aValue) { this.startDistance = aValue; this.isDirty = true; }
-	public void setSaveHeight(Double aValue) { this.saveHeight = aValue; this.isDirty = true; }
-	public void setPause(Double aValue) { this.pause = aValue; this.isDirty = true; }
-	public void setWireSpeed(Double aValue) { this.wireSpeed = aValue; this.isDirty = true; }
-	public void setTravelSpeed(Double aValue) { this.travelSpeed = aValue; this.isDirty = true; }
-	public void setProjectDefaultPath(String aValue) { this.projectDefaultPath = aValue; this.isDirty = true; }
-	public void setProfileDefaultPath(String aValue) { this.profileDefaultPath = aValue; this.isDirty = true; }
+	public void setWireLength(Double aValue) { this.wireLength = aValue; this.setIsDirty(true); }
+	public void setXAxisMax(Double aValue) { this.xAxisMax = aValue; this.setIsDirty(true); }
+	public void setYAxisMax(Double aValue) { this.yAxisMax = aValue; this.setIsDirty(true); }
+	public void setStartDistance(Double aValue) { this.startDistance = aValue; this.setIsDirty(true); }
+	public void setSaveHeight(Double aValue) { this.saveHeight = aValue; this.setIsDirty(true); }
+	public void setPause(Double aValue) { this.pause = aValue; this.setIsDirty(true); }
+	public void setWireSpeed(Double aValue) { this.wireSpeed = aValue; this.setIsDirty(true); }
+	public void setTravelSpeed(Double aValue) { this.travelSpeed = aValue; this.setIsDirty(true); }
+	public void setProjectDefaultPath(String aValue) { this.projectDefaultPath = aValue; this.setIsDirty(true); }
+	public void setProfileDefaultPath(String aValue) { this.profileDefaultPath = aValue; this.setIsDirty(true); }
 	// ==================
 
 	public Boolean isDirty() { return isDirty; }
@@ -87,4 +89,23 @@ public class Settings {
 	public String getProfileDefaultPath() { return this.profileDefaultPath; }
 	// ==================
 
+	// ==================
+	// Eventing
+	// ==================
+	private void sendSettingsChangeEvent(SettingsChangeEvent event) {
+		settingsChangeEventListener.forEach(l -> l.SettingsValuesChangedEvent(event));
+	}
+	
+	public void addSettingsChangeListener(SettingsChangeEventListener listener) {
+		if (!settingsChangeEventListener.contains(listener)) {
+			settingsChangeEventListener.add(listener);
+		}
+	}
+
+	public void removeSettingsChangeListener(SettingsChangeEventListener listener) {
+		if (settingsChangeEventListener.contains(listener)) {
+			settingsChangeEventListener.remove(listener);
+		}
+	}
+	
 }

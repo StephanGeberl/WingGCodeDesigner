@@ -25,6 +25,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashSet;
+import java.util.logging.Logger;
 
 import com.geberl.winggcodedesigner.eventing.ProjectChangeEvent;
 import com.geberl.winggcodedesigner.eventing.ProjectChangeEventListener;
@@ -34,6 +35,7 @@ import com.geberl.winggcodedesigner.eventing.WingCalculatorEvent;
 
 public class Project {
 	private transient final Collection<ProjectChangeEventListener> projectChangeEventListener = new ArrayList<>();
+    private static final Logger logger = Logger.getLogger(Settings.class.getName());
 
 	// =====================================
 	// Input
@@ -89,8 +91,7 @@ public class Project {
      * .
      */
     public Project() {
-
-    
+        logger.fine("Initializing project ...");
     }
 
     
@@ -217,8 +218,5 @@ public class Project {
 			projectChangeEventListener.remove(listener);
 		}
 	}
-
-	
-	
 	
 }

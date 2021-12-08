@@ -809,14 +809,11 @@ public class ProjectPanel extends JPanel implements ProjectChangeEventListener {
 
 	@Override
 	public void ProjectValuesChangedEvent(ProjectChangeEvent evt) {
-		logger.info("Event: " + evt.toString());
 		if(evt.isProjectChangedCleanEvent()) {
 			btnSaveProject.setEnabled(false);
 		};
 		if(evt.isProjectChangedDirtyEvent()) {
 			btnSaveProject.setEnabled(true);	
 		};
-		
-		
 	}
 }

@@ -41,7 +41,7 @@ public class SettingsChangeEvent {
 		return EventType.SETTINGS_CHANGED_DIRTY_EVENT.equals(evt);
 	}
 
-	public boolean isProjectChangedCleanEvent() {
+	public boolean isSettingsChangedCleanEvent() {
 		return EventType.SETTINGS_CHANGED_CLEAN_EVENT.equals(evt);
 	}
 

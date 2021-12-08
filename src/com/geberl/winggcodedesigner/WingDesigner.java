@@ -82,6 +82,8 @@ public class WingDesigner extends JFrame {
         Container projectPanelContainer = new Container();
         
         SettingsPanel settingsPanel = new SettingsPanel(settings);
+        settings.addSettingsChangeListener(settingsPanel);
+        
         ProjectPanel projectDataPanel = new ProjectPanel(wingCalculatorModel);
         WingCalculatorPanel calculatorPanel = new WingCalculatorPanel(wingCalculatorModel);
         project.addProjectChangeListener(wingCalculatorModel);
