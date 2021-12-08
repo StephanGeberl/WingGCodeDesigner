@@ -47,9 +47,6 @@ public class ProfilesDrawPanel extends JPanel implements WingCalculatorEventList
 	private Integer buildYHalf = buildYMax / 2;
 	private Integer borderOffset = 0;
 	private Double drawFactor = 1.0;
-
-	private LinkedHashSet<ProfileCoordinate> baseProfileSet = new LinkedHashSet<ProfileCoordinate>();
-	private LinkedHashSet<ProfileCoordinate> tipProfileSet = new LinkedHashSet<ProfileCoordinate>();
 	
 	
 	public ProfilesDrawPanel(WingCalculatorModel anWingDesignerModel) {
@@ -81,9 +78,6 @@ public class ProfilesDrawPanel extends JPanel implements WingCalculatorEventList
 			Double xStart = 0.0, xEnd = 0.0, yStart = 0.0, yEnd = 0.0;
 			Boolean aFirstLine;
 
-			baseProfileSet = wingCalculatorModel.getBaseProfileSet();
-			tipProfileSet = wingCalculatorModel.getTipProfileSet();
-
 			Double xDrawFactor = this.buildXMax / wingCalculatorModel.getTotalMaxX();
 			Double yDrawFactor = this.buildYMax / wingCalculatorModel.getTotalMaxY();
 
@@ -93,7 +87,7 @@ public class ProfilesDrawPanel extends JPanel implements WingCalculatorEventList
 
 			xStart = 0.0; xEnd = 0.0; yStart = 0.0; yEnd = 0.0;
 			aFirstLine = true;
-			Iterator<ProfileCoordinate> baseIterator = baseProfileSet.iterator();
+			Iterator<ProfileCoordinate> baseIterator = wingCalculatorModel.project.baseProfileSet.iterator();
 			while(baseIterator.hasNext()) 
 			{
 				ProfileCoordinate coordinate = baseIterator.next();
@@ -115,7 +109,7 @@ public class ProfilesDrawPanel extends JPanel implements WingCalculatorEventList
 
 			xStart = 0.0; xEnd = 0.0; yStart = 0.0; yEnd = 0.0;
 			aFirstLine = true;
-			Iterator<ProfileCoordinate> tipIterator = tipProfileSet.iterator();
+			Iterator<ProfileCoordinate> tipIterator = wingCalculatorModel.project.tipProfileSet.iterator();
 			while(tipIterator.hasNext()) 
 			{
 				ProfileCoordinate coordinate = tipIterator.next();

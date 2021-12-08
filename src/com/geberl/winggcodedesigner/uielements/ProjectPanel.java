@@ -25,10 +25,10 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 
 import com.geberl.winggcodedesigner.eventing.ProjectChangeEvent;
-import com.geberl.winggcodedesigner.eventing.ProjectChangeListener;
+import com.geberl.winggcodedesigner.eventing.ProjectChangeEventListener;
 import com.geberl.winggcodedesigner.model.Project;
 import com.geberl.winggcodedesigner.model.ProjectFactory;
-//import com.geberl.winggcodedesigner.model.SettingsFactory;
+import com.geberl.winggcodedesigner.model.SettingsFactory;
 import com.geberl.winggcodedesigner.model.WingCalculatorModel;
 // import com.geberl.winggcodedesigner.utils.GUIHelpers;
 
@@ -36,7 +36,7 @@ import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
-//import java.util.logging.Logger;
+import java.util.logging.Logger;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
 import java.awt.Component;
@@ -55,12 +55,12 @@ import java.beans.PropertyChangeEvent;
 import javax.swing.JSeparator;
 
 
-public class ProjectPanel extends JPanel implements ProjectChangeListener {
+public class ProjectPanel extends JPanel implements ProjectChangeEventListener {
 
 	/**
 	 * 
 	 */
-//    private static final Logger logger = Logger.getLogger(SettingsFactory.class.getName());
+    private static final Logger logger = Logger.getLogger(SettingsFactory.class.getName());
 	private static final long serialVersionUID = 1L;
 
 //	private WingCalculatorModel wingCalculatorModel;
@@ -117,9 +117,8 @@ public class ProjectPanel extends JPanel implements ProjectChangeListener {
 
 	public ProjectPanel(WingCalculatorModel anWingDesignerModel) {
 		
-//		this.wingCalculatorModel = anWingDesignerModel;
-//		this.project = anWingDesignerModel.project;
-		this.project = new Project();
+		this.project = anWingDesignerModel.project;
+		addMeAsProjectValuesChangedListener();
 		
 		// setForeground(Color.LIGHT_GRAY);
 		this.setLayout(null);
@@ -128,7 +127,6 @@ public class ProjectPanel extends JPanel implements ProjectChangeListener {
 		this.createControls();
 		
 		btnSaveProject.setEnabled(false);
-		// inputProjectPath.setText("");
 		setPanelValues();
 		setProfileValues();
 
@@ -248,7 +246,7 @@ public class ProjectPanel extends JPanel implements ProjectChangeListener {
 		btnLoadProject.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				project = ProjectFactory.loadProject();
-				project.addProjectChangeListener((ProjectChangeListener)this);
+				addMeAsProjectValuesChangedListener();
 				setPanelValues();
 				setProfileValues();
 				inputProjectPath.setText(project.getProjectPath());
@@ -263,7 +261,7 @@ public class ProjectPanel extends JPanel implements ProjectChangeListener {
 		btnNewProject.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				project = ProjectFactory.newProject();
-				project.addProjectChangeListener((ProjectChangeListener)this);
+				addMeAsProjectValuesChangedListener();
 				setPanelValues();
 				setProfileValues();
 				inputProjectPath.setText("");
@@ -788,6 +786,11 @@ public class ProjectPanel extends JPanel implements ProjectChangeListener {
 		}
 	}
     
+	private void addMeAsProjectValuesChangedListener() {
+		logger.info("Add one: ");
+		project.addProjectChangeListener(this);
+	}
+	
     
 	// Hilfsfunktion
 	// enable/disable Panels
@@ -806,7 +809,7 @@ public class ProjectPanel extends JPanel implements ProjectChangeListener {
 
 	@Override
 	public void ProjectValuesChangedEvent(ProjectChangeEvent evt) {
-		// TODO Auto-generated method stub
+		logger.info("Event: " + evt.toString());
 		if(evt.isProjectChangedCleanEvent()) {
 			btnSaveProject.setEnabled(false);
 		};

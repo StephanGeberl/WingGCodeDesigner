@@ -56,7 +56,7 @@ public class WingCalculatorPanel extends JPanel implements WingCalculatorEventLi
 	private static final long serialVersionUID = 1L;
  
 	private WingCalculatorModel wingCalculatorModel;
-	private JLabel statusMessage = new JLabel("<html><b>Idle</b></html>");
+//	private JLabel statusMessage = new JLabel("<html><b>Idle</b></html>");
 	
 	private JFormattedTextField sMiddleCordLength;
 	private JFormattedTextField sBaseCordWireBase;
@@ -76,7 +76,7 @@ public class WingCalculatorPanel extends JPanel implements WingCalculatorEventLi
 		
 		setForeground(Color.LIGHT_GRAY);
 		this.setLayout(null);
-		this.setPreferredSize(new Dimension(946, 900));
+		this.setPreferredSize(new Dimension(940, 460));
 		
 		this.createControls();
 		
@@ -125,35 +125,21 @@ public class WingCalculatorPanel extends JPanel implements WingCalculatorEventLi
 		// ===============================================================
 
 		ProfilesDrawPanel profilePanel = new ProfilesDrawPanel(wingCalculatorModel);
-		profilePanel.setBounds(247, 374, 660, 210);
+		profilePanel.setBounds(270, 8, 660, 210);
 		add(profilePanel);
 		wingCalculatorModel.addWingCalculatorEventListener(profilePanel);
 		
 		// ===============================================================
 		
 		WingDrawPanel wingPanel = new WingDrawPanel(wingCalculatorModel);
-		wingPanel.setBounds(252, 583, 660, 210);
+		wingPanel.setBounds(270, 220, 660, 210);
 		add(wingPanel);
 		wingCalculatorModel.addWingCalculatorEventListener(wingPanel);
 		
-		// ===============================================================
-
-		ProjectPanel projectPanel = new ProjectPanel(wingCalculatorModel);
-		projectPanel.setBounds(5, 5, 940, 320);
-		projectPanel.setBorder(BorderFactory.createLoweredBevelBorder());
-		add(projectPanel);
-		
-		// ===============================================================
-		
-		
-		
-		
-		
-		
 		
 		// =========== Status Message ===========================
-		statusMessage.setBounds(244, 337, 403, 25);
-		add(statusMessage);
+		// statusMessage.setBounds(244, 337, 403, 25);
+		// add(statusMessage);
 		// =======================================================
 		
 		// =========== Action Buttons ============================
@@ -161,116 +147,131 @@ public class WingCalculatorPanel extends JPanel implements WingCalculatorEventLi
 		btnSaveRightGcode.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) { wingCalculatorModel.saveRightGcodeList(); }
 		});
-		btnSaveRightGcode.setBounds(39, 404, 170, 27);
+		btnSaveRightGcode.setBounds(6, 205, 240, 27);
 		add(btnSaveRightGcode);
 
 		JButton btnSaveLeftGcode = new JButton("Save left GCode");
 		btnSaveLeftGcode.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) { wingCalculatorModel.saveLeftGcodeList(); }
 		});
-		btnSaveLeftGcode.setBounds(39, 374, 170, 27);
+		btnSaveLeftGcode.setBounds(6, 235, 240, 27);
 		add(btnSaveLeftGcode);
 		
 		JButton btnDrawDraft = new JButton("Draw draft");
 		btnDrawDraft.addActionListener(new ActionListener() { 
 			public void actionPerformed(ActionEvent e) { wingCalculatorModel.drawDraft(); }
 		});
-		btnDrawDraft.setBounds(39, 480, 170, 27);
+		btnDrawDraft.setBounds(6, 265, 240, 27);
 		add(btnDrawDraft);
-		
-		JLabel lblInputHalfspanLength_1_3_2_2 = new JLabel("Mid cord length [mm]");
-		lblInputHalfspanLength_1_3_2_2.setBounds(6, 533, 157, 25);
-		add(lblInputHalfspanLength_1_3_2_2);
-		
+
+		// ------------------
 		// Output
 		
+		JLabel lblInputHalfspanLength_1_3_2_2 = new JLabel("Mid cord length [mm]");
+		lblInputHalfspanLength_1_3_2_2.setBounds(6, 5, 157, 25);
+		add(lblInputHalfspanLength_1_3_2_2);
+
 		sMiddleCordLength = new JFormattedTextField(doubleFormatter);
 		sMiddleCordLength.setBackground(Color.LIGHT_GRAY);
 		sMiddleCordLength.setEditable(false);
 		sMiddleCordLength.setText("0.0");
-		sMiddleCordLength.setBounds(160, 533, 75, 25);
+		sMiddleCordLength.setBounds(172, 5, 75, 25);
 		add(sMiddleCordLength);
+
+		// ------------------
 		
 		JLabel lblInputHalfspanLength_1_3_2_2_1 = new JLabel("Wire cord base [mm]");
-		lblInputHalfspanLength_1_3_2_2_1.setBounds(6, 559, 157, 25);
+		lblInputHalfspanLength_1_3_2_2_1.setBounds(6, 29, 157, 25);
 		add(lblInputHalfspanLength_1_3_2_2_1);
 		
 		sBaseCordWireBase = new JFormattedTextField(doubleFormatter);
 		sBaseCordWireBase.setBackground(Color.LIGHT_GRAY);
 		sBaseCordWireBase.setEditable(false);
 		sBaseCordWireBase.setText("0.0");
-		sBaseCordWireBase.setBounds(160, 559, 75, 25);
+		sBaseCordWireBase.setBounds(172, 29, 75, 25);
 		add(sBaseCordWireBase);
+
+		// ------------------
 		
 		JLabel lblInputHalfspanLength_1_3_2_2_1_1 = new JLabel("Wire cord base + [mm]");
-		lblInputHalfspanLength_1_3_2_2_1_1.setBounds(6, 585, 157, 25);
+		lblInputHalfspanLength_1_3_2_2_1_1.setBounds(6, 53, 157, 25);
 		add(lblInputHalfspanLength_1_3_2_2_1_1);
 		
 		sBaseCordWire = new JFormattedTextField(doubleFormatter);
 		sBaseCordWire.setBackground(Color.LIGHT_GRAY);
 		sBaseCordWire.setEditable(false);
 		sBaseCordWire.setText("0.0");
-		sBaseCordWire.setBounds(160, 585, 75, 25);
+		sBaseCordWire.setBounds(172, 53, 75, 25);
 		add(sBaseCordWire);
+
 		
 		JLabel lblInputHalfspanLength_1_3_2_2_1_2 = new JLabel("Wire cord tip [mm]");
-		lblInputHalfspanLength_1_3_2_2_1_2.setBounds(6, 610, 157, 25);
+		lblInputHalfspanLength_1_3_2_2_1_2.setBounds(6, 77, 157, 25);
 		add(lblInputHalfspanLength_1_3_2_2_1_2);
 		
 		sTipCordWireBase = new JFormattedTextField(doubleFormatter);
 		sTipCordWireBase.setBackground(Color.LIGHT_GRAY);
 		sTipCordWireBase.setEditable(false);
 		sTipCordWireBase.setText("0.0");
-		sTipCordWireBase.setBounds(160, 610, 75, 25);
+		sTipCordWireBase.setBounds(172, 77, 75, 25);
 		add(sTipCordWireBase);
+
+		// ------------------
 		
 		JLabel lblInputHalfspanLength_1_3_2_2_1_3 = new JLabel("Wire cord tip + [mm]");
-		lblInputHalfspanLength_1_3_2_2_1_3.setBounds(6, 635, 157, 25);
+		lblInputHalfspanLength_1_3_2_2_1_3.setBounds(6, 101, 157, 25);
 		add(lblInputHalfspanLength_1_3_2_2_1_3);
 		
 		sTipCordWire = new JFormattedTextField(doubleFormatter);
 		sTipCordWire.setBackground(Color.LIGHT_GRAY);
 		sTipCordWire.setEditable(false);
 		sTipCordWire.setText("0.0");
-		sTipCordWire.setBounds(160, 635, 75, 25);
+		sTipCordWire.setBounds(172, 101, 75, 25);
 		add(sTipCordWire);
 		
-		JSeparator separator = new JSeparator();
-		separator.setBounds(16, 219, 1, 2);
-		add(separator);
+		// JSeparator separator = new JSeparator();
+		// separator.setBounds(16, 219, 1, 2);
+		// add(separator);
+
+		// ------------------
+		
+		JLabel lblInputHalfspanLength_1_3_2_2_1_3_1 = new JLabel("Tip delta [mm]");
+		lblInputHalfspanLength_1_3_2_2_1_3_1.setBounds(6, 125, 157, 25);
+		add(lblInputHalfspanLength_1_3_2_2_1_3_1);
 		
 		sTipDeltaBase = new JFormattedTextField(doubleFormatter);
 		sTipDeltaBase.setText("0.0");
 		sTipDeltaBase.setEditable(false);
 		sTipDeltaBase.setBackground(Color.LIGHT_GRAY);
-		sTipDeltaBase.setBounds(160, 659, 75, 25);
+		sTipDeltaBase.setBounds(172, 125, 75, 25);
 		add(sTipDeltaBase);
+
+		// ------------------
+		
+		JLabel lblInputHalfspanLength_1_3_2_2_1_3_2 = new JLabel("Tip Sweep delta [mm]");
+		lblInputHalfspanLength_1_3_2_2_1_3_2.setBounds(6, 149, 157, 25);
+		add(lblInputHalfspanLength_1_3_2_2_1_3_2);
 		
 		sTipDeltaSweep = new JFormattedTextField(doubleFormatter);
 		sTipDeltaSweep.setText("0.0");
 		sTipDeltaSweep.setEditable(false);
 		sTipDeltaSweep.setBackground(Color.LIGHT_GRAY);
-		sTipDeltaSweep.setBounds(160, 684, 75, 25);
+		sTipDeltaSweep.setBounds(172, 149, 75, 25);
 		add(sTipDeltaSweep);
+
+		// ------------------
+		
+		JLabel lblInputHalfspanLength_1_3_2_2_1_3_3 = new JLabel("Tip Sum Delta [mm]");
+		lblInputHalfspanLength_1_3_2_2_1_3_3.setBounds(6, 173, 157, 25);
+		add(lblInputHalfspanLength_1_3_2_2_1_3_3);
 		
 		sTipDeltaAll = new JFormattedTextField(doubleFormatter);
 		sTipDeltaAll.setText("0.0");
 		sTipDeltaAll.setEditable(false);
 		sTipDeltaAll.setBackground(Color.LIGHT_GRAY);
-		sTipDeltaAll.setBounds(160, 707, 75, 25);
+		sTipDeltaAll.setBounds(172, 173, 75, 25);
 		add(sTipDeltaAll);
 		
-		JLabel lblInputHalfspanLength_1_3_2_2_1_3_1 = new JLabel("Tip delta [mm]");
-		lblInputHalfspanLength_1_3_2_2_1_3_1.setBounds(6, 659, 157, 25);
-		add(lblInputHalfspanLength_1_3_2_2_1_3_1);
-		
-		JLabel lblInputHalfspanLength_1_3_2_2_1_3_2 = new JLabel("Tip Sweep delta [mm]");
-		lblInputHalfspanLength_1_3_2_2_1_3_2.setBounds(6, 684, 157, 25);
-		add(lblInputHalfspanLength_1_3_2_2_1_3_2);
-		
-		JLabel lblInputHalfspanLength_1_3_2_2_1_3_3 = new JLabel("Tip Sum Delta [mm]");
-		lblInputHalfspanLength_1_3_2_2_1_3_3.setBounds(6, 707, 157, 25);
-		add(lblInputHalfspanLength_1_3_2_2_1_3_3);
 		// =======================================================
 		
 		
@@ -288,7 +289,7 @@ public class WingCalculatorPanel extends JPanel implements WingCalculatorEventLi
 //				this.setInputTipProfileNumberPoints(wingCalculatorModel.getTipProfilePointNumber());
 				break;
 			case CALCULATOR_STATUS_CHANGED_EVENT:
-				statusMessage.setText(wingCalculatorModel.getStatusMessage());
+				// statusMessage.setText(wingCalculatorModel.getStatusMessage());
 				sMiddleCordLength.setValue(wingCalculatorModel.getMiddleCordLength());
 				sBaseCordWireBase.setValue(wingCalculatorModel.getBaseCordWireBase());
 				sBaseCordWire.setValue(wingCalculatorModel.getBaseCordWire());
@@ -298,16 +299,9 @@ public class WingCalculatorPanel extends JPanel implements WingCalculatorEventLi
 				sTipDeltaSweep.setValue(wingCalculatorModel.getTipDeltaSweep());
 				sTipDeltaAll.setValue(wingCalculatorModel.getTipDeltaAll());
 
-				if ((wingCalculatorModel.getTipProfilePointNumber()).intValue() != (wingCalculatorModel.getBaseProfilePointNumber()).intValue()) {
-//					this.inputBaseProfileNumberPoints.setBackground(Color.RED);;
-//					this.inputTipProfileNumberPoints.setBackground(Color.RED);;
-				} else {
-//					this.inputBaseProfileNumberPoints.setBackground(Color.LIGHT_GRAY);;
-//					this.inputTipProfileNumberPoints.setBackground(Color.LIGHT_GRAY);;
-				}
 				break;
 			case GCODE_CHANGED_EVENT:
-				statusMessage.setText("------");
+				// statusMessage.setText("------");
 				// statusMessage.setText(wingDesignerModel.getStatusMessage());
 				break;
 			default:

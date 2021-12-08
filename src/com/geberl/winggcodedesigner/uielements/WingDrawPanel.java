@@ -51,8 +51,6 @@ public class WingDrawPanel extends JPanel implements WingCalculatorEventListener
 	private int borderOffset = 0;
 	private double drawFactor = 1.0;
 
-	private LinkedHashSet<ProfileCoordinate> baseProfileSet = new LinkedHashSet<ProfileCoordinate>();
-	private LinkedHashSet<ProfileCoordinate> tipProfileSet = new LinkedHashSet<ProfileCoordinate>();
 	
 	
 	public WingDrawPanel(WingCalculatorModel anWingCalculatorModel) {
@@ -110,7 +108,7 @@ public class WingDrawPanel extends JPanel implements WingCalculatorEventListener
 			
 			g2d.drawLine(this.borderOffset, (int)baseCordStart, this.buildXMax, (int)baseCordStart);
 			
-			double halfSpan = wingCalculatorModel.getHalfSpanLength() /2  * this.drawFactor;
+			double halfSpan = wingCalculatorModel.project.getHalfSpanLength() /2  * this.drawFactor;
 			double halfWire = wingCalculatorModel.settings.getWireLength() /2  * this.drawFactor;
 			
 			g2d.drawLine((int)(this.buildXHalf - halfWire), this.borderOffset, (int)(this.buildXHalf - halfWire), this.buildYMax);

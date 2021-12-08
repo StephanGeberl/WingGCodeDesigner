@@ -27,12 +27,13 @@ import java.util.Collection;
 import java.util.LinkedHashSet;
 
 import com.geberl.winggcodedesigner.eventing.ProjectChangeEvent;
-import com.geberl.winggcodedesigner.eventing.ProjectChangeListener;
+import com.geberl.winggcodedesigner.eventing.ProjectChangeEventListener;
 // import com.geberl.winggcodedesigner.eventing.WingCalculatorEvent;
+import com.geberl.winggcodedesigner.eventing.WingCalculatorEvent;
 
 
 public class Project {
-	private transient final Collection<ProjectChangeListener> projectChangeListener = new ArrayList<>();
+	private transient final Collection<ProjectChangeEventListener> projectChangeEventListener = new ArrayList<>();
 
 	// =====================================
 	// Input
@@ -99,10 +100,10 @@ public class Project {
 	public void setIsDirty(Boolean aValue) {
 		this.isDirty = aValue; 
 		if (aValue) {
-			new ProjectChangeEvent(ProjectChangeEvent.EventType.PROJECT_CHANGED_DIRTY_EVENT);
+			this.sendProjectChangeEvent(new ProjectChangeEvent(ProjectChangeEvent.EventType.PROJECT_CHANGED_DIRTY_EVENT));
 		}
 		else {
-			new ProjectChangeEvent(ProjectChangeEvent.EventType.PROJECT_CHANGED_CLEAN_EVENT);
+			this.sendProjectChangeEvent(new ProjectChangeEvent(ProjectChangeEvent.EventType.PROJECT_CHANGED_CLEAN_EVENT));
 		};
 	}
 	
@@ -201,16 +202,19 @@ public class Project {
 	// ==================
 	// Eventing
 	// ==================
-
-	public void addProjectChangeListener(ProjectChangeListener listener) {
-		if (!projectChangeListener.contains(listener)) {
-			projectChangeListener.add(listener);
+	private void sendProjectChangeEvent(ProjectChangeEvent event) {
+		projectChangeEventListener.forEach(l -> l.ProjectValuesChangedEvent(event));
+	}
+	
+	public void addProjectChangeListener(ProjectChangeEventListener listener) {
+		if (!projectChangeEventListener.contains(listener)) {
+			projectChangeEventListener.add(listener);
 		}
 	}
 
-	public void removeProjectChangeListener(ProjectChangeListener listener) {
-		if (projectChangeListener.contains(listener)) {
-			projectChangeListener.remove(listener);
+	public void removeProjectChangeListener(ProjectChangeEventListener listener) {
+		if (projectChangeEventListener.contains(listener)) {
+			projectChangeEventListener.remove(listener);
 		}
 	}
 

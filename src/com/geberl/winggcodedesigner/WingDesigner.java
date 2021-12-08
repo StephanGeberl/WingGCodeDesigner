@@ -34,7 +34,8 @@ import com.geberl.winggcodedesigner.model.ProjectFactory;
 import com.geberl.winggcodedesigner.model.Settings;
 import com.geberl.winggcodedesigner.model.SettingsFactory;
 import com.geberl.winggcodedesigner.model.WingCalculatorModel;
-import com.geberl.winggcodedesigner.uielements.ParameterPanel;
+import com.geberl.winggcodedesigner.uielements.SettingsPanel;
+import com.geberl.winggcodedesigner.uielements.ProjectPanel;
 import com.geberl.winggcodedesigner.uielements.WingCalculatorPanel;
 import com.geberl.winggcodedesigner.utils.GUIHelpers;
 
@@ -63,10 +64,10 @@ public class WingDesigner extends JFrame {
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        int frameWidth = 1200;
-        int frameHeight = 1000;
+        int frameWidth = 955;
+        int frameHeight = 850;
         setSize(frameWidth, frameHeight);
-        setMinimumSize(new java.awt.Dimension(500, 200));
+        setMinimumSize(new java.awt.Dimension(955, 850));
         setLocation(60, 60);
 
         Container cp = getContentPane();
@@ -77,17 +78,37 @@ public class WingDesigner extends JFrame {
         project = ProjectFactory.newProject();
         
         WingCalculatorModel wingCalculatorModel = new WingCalculatorModel(project,settings);
-        WingCalculatorPanel wingCalculatorPanel = new WingCalculatorPanel(wingCalculatorModel);
-        ParameterPanel parameterPanel = new ParameterPanel(wingCalculatorModel);
+        
+        Container projectPanelContainer = new Container();
+        
+        SettingsPanel parameterPanel = new SettingsPanel(wingCalculatorModel);
+        ProjectPanel projectDataPanel = new ProjectPanel(wingCalculatorModel);
+        WingCalculatorPanel calculatorPanel = new WingCalculatorPanel(wingCalculatorModel);
+        project.addProjectChangeListener(wingCalculatorModel);
+        
+        // WingCalculatorPanel wingCalculatorPanel = new WingCalculatorPanel(wingCalculatorModel);
+        
+       // wingCalculatorPanel.setBounds(0, 0, 800, 800);
+        //projectPanelContainer.add(wingCalculatorPanel);
+        projectDataPanel.setBounds(5, 5, 940, 320);
+        projectDataPanel.setBorder(BorderFactory.createLoweredBevelBorder());
+        projectPanelContainer.add(projectDataPanel);
+        
+        calculatorPanel.setBounds(5, 330, 940, 440);
+        calculatorPanel.setBorder(BorderFactory.createLoweredBevelBorder());
+        projectPanelContainer.add(calculatorPanel);
+        
        
-        wingCalculatorModel.addWingCalculatorEventListener(wingCalculatorPanel);
+        // wingCalculatorModel.addWingCalculatorEventListener(wingCalculatorPanel);
+        // wingCalculatorModel.addWingCalculatorEventListener(projectDataPanel);
         
         
         JTabbedPane tabbedPanelMain = new JTabbedPane();
         tabbedPanelMain.setFont(new Font("DejaVu Sans", Font.BOLD, 14));
         // tabbedPanelMain.setBorder(javax.swing.BorderFactory.createLoweredBevelBorder());
         // tabbedPanelMain.setBounds(190,0,610,480);
-        javax.swing.JScrollPane wingCalculatorScrollPanel = new javax.swing.JScrollPane(wingCalculatorPanel, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        // javax.swing.JScrollPane wingCalculatorScrollPanel = new javax.swing.JScrollPane(wingCalculatorPanel, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        javax.swing.JScrollPane wingCalculatorScrollPanel = new javax.swing.JScrollPane(projectPanelContainer, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         javax.swing.JScrollPane parameterPanelScrollPanel = new javax.swing.JScrollPane(parameterPanel, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         tabbedPanelMain.addTab("Project",wingCalculatorScrollPanel);
         tabbedPanelMain.addTab("Settings",parameterPanelScrollPanel);

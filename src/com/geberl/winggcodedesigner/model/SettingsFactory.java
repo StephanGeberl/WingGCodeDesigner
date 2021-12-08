@@ -31,7 +31,8 @@ import java.util.logging.Logger;
  */
 public class SettingsFactory {
 	
-    private static final Logger logger = Logger.getLogger(SettingsFactory.class.getName());
+	
+	private static final Logger logger = Logger.getLogger(SettingsFactory.class.getName());
     private static final String USER_HOME = "user.home";
     private static final String FALSE = "false";
     public static final String SETTINGS_DIRECTORY_NAME = "WGCD";

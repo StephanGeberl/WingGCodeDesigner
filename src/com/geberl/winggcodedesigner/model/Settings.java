@@ -24,6 +24,7 @@ import java.util.logging.Logger;
 import com.geberl.winggcodedesigner.utils.GUIHelpers;
 
 public class Settings {
+	
     private static final Logger logger = Logger.getLogger(Settings.class.getName());
 
     private transient Boolean isDirty = false;
@@ -34,7 +35,6 @@ public class Settings {
     private Double pause = 2.0;
     private Double wireSpeed = 100.0;
     private Double travelSpeed = 1000.0;
-    private Boolean cutBaseFirst = false;
     private String projectDefaultPath = System.getProperty("user.home");
     private String profileDefaultPath = System.getProperty("user.home");
 
@@ -55,7 +55,6 @@ public class Settings {
 	public void setPause(Double aValue) { this.pause = aValue; this.isDirty = true; }
 	public void setWireSpeed(Double aValue) { this.wireSpeed = aValue; this.isDirty = true; }
 	public void setTravelSpeed(Double aValue) { this.travelSpeed = aValue; this.isDirty = true; }
-	public void setCutBaseFirst(Boolean aValue) { this.cutBaseFirst = aValue; this.isDirty = true; }
 	public void setProjectDefaultPath(String aValue) { this.projectDefaultPath = aValue; this.isDirty = true; }
 	public void setProfileDefaultPath(String aValue) { this.profileDefaultPath = aValue; this.isDirty = true; }
 	// ==================
@@ -66,7 +65,6 @@ public class Settings {
 	public Double getPause() {return this.pause;}
 	public Double getWireSpeed() {return this.wireSpeed;}
 	public Double getTravelSpeed() {return this.travelSpeed;}
-	public Boolean getCutBaseFirst() {return this.cutBaseFirst;}
 	public String getProjectDefaultPath() { return this.projectDefaultPath; }
 	public String getProfileDefaultPath() { return this.profileDefaultPath; }
 	

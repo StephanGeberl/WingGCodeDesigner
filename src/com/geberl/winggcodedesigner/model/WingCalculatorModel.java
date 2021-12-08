@@ -36,6 +36,8 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
 
 import com.geberl.winggcodedesigner.utils.GUIHelpers;
+import com.geberl.winggcodedesigner.eventing.ProjectChangeEvent;
+import com.geberl.winggcodedesigner.eventing.ProjectChangeEventListener;
 import com.geberl.winggcodedesigner.eventing.WingCalculatorEvent;
 import com.geberl.winggcodedesigner.eventing.WingCalculatorEventListener;
  
@@ -46,55 +48,19 @@ import com.geberl.winggcodedesigner.eventing.WingCalculatorEventListener;
  * @author sgeberl
  */
 
-public class WingCalculatorModel {
+public class WingCalculatorModel implements ProjectChangeEventListener{
 
-	private javax.swing.JFileChooser fileChooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+	JFileChooser fileChooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
 
 	private final Collection<WingCalculatorEventListener> wingCalculatorEventListener = new ArrayList<>();
-
-    public Settings settings;
-    public Project project;
-	
-	
-	
-	private LinkedHashSet<ProfileCoordinate> baseProfileSet = new LinkedHashSet<ProfileCoordinate>();
-	private LinkedHashSet<ProfileCoordinate> tipProfileSet = new LinkedHashSet<ProfileCoordinate>();
-	private LinkedHashSet<String> gCodeLines = new LinkedHashSet<String>();
-
-	
-	private String baseProfileName = "";
-	private String tipProfileName = "";
-	private Integer baseProfilePointNumber = 0;
-	private Integer tipProfilePointNumber = 0;
-	
-	private Boolean baseDirection = true;
-	private Boolean tipDirection = true;
-	
 	
 	// =====================================
 	// Input
 	// =====================================
-	private Double halfSpanLength = 0.0;
-	private Double baseCordLength = 0.0;
-	private Double tipCordLength = 0.0;
-	private Double baseMeltingLoss = 0.0;
-	private Double tipMeltingLoss = 0.0;
-	private Double wingSweep = 0.0;
-	private Double wingTipOffset = 0.0;
-	private Double wingTipYOffset = 0.0;
-
-	private Boolean hasSparTop = false;
-	private Boolean hasSparBottom = false;
-	private Double sparOffsetTop = 0.0;
-	private Double sparWidthTop = 0.0;
-	private Double sparHeightTop = 0.0;
-	private Double sparOffsetBottom = 0.0;
-	private Double sparWidthBottom = 0.0;
-	private Double sparHeightBottom = 0.0;
+    public Settings settings;
+    public Project project;
 	
-	
-	
-	
+	private LinkedHashSet<String> gCodeLines = new LinkedHashSet<String>();
 	// =====================================
 	
 	// calculated
@@ -134,40 +100,16 @@ public class WingCalculatorModel {
 	public WingCalculatorModel(Project project, Settings settings) {
         this.settings = settings;
         this.project = project;
+        
     }
 
 
 	// ==================
 	// Set/Get Input Values
 	// ==================
-	public void setHalfSpanLength(Double aValue) { this.halfSpanLength = aValue; }
-	public void setBaseCordLength(Double aValue) { this.baseCordLength = aValue; }
-	public void setTipCordLength(Double aValue) { this.tipCordLength = aValue; }
-	public void setBaseMeltingLoss(Double aValue) { this.baseMeltingLoss = aValue; }
-	public void setTipMeltingLoss(Double aValue) { this.tipMeltingLoss = aValue; }
-
-	public void setWingSweep(Double aValue) { this.wingSweep = aValue; }
-	public void setWingTipOffset(Double aValue) { this.wingTipOffset = aValue; }
-	public void setWingTipYOffset(Double aValue) { this.wingTipYOffset = aValue; }
-
-	public void setHasSparTop(Boolean aValue) { this.hasSparTop = aValue; }
-	public void setHasSparBottom(Boolean aValue) { this.hasSparBottom = aValue; }
-	public void setSparOffsetTop(Double aValue) { this.sparOffsetTop = aValue; }
-	public void setSparWidthTop(Double aValue) { this.sparWidthTop = aValue; }
-	public void setSparHeightTop(Double aValue) { this.sparHeightTop = aValue; }
-	public void setSparOffsetBottom(Double aValue) { this.sparOffsetBottom = aValue; }
-	public void setSparWidthBottom(Double aValue) { this.sparWidthBottom = aValue; }
-	public void setSparHeightBottom(Double aValue) { this.sparHeightBottom = aValue; }
-
-
 	
-	public void setBaseDirection(Boolean aValue) { this.baseDirection = aValue; this.changeBaseProfileDirection(aValue); }
-	public void setTipDirection(Boolean aValue) { this.tipDirection = aValue; this.changeTipProfileDirection(aValue); }
 
-	// --------------------
-	
-	public Double getHalfSpanLength() {return this.halfSpanLength;};
-
+	// Return calculated Values
 	
 	public Double getMiddleCordLength() {return this.middleCordLength;};
 	public Double getBaseCordWireBase() {return this.baseCordWireBase;};
@@ -179,10 +121,6 @@ public class WingCalculatorModel {
 	public Double getTipDeltaAll() {return this.tipDeltaAll;};
 	
 	
-	public String getBaseProfileName() {return this.baseProfileName;}
-	public Integer getBaseProfilePointNumber() {return this.baseProfilePointNumber;}
-	public String getTipProfileName() {return this.tipProfileName;}
-	public Integer getTipProfilePointNumber() {return this.tipProfilePointNumber;}
 	public String getStatusMessage() {return this.statusMessage;}
 
 	public Double getTotalMaxX() {return this.totalMaxX;}
@@ -204,11 +142,6 @@ public class WingCalculatorModel {
 	public Double getBaseCordStartBaseTotal() {return this.baseCordStartBaseTotal;}
 	public Double getBaseCordStartTipTotal() {return this.baseCordStartTipTotal;}
 
-	
-	
-	public LinkedHashSet<ProfileCoordinate> getBaseProfileSet() {return this.baseProfileSet;}
-	public LinkedHashSet<ProfileCoordinate> getTipProfileSet() {return this.tipProfileSet;}
-
 	// ==================
 	// Calculations
 	// ==================
@@ -221,21 +154,21 @@ public class WingCalculatorModel {
 		Double wireLength = this.settings.getWireLength();
 		Double startDistance = this.settings.getStartDistance();
 		
-		this.middleCordLength = (this.baseCordLength + this.tipCordLength)/2;
-		dti = (this.baseCordLength - this.middleCordLength)/2;
-		dtiw = wireLength * dti / this.halfSpanLength;
+		this.middleCordLength = (project.getBaseCordLength() + project.getTipCordLength())/2;
+		dti = (project.getBaseCordLength() - this.middleCordLength)/2;
+		dtiw = wireLength * dti / project.getHalfSpanLength();
 		
 		this.baseCordWireBase = this.middleCordLength + (2 * dtiw);
-		this.baseCordWire = this.baseCordWireBase + (2 * this.baseMeltingLoss);
+		this.baseCordWire = this.baseCordWireBase + (2 * project.getBaseMeltingLoss());
 
 		this.tipCordWireBase = this.middleCordLength - (2 * dtiw);
-		this.tipCordWire = this.tipCordWireBase + (2 * this.tipMeltingLoss);
+		this.tipCordWire = this.tipCordWireBase + (2 * project.getTipMeltingLoss());
 
 		// Versatz der schmalen Flaechentiefe
 		this.tipDeltaBase = (this.baseCordWire - this.tipCordWire)/2;
 		
 		// Versatz bei Pfeilung
-		Double angleRad = Math.toRadians(this.wingSweep);
+		Double angleRad = Math.toRadians(project.getWingSweep());
 		this.tipDeltaSweep = (-1) * (wireLength * Math.tan(angleRad));
 		
 		this.tipDeltaAll = this.tipDeltaBase + this.tipDeltaSweep;
@@ -258,7 +191,7 @@ public class WingCalculatorModel {
 	// Schneiderichtung ändern (Standard ist immer invertieren) - Files fangen bei der Nase von 0 an
 	// hier brauchen wir 0 an der Endleiste
 	public void changeBaseProfileDirection(Boolean direction) {
-		Iterator<ProfileCoordinate> iter = baseProfileSet.iterator();
+		Iterator<ProfileCoordinate> iter = project.baseProfileSet.iterator();
 		while(iter.hasNext()) 
 		{
 			ProfileCoordinate coordinate = iter.next();
@@ -267,7 +200,7 @@ public class WingCalculatorModel {
 	}
 	
 	public void changeTipProfileDirection(Boolean direction) {
-		Iterator<ProfileCoordinate> iter = tipProfileSet.iterator();
+		Iterator<ProfileCoordinate> iter = project.tipProfileSet.iterator();
 		while(iter.hasNext()) 
 		{
 			ProfileCoordinate coordinate = iter.next();
@@ -320,41 +253,41 @@ public class WingCalculatorModel {
 		calcParameters();
 
 		// Berechne die tatsächlichen Ausmasse incl. Holmausschnitte
-		sparTopStart = this.baseCordWire * (100 - this.sparOffsetTop)/100;
-		sparTopEnd = sparTopStart - this.sparWidthTop;
-		sparBottomStart = this.baseCordWire * (100 - this.sparOffsetBottom)/100;
-		sparBottomEnd = sparBottomStart - this.sparWidthBottom;
+		sparTopStart = this.baseCordWire * (100 - project.getSparOffsetTop())/100;
+		sparTopEnd = sparTopStart - project.getSparWidthTop();
+		sparBottomStart = this.baseCordWire * (100 - project.getSparOffsetBottom())/100;
+		sparBottomEnd = sparBottomStart - project.getSparWidthBottom();
 		
-		Iterator<ProfileCoordinate> iterBase = baseProfileSet.iterator();
+		Iterator<ProfileCoordinate> iterBase = project.baseProfileSet.iterator();
 		while(iterBase.hasNext()) 
 		{
 			coordinate = iterBase.next();
-			coordinate.changeDirection(this.baseDirection);
+			coordinate.changeDirection(project.getBaseDirection());
 			coordinate.calcBasicCoordinate(this.baseCordWire);
-			coordinate.calcSparCoordinateTop(sparTopStart, sparTopEnd, this.sparHeightTop, this.hasSparTop);
-			coordinate.calcSparCoordinateBottom(sparBottomStart, sparBottomEnd, this.sparHeightBottom, this.hasSparBottom);
+			coordinate.calcSparCoordinateTop(sparTopStart, sparTopEnd, project.getSparHeightTop(), project.getHasSparTop());
+			coordinate.calcSparCoordinateBottom(sparBottomStart, sparBottomEnd, project.getSparHeightBottom(), project.getHasSparBottom());
 		}
 		
-		sparTopStart = this.tipCordWire * (100 - this.sparOffsetTop)/100;
-		sparTopEnd = sparTopStart - this.sparWidthTop;
-		sparBottomStart = this.tipCordWire * (100 - this.sparOffsetBottom)/100;
-		sparBottomEnd = sparBottomStart - this.sparWidthBottom;
-		Iterator<ProfileCoordinate> iterTip = tipProfileSet.iterator();
+		sparTopStart = this.tipCordWire * (100 - project.getSparOffsetTop())/100;
+		sparTopEnd = sparTopStart - project.getSparWidthTop();
+		sparBottomStart = this.tipCordWire * (100 - project.getSparOffsetBottom())/100;
+		sparBottomEnd = sparBottomStart - project.getSparWidthBottom();
+		Iterator<ProfileCoordinate> iterTip = project.tipProfileSet.iterator();
 		while(iterTip.hasNext()) 
 		{
 			coordinate = iterTip.next();
-			coordinate.changeDirection(this.tipDirection);
+			coordinate.changeDirection(project.getTipDirection());
 			coordinate.calcBasicCoordinate(this.tipCordWire);
-			coordinate.calcSparCoordinateTop(sparTopStart, sparTopEnd, this.sparHeightTop, this.hasSparTop);
-			coordinate.calcSparCoordinateBottom(sparBottomStart, sparBottomEnd, this.sparHeightBottom, this.hasSparBottom);
+			coordinate.calcSparCoordinateTop(sparTopStart, sparTopEnd, project.getSparHeightTop(), project.getHasSparTop());
+			coordinate.calcSparCoordinateBottom(sparBottomStart, sparBottomEnd, project.getSparHeightBottom(), project.getHasSparBottom());
 		}
 
 		// Berechne wenn gefragt die Schraenkung (im Moment nur Tip)
-		Iterator<ProfileCoordinate> iterTipOffset = tipProfileSet.iterator();
+		Iterator<ProfileCoordinate> iterTipOffset = project.tipProfileSet.iterator();
 		while(iterTipOffset.hasNext()) 
 		{
 			coordinate = iterTipOffset.next();
-			coordinate.calcYOffset(this.wingTipOffset, this.wingTipYOffset, this.tipCordLength);
+			coordinate.calcYOffset(project.getWingTipOffset(), project.getWingTipYOffset(), project.getTipCordLength());
 		}
 
 		// GCode berechnen
@@ -373,7 +306,7 @@ public class WingCalculatorModel {
 		}
 		
 		isFirstCoordinate = true;
-		Iterator<ProfileCoordinate> iterGCodeBase = baseProfileSet.iterator();
+		Iterator<ProfileCoordinate> iterGCodeBase = project.baseProfileSet.iterator();
 		while(iterGCodeBase.hasNext()) 
 		{
 			coordinate = iterGCodeBase.next();
@@ -390,7 +323,7 @@ public class WingCalculatorModel {
 		if (coordinate != null ) { endBaseY = coordinate.getYGcodeCoordinate(); }
 		
 		isFirstCoordinate = true;
-		Iterator<ProfileCoordinate> iterGCodeTip = tipProfileSet.iterator();
+		Iterator<ProfileCoordinate> iterGCodeTip = project.tipProfileSet.iterator();
 		while(iterGCodeTip.hasNext()) 
 		{
 			coordinate = iterGCodeTip.next();
@@ -438,16 +371,16 @@ public class WingCalculatorModel {
 		String aWaitLine = "G4 P" + String.valueOf(pause.intValue()); // P in Sekunden!
 				
 		
-		List<ProfileCoordinate> baseCoordinates = new ArrayList<ProfileCoordinate>( baseProfileSet );
-		List<ProfileCoordinate> tipCoordinates = new ArrayList<ProfileCoordinate>( tipProfileSet );
+		List<ProfileCoordinate> baseCoordinates = new ArrayList<ProfileCoordinate>( project.baseProfileSet );
+		List<ProfileCoordinate> tipCoordinates = new ArrayList<ProfileCoordinate>( project.tipProfileSet );
 		
-		if (this.baseProfilePointNumber > 0 && this.tipProfilePointNumber > 0 &&
-			(this.baseProfilePointNumber.intValue() == this.tipProfilePointNumber.intValue()) ) {
+		if (project.getBaseProfileNumberPoints() > 0 && project.getTipProfileNumberPoints() > 0 &&
+			(project.getBaseProfileNumberPoints() == project.getTipProfileNumberPoints()) ) {
 			
 			this.gCodeLines.add("(Start processing coordinates)");
 			// Startkoordinaten
-			// baseCordinate = baseCoordinates.get(this.baseProfilePointNumber - 1);
-			// tipCordinate = tipCoordinates.get(this.baseProfilePointNumber - 1);
+			// baseCordinate = baseCoordinates.get(project.getBaseProfileNumberPoints() - 1);
+			// tipCordinate = tipCoordinates.get(project.getTipProfileNumberPoints() - 1);
 			baseCordinate = baseCoordinates.get(0);
 			tipCordinate = tipCoordinates.get(0);
 
@@ -530,9 +463,9 @@ public class WingCalculatorModel {
 
 			this.gCodeLines.add("(Start process profile coordinates)");
 			// untere Profillinie zuerst
-			//	for (int i = this.baseProfilePointNumber - 1; i >= 0; i-- ) {
+			//	for (int i = project.getBaseProfileNumberPoints() - 1; i >= 0; i-- ) {
 			// obere Profillinie zuerst
-			for (int i = 0; i < this.baseProfilePointNumber - 1; i++ ) {
+			for (int i = 0; i < project.getBaseProfileNumberPoints() - 1; i++ ) {
 				
 				baseCordinate = baseCoordinates.get(i);
 				tipCordinate = tipCoordinates.get(i);
@@ -713,85 +646,7 @@ public class WingCalculatorModel {
 		}
 	}
 
-	// ==================
-	// Profilkoordinaten laden
-	// ==================
-	public void loadBaseProfileData() {
-		int returnVal = fileChooser.showOpenDialog(null);
-		if (returnVal == JFileChooser.APPROVE_OPTION) {
-			try {
-				this.baseProfileName = "";
-				this.baseProfilePointNumber = 0;
-				this.baseProfileSet.clear();
 
-				File baseProfileFile = fileChooser.getSelectedFile();
-				String oldProfileLine = "";
-				String profileLine = "";
-				Integer pointNum = 0;
-				BufferedReader profileReader = new BufferedReader(new FileReader(baseProfileFile.getAbsolutePath())); 
-				
-				while ((profileLine = profileReader.readLine()) != null) {
-					// just skip empty Lines
-					if (!(profileLine.trim()).contentEquals("")) {
-						profileLine = profileLine.trim();
-						if (pointNum == 0) {
-							this.baseProfileName = profileLine;
-						} else {
-							baseProfileSet.add(new ProfileCoordinate(profileLine, oldProfileLine));
-							oldProfileLine = profileLine;
-						}
-						pointNum = pointNum + 1;
-					};
-				}; 
-				this.baseProfilePointNumber = pointNum -1;
-				// this.calculateCoordinates(); 
-				this.sendWingCalculatorEvent(new WingCalculatorEvent(WingCalculatorEvent.EventType.BASE_PROFILE_CHANGED_EVENT));
-				this.sendWingCalculatorEvent(new WingCalculatorEvent(WingCalculatorEvent.EventType.CALCULATOR_STATUS_CHANGED_EVENT));
-			
-			} catch (Exception ex) {
-				GUIHelpers.displayErrorDialog("Problem loading profile data: " + ex.getMessage());
-			}
-		}
-	}
-
-	public void loadTipProfileData() {
-		
-		int returnVal = fileChooser.showOpenDialog(null);
-		if (returnVal == JFileChooser.APPROVE_OPTION) {
-			try {
-				this.tipProfileName = "";
-				this.tipProfilePointNumber = 0;
-				this.tipProfileSet.clear();
-
-				File tipProfileFile = fileChooser.getSelectedFile();
-				String oldProfileLine = "";
-				String profileLine = "";
-				Integer pointNum = 0;
-				BufferedReader profileReader = new BufferedReader(new FileReader(tipProfileFile.getAbsolutePath())); 
-				
-				while ((profileLine = profileReader.readLine()) != null) {
-					if (!(profileLine.trim()).contentEquals("")) {
-						profileLine = profileLine.trim();
-						if (pointNum == 0) {
-							this.tipProfileName = profileLine;
-						} else {
-							tipProfileSet.add(new ProfileCoordinate(profileLine, oldProfileLine));
-							oldProfileLine = profileLine;
-						}
-						pointNum = pointNum + 1;
-					};
-				}; 
-				this.tipProfilePointNumber = pointNum -1;
-				// this.calculateCoordinates(); 
-				
-				this.sendWingCalculatorEvent(new WingCalculatorEvent(WingCalculatorEvent.EventType.TIP_PROFILE_CHANGED_EVENT));
-				this.sendWingCalculatorEvent(new WingCalculatorEvent(WingCalculatorEvent.EventType.CALCULATOR_STATUS_CHANGED_EVENT));
-			} catch (Exception ex) {
-				GUIHelpers.displayErrorDialog("Problem loading profile data: " + ex.getMessage());
-			}
-		}
-	}	
-	
 	
 	// ==================
 	// Eventing
@@ -810,6 +665,23 @@ public class WingCalculatorModel {
 		if (wingCalculatorEventListener.contains(listener)) {
 			wingCalculatorEventListener.remove(listener);
 		}
+	}
+
+	@Override
+	public void ProjectValuesChangedEvent(ProjectChangeEvent evt) {
+		// TODO Auto-generated method stub
+		
+		if (evt.isProjectChangedCleanEvent()) {
+			System.out.println("Project is Clean");
+			
+			
+		}
+		if (evt.isProjectChangedDirtyEvent()) {
+			System.out.println("Project is Dirty");
+			
+		};
+
+		
 	}
 
 	public void saveSettings() {
