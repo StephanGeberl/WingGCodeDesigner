@@ -46,7 +46,7 @@ import java.io.File;
 import java.beans.PropertyChangeEvent;
 import javax.swing.JSeparator;
 
-public class ParameterPanel extends JPanel {
+public class SettingsPanel extends JPanel {
 
 	/**
 	 * 
@@ -55,7 +55,7 @@ public class ParameterPanel extends JPanel {
  
 	private WingCalculatorModel wingCalculatorModel;
 
-	public ParameterPanel(WingCalculatorModel anWingDesignerModel) {
+	public SettingsPanel(WingCalculatorModel anWingDesignerModel) {
 		
 		this.wingCalculatorModel = anWingDesignerModel;
 		
@@ -170,15 +170,7 @@ public class ParameterPanel extends JPanel {
 		inputTravelSpeed.setBounds(195, 161, 98, 25);
 		add(inputTravelSpeed);
 		// ------------------------------------------
-		JCheckBox cbxCutBaseFirst = new JCheckBox("Cut base first");
-		cbxCutBaseFirst.setSelected(wingCalculatorModel.settings.getCutBaseFirst());
-		cbxCutBaseFirst.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				wingCalculatorModel.settings.setCutBaseFirst(cbxCutBaseFirst.isSelected());
-			}
-		});
-		cbxCutBaseFirst.setBounds(16, 203, 167, 18);
-		add(cbxCutBaseFirst);
+
 		// ------------------------------------------
 		JTextField inputDefaultProjectDirectory = new JTextField();
 		inputDefaultProjectDirectory.setEditable(false);
@@ -193,7 +185,7 @@ public class ParameterPanel extends JPanel {
 		add(inputDefaultProfileDirectory);
 		// ------------------------------------------
 		// ------------------------------------------
-		JButton btnChangeProjectDirectory = new JButton("Set ...");
+		JButton btnChangeProjectDirectory = new JButton("Change ...");
 		btnChangeProjectDirectory.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String aNewPath = getDefaultPath( inputDefaultProjectDirectory.getText() );
@@ -201,10 +193,10 @@ public class ParameterPanel extends JPanel {
 				wingCalculatorModel.settings.setProjectDefaultPath(aNewPath);	
 			}
 		});
-		btnChangeProjectDirectory.setBounds(639, 240, 65, 27);
+		btnChangeProjectDirectory.setBounds(639, 240, 100, 27);
 		add(btnChangeProjectDirectory);
 		// ------------------------------------------
-		JButton btnChangeProfileDirectory = new JButton("Set ...");
+		JButton btnChangeProfileDirectory = new JButton("Change ...");
 		btnChangeProfileDirectory.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String aNewPath = getDefaultPath( inputDefaultProfileDirectory.getText() );
@@ -212,7 +204,7 @@ public class ParameterPanel extends JPanel {
 				wingCalculatorModel.settings.setProfileDefaultPath(aNewPath);	
 			}
 		});
-		btnChangeProfileDirectory.setBounds(639, 272, 65, 27);
+		btnChangeProfileDirectory.setBounds(639, 272, 100, 27);
 		add(btnChangeProfileDirectory);
 		// ------------------------------------------
 		JButton btnSaveParameters = new JButton("Save Parameters");
