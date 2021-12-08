@@ -21,6 +21,7 @@ package com.geberl.winggcodedesigner.model;
 
 import java.util.logging.Logger;
 
+import com.geberl.winggcodedesigner.eventing.ProjectChangeEvent;
 import com.geberl.winggcodedesigner.utils.GUIHelpers;
 
 public class Settings {
@@ -30,6 +31,8 @@ public class Settings {
     private transient Boolean isDirty = false;
 
     private Double wireLength = 800.0;
+    private Double xAxisMax = 300.0;
+    private Double yAxisMax = 120.0;
     private Double startDistance = 20.0;
     private Double saveHeight = 50.0;
     private Double pause = 2.0;
@@ -37,7 +40,6 @@ public class Settings {
     private Double travelSpeed = 1000.0;
     private String projectDefaultPath = System.getProperty("user.home");
     private String profileDefaultPath = System.getProperty("user.home");
-
 
     /**
      * 
@@ -49,7 +51,19 @@ public class Settings {
 	// ==================
 	// Parameter
 	// ==================
+	public void setIsDirty(Boolean aValue) {
+		this.isDirty = aValue; 
+		if (aValue) {
+			// this.sendProjectChangeEvent(new ProjectChangeEvent(ProjectChangeEvent.EventType.PROJECT_CHANGED_DIRTY_EVENT));
+		}
+		else {
+			// this.sendProjectChangeEvent(new ProjectChangeEvent(ProjectChangeEvent.EventType.PROJECT_CHANGED_CLEAN_EVENT));
+		};
+	}
+	
 	public void setWireLength(Double aValue) { this.wireLength = aValue; this.isDirty = true; }
+	public void setXAxisMax(Double aValue) { this.xAxisMax = aValue; this.isDirty = true; }
+	public void setYAxisMax(Double aValue) { this.yAxisMax = aValue; this.isDirty = true; }
 	public void setStartDistance(Double aValue) { this.startDistance = aValue; this.isDirty = true; }
 	public void setSaveHeight(Double aValue) { this.saveHeight = aValue; this.isDirty = true; }
 	public void setPause(Double aValue) { this.pause = aValue; this.isDirty = true; }
@@ -59,7 +73,11 @@ public class Settings {
 	public void setProfileDefaultPath(String aValue) { this.profileDefaultPath = aValue; this.isDirty = true; }
 	// ==================
 
+	public Boolean isDirty() { return isDirty; }
+
 	public Double getWireLength() {return this.wireLength;}
+	public Double getXAxisMax() {return this.xAxisMax;}
+	public Double getYAxisMax() {return this.yAxisMax;}
 	public Double getStartDistance() {return this.startDistance;}
 	public Double getSaveHeight() {return this.saveHeight;}
 	public Double getPause() {return this.pause;}
@@ -67,9 +85,6 @@ public class Settings {
 	public Double getTravelSpeed() {return this.travelSpeed;}
 	public String getProjectDefaultPath() { return this.projectDefaultPath; }
 	public String getProfileDefaultPath() { return this.profileDefaultPath; }
-	
-	public Boolean isDirty() { return isDirty; }
-
 	// ==================
 
 }

@@ -81,7 +81,7 @@ public class WingDesigner extends JFrame {
         
         Container projectPanelContainer = new Container();
         
-        SettingsPanel parameterPanel = new SettingsPanel(wingCalculatorModel);
+        SettingsPanel settingsPanel = new SettingsPanel(settings);
         ProjectPanel projectDataPanel = new ProjectPanel(wingCalculatorModel);
         WingCalculatorPanel calculatorPanel = new WingCalculatorPanel(wingCalculatorModel);
         project.addProjectChangeListener(wingCalculatorModel);
@@ -109,7 +109,7 @@ public class WingDesigner extends JFrame {
         // tabbedPanelMain.setBounds(190,0,610,480);
         // javax.swing.JScrollPane wingCalculatorScrollPanel = new javax.swing.JScrollPane(wingCalculatorPanel, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         javax.swing.JScrollPane wingCalculatorScrollPanel = new javax.swing.JScrollPane(projectPanelContainer, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        javax.swing.JScrollPane parameterPanelScrollPanel = new javax.swing.JScrollPane(parameterPanel, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        javax.swing.JScrollPane parameterPanelScrollPanel = new javax.swing.JScrollPane(settingsPanel, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         tabbedPanelMain.addTab("Project",wingCalculatorScrollPanel);
         tabbedPanelMain.addTab("Settings",parameterPanelScrollPanel);
         

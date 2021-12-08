@@ -63,6 +63,7 @@ public class SettingsFactory {
         if (settings == null) {
             settings = new Settings();
         }
+        settings.setIsDirty(false);
         return settings;
     }
 
@@ -74,11 +75,13 @@ public class SettingsFactory {
             try (FileWriter fileWriter = new FileWriter(jsonFile)) {
                 Gson gson = new GsonBuilder().setPrettyPrinting().create();
                 fileWriter.write(gson.toJson(settings, Settings.class));
+                settings.setIsDirty(false);
             }
          } catch (Exception e) {
             e.printStackTrace();
             logger.warning("Can't save settings!");
         }
+
     }
 
     /**
