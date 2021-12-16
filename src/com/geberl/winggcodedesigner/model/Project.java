@@ -20,7 +20,6 @@
 package com.geberl.winggcodedesigner.model;
 
 
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -29,13 +28,11 @@ import java.util.logging.Logger;
 
 import com.geberl.winggcodedesigner.eventing.ProjectChangeEvent;
 import com.geberl.winggcodedesigner.eventing.ProjectChangeEventListener;
-// import com.geberl.winggcodedesigner.eventing.WingCalculatorEvent;
-import com.geberl.winggcodedesigner.eventing.WingCalculatorEvent;
 
 
 public class Project {
-	private transient final Collection<ProjectChangeEventListener> projectChangeEventListener = new ArrayList<>();
-    private static final Logger logger = Logger.getLogger(Settings.class.getName());
+
+	private static final Logger logger = Logger.getLogger(Settings.class.getName());
 
 	// =====================================
 	// Input
@@ -99,19 +96,10 @@ public class Project {
     // ==================
 	// Get / Set
 	// ==================
-	public void setIsDirty(Boolean aValue) {
-		this.isDirty = aValue; 
-		if (aValue) {
-			this.sendProjectChangeEvent(new ProjectChangeEvent(ProjectChangeEvent.EventType.PROJECT_CHANGED_DIRTY_EVENT));
-		}
-		else {
-			this.sendProjectChangeEvent(new ProjectChangeEvent(ProjectChangeEvent.EventType.PROJECT_CHANGED_CLEAN_EVENT));
-		};
-	}
+	public void setIsDirty(Boolean aValue) { this.isDirty = aValue; }
 	
 	public void setProjectPath(String aValue) { this.projectPath = aValue; }
 	public void setFile(File aValue) { this.file = aValue; }
-
 	
 	public void setProjectName(String aValue) { this.projectName = aValue; this.setIsDirty(true); }
 	public void setBaseProfileName(String aValue) { this.baseProfileName = aValue; this.setIsDirty(true); }
@@ -200,25 +188,5 @@ public class Project {
 	public Boolean getBaseDirection() { return this.baseDirection; }
 
 	// ==================
-
-	
-	// ==================
-	// Eventing
-	// ==================
-	private void sendProjectChangeEvent(ProjectChangeEvent event) {
-		projectChangeEventListener.forEach(l -> l.ProjectValuesChangedEvent(event));
-	}
-	
-	public void addProjectChangeListener(ProjectChangeEventListener listener) {
-		if (!projectChangeEventListener.contains(listener)) {
-			projectChangeEventListener.add(listener);
-		}
-	}
-
-	public void removeProjectChangeListener(ProjectChangeEventListener listener) {
-		if (projectChangeEventListener.contains(listener)) {
-			projectChangeEventListener.remove(listener);
-		}
-	}
 	
 }

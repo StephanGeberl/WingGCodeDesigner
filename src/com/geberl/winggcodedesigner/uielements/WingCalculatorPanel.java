@@ -36,6 +36,7 @@ import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
+import java.util.logging.Logger;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
 import java.awt.Component;
@@ -54,6 +55,7 @@ public class WingCalculatorPanel extends JPanel implements WingCalculatorEventLi
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+    private static final Logger logger = Logger.getLogger(SettingsFactory.class.getName());
  
 	private WingCalculatorModel wingCalculatorModel;
 //	private JLabel statusMessage = new JLabel("<html><b>Idle</b></html>");
@@ -124,18 +126,17 @@ public class WingCalculatorPanel extends JPanel implements WingCalculatorEventLi
 		
 		// ===============================================================
 
-		ProfilesDrawPanel profilePanel = new ProfilesDrawPanel(wingCalculatorModel);
-		profilePanel.setBounds(270, 8, 660, 210);
-		add(profilePanel);
-		wingCalculatorModel.addWingCalculatorEventListener(profilePanel);
+//		ProfilesDrawPanel profilePanel = new ProfilesDrawPanel(wingCalculatorModel);
+//		profilePanel.setBounds(270, 8, 660, 210);
+//		add(profilePanel);
+//		wingCalculatorModel.addWingCalculatorEventListener(profilePanel);
 		
 		// ===============================================================
 		
-		WingDrawPanel wingPanel = new WingDrawPanel(wingCalculatorModel);
-		wingPanel.setBounds(270, 220, 660, 210);
-		add(wingPanel);
-		wingCalculatorModel.addWingCalculatorEventListener(wingPanel);
-		
+//		WingDrawPanel wingPanel = new WingDrawPanel(wingCalculatorModel);
+//		wingPanel.setBounds(270, 220, 660, 210);
+//		add(wingPanel);
+//		wingCalculatorModel.addWingCalculatorEventListener(wingPanel);
 		
 		// =========== Status Message ===========================
 		// statusMessage.setBounds(244, 337, 403, 25);
@@ -279,16 +280,9 @@ public class WingCalculatorPanel extends JPanel implements WingCalculatorEventLi
 
 	@Override
 	public void WingCalculatorEvent(WingCalculatorEvent evt) {
+		logger.info("CALC DONE EVENT");
 		switch(evt.getEventType()) {
-			case BASE_PROFILE_CHANGED_EVENT:
-//				this.setInputBaseProfileName(wingCalculatorModel.getBaseProfileName());
-//				this.setInputBaseProfileNumberPoints(wingCalculatorModel.getBaseProfilePointNumber());
-				break;
-			case TIP_PROFILE_CHANGED_EVENT:
-//				this.setInputTipProfileName(wingCalculatorModel.getTipProfileName());
-//				this.setInputTipProfileNumberPoints(wingCalculatorModel.getTipProfilePointNumber());
-				break;
-			case CALCULATOR_STATUS_CHANGED_EVENT:
+			case CALCULATION_DONE_EVENT:
 				// statusMessage.setText(wingCalculatorModel.getStatusMessage());
 				sMiddleCordLength.setValue(wingCalculatorModel.getMiddleCordLength());
 				sBaseCordWireBase.setValue(wingCalculatorModel.getBaseCordWireBase());
@@ -300,10 +294,7 @@ public class WingCalculatorPanel extends JPanel implements WingCalculatorEventLi
 				sTipDeltaAll.setValue(wingCalculatorModel.getTipDeltaAll());
 
 				break;
-			case GCODE_CHANGED_EVENT:
-				// statusMessage.setText("------");
-				// statusMessage.setText(wingDesignerModel.getStatusMessage());
-				break;
+
 			default:
 				break;
 		}

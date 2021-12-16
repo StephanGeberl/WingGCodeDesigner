@@ -35,8 +35,10 @@ import com.geberl.winggcodedesigner.model.Settings;
 import com.geberl.winggcodedesigner.model.SettingsFactory;
 import com.geberl.winggcodedesigner.model.WingCalculatorModel;
 import com.geberl.winggcodedesigner.uielements.SettingsPanel;
+import com.geberl.winggcodedesigner.uielements.ProfilesDrawPanel;
 import com.geberl.winggcodedesigner.uielements.ProjectPanel;
 import com.geberl.winggcodedesigner.uielements.WingCalculatorPanel;
+import com.geberl.winggcodedesigner.uielements.WingDrawPanel;
 import com.geberl.winggcodedesigner.utils.GUIHelpers;
 
 
@@ -79,31 +81,43 @@ public class WingDesigner extends JFrame {
         
         WingCalculatorModel wingCalculatorModel = new WingCalculatorModel(project,settings);
         
-        Container projectPanelContainer = new Container();
+        // --------------------
         
         SettingsPanel settingsPanel = new SettingsPanel(settings);
-        settings.addSettingsChangeListener(settingsPanel);
-        
+ 
+        // --------------------
+       
+        Container projectPanelContainer = new Container();
+
         ProjectPanel projectDataPanel = new ProjectPanel(wingCalculatorModel);
-        WingCalculatorPanel calculatorPanel = new WingCalculatorPanel(wingCalculatorModel);
-        project.addProjectChangeListener(wingCalculatorModel);
-        
-        // WingCalculatorPanel wingCalculatorPanel = new WingCalculatorPanel(wingCalculatorModel);
-        
-       // wingCalculatorPanel.setBounds(0, 0, 800, 800);
-        //projectPanelContainer.add(wingCalculatorPanel);
         projectDataPanel.setBounds(5, 5, 940, 320);
         projectDataPanel.setBorder(BorderFactory.createLoweredBevelBorder());
         projectPanelContainer.add(projectDataPanel);
         
-        calculatorPanel.setBounds(5, 330, 940, 440);
+        WingCalculatorPanel calculatorPanel = new WingCalculatorPanel(wingCalculatorModel);
+        calculatorPanel.setBounds(5, 330, 265, 440);
         calculatorPanel.setBorder(BorderFactory.createLoweredBevelBorder());
         projectPanelContainer.add(calculatorPanel);
         
+        ProfilesDrawPanel profileDrawPanel = new ProfilesDrawPanel(wingCalculatorModel);
+		profileDrawPanel.setBounds(285, 335, 660, 210);
+		projectPanelContainer.add(profileDrawPanel);
+
+		WingDrawPanel wingDrawPanel = new WingDrawPanel(wingCalculatorModel);
+		wingDrawPanel.setBounds(290, 590, 660, 210);
+		projectPanelContainer.add(wingDrawPanel);
        
-        // wingCalculatorModel.addWingCalculatorEventListener(wingCalculatorPanel);
-        // wingCalculatorModel.addWingCalculatorEventListener(projectDataPanel);
         
+		ProjectFactory.addProjectChangeListener(wingCalculatorModel);
+        
+
+        
+        
+        wingCalculatorModel.addWingCalculatorEventListener(calculatorPanel);
+        wingCalculatorModel.addWingCalculatorEventListener(profileDrawPanel);
+		wingCalculatorModel.addWingCalculatorEventListener(wingDrawPanel);
+		
+        // --------------------
         
         JTabbedPane tabbedPanelMain = new JTabbedPane();
         tabbedPanelMain.setFont(new Font("DejaVu Sans", Font.BOLD, 14));

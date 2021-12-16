@@ -29,11 +29,7 @@ public class WingCalculatorEvent {
 	private final EventType evt;
 
 	public enum EventType {
-		BASE_PROFILE_CHANGED_EVENT,
-		TIP_PROFILE_CHANGED_EVENT,
-		CALCULATOR_STATUS_CHANGED_EVENT,
-		CALCULATOR_DRAW_EVENT,
-		GCODE_CHANGED_EVENT
+		CALCULATION_DONE_EVENT,
 	}
 
 
@@ -41,25 +37,10 @@ public class WingCalculatorEvent {
 		return evt;
 	}
 
-	public boolean isRootProfileChangedEvent() {
-		return EventType.BASE_PROFILE_CHANGED_EVENT.equals(evt);
+	public boolean isCalculationDoneEvent() {
+		return EventType.CALCULATION_DONE_EVENT.equals(evt);
 	}
 
-	public boolean isTipProfileChangedEvent() {
-		return EventType.TIP_PROFILE_CHANGED_EVENT.equals(evt);
-	}
-
-	public boolean isCalculatorStatusChangedEvent() {
-		return EventType.CALCULATOR_STATUS_CHANGED_EVENT.equals(evt);
-	}
-
-	public boolean isCalculatorDrawEvent() {
-		return EventType.CALCULATOR_DRAW_EVENT.equals(evt);
-	}
-
-	public boolean isGCodeChangedEvent() {
-		return EventType.GCODE_CHANGED_EVENT.equals(evt);
-	}
 
 	/**
 	* Create a new event of given type. 
@@ -68,11 +49,7 @@ public class WingCalculatorEvent {
 	public WingCalculatorEvent(EventType type) {
 		evt = type;
 		switch (evt) {
-			case BASE_PROFILE_CHANGED_EVENT:
-			case TIP_PROFILE_CHANGED_EVENT:
-			case CALCULATOR_STATUS_CHANGED_EVENT:
-			case CALCULATOR_DRAW_EVENT:
-			case GCODE_CHANGED_EVENT:
+			case CALCULATION_DONE_EVENT:
 		}
 	}
 

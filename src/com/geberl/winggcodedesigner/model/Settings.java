@@ -19,16 +19,10 @@
 
 package com.geberl.winggcodedesigner.model;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.logging.Logger;
-
-import com.geberl.winggcodedesigner.eventing.SettingsChangeEvent;
-import com.geberl.winggcodedesigner.eventing.SettingsChangeEventListener;
 
 public class Settings {
 	
-	private transient final Collection<SettingsChangeEventListener> settingsChangeEventListener = new ArrayList<>();
     private static final Logger logger = Logger.getLogger(Settings.class.getName());
     private transient Boolean isDirty = false;
 
@@ -53,15 +47,7 @@ public class Settings {
 	// ==================
 	// Parameter
 	// ==================
-	public void setIsDirty(Boolean aValue) {
-		this.isDirty = aValue; 
-		if (aValue) {
-			this.sendSettingsChangeEvent(new SettingsChangeEvent(SettingsChangeEvent.EventType.SETTINGS_CHANGED_DIRTY_EVENT));
-		}
-		else {
-			this.sendSettingsChangeEvent(new SettingsChangeEvent(SettingsChangeEvent.EventType.SETTINGS_CHANGED_CLEAN_EVENT));
-		};
-	}
+	public void setIsDirty(Boolean aValue) { this.isDirty = aValue; }
 	
 	public void setWireLength(Double aValue) { this.wireLength = aValue; this.setIsDirty(true); }
 	public void setXAxisMax(Double aValue) { this.xAxisMax = aValue; this.setIsDirty(true); }
@@ -89,23 +75,5 @@ public class Settings {
 	public String getProfileDefaultPath() { return this.profileDefaultPath; }
 	// ==================
 
-	// ==================
-	// Eventing
-	// ==================
-	private void sendSettingsChangeEvent(SettingsChangeEvent event) {
-		settingsChangeEventListener.forEach(l -> l.SettingsValuesChangedEvent(event));
-	}
-	
-	public void addSettingsChangeListener(SettingsChangeEventListener listener) {
-		if (!settingsChangeEventListener.contains(listener)) {
-			settingsChangeEventListener.add(listener);
-		}
-	}
-
-	public void removeSettingsChangeListener(SettingsChangeEventListener listener) {
-		if (settingsChangeEventListener.contains(listener)) {
-			settingsChangeEventListener.remove(listener);
-		}
-	}
 	
 }

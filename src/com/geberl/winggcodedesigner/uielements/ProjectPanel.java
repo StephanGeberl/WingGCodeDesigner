@@ -24,8 +24,6 @@ import javax.swing.JPanel;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 
-import com.geberl.winggcodedesigner.eventing.ProjectChangeEvent;
-import com.geberl.winggcodedesigner.eventing.ProjectChangeEventListener;
 import com.geberl.winggcodedesigner.model.Project;
 import com.geberl.winggcodedesigner.model.ProjectFactory;
 import com.geberl.winggcodedesigner.model.SettingsFactory;
@@ -55,7 +53,7 @@ import java.beans.PropertyChangeEvent;
 import javax.swing.JSeparator;
 
 
-public class ProjectPanel extends JPanel implements ProjectChangeEventListener {
+public class ProjectPanel extends JPanel {
 
 	/**
 	 * 
@@ -70,8 +68,10 @@ public class ProjectPanel extends JPanel implements ProjectChangeEventListener {
 	private JPanel hollowProfilePanel = new JPanel();
 
 	private JButton btnSaveProject = null;
+	private JButton btnSaveAsProject = null;
 	private JButton btnNewProject = null;
 	private JButton btnLoadProject = null;
+	private JButton btnCalcProject = null;
 	
 	private JTextField inputProjectPath;
 	private JTextField inputProjectName;
@@ -116,8 +116,7 @@ public class ProjectPanel extends JPanel implements ProjectChangeEventListener {
 
 	public ProjectPanel(WingCalculatorModel anWingDesignerModel) {
 		
-		this.project = anWingDesignerModel.project;
-		addMeAsProjectValuesChangedListener();
+		this.project = ProjectFactory.project;
 		
 		// setForeground(Color.LIGHT_GRAY);
 		this.setLayout(null);
@@ -242,7 +241,6 @@ public class ProjectPanel extends JPanel implements ProjectChangeEventListener {
 		btnLoadProject.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				project = ProjectFactory.loadProject();
-				addMeAsProjectValuesChangedListener();
 				setPanelValues();
 				setProfileValues();
 				inputProjectPath.setText(project.getProjectPath());
@@ -250,25 +248,36 @@ public class ProjectPanel extends JPanel implements ProjectChangeEventListener {
 
 				}
 		});
-		btnLoadProject.setBounds(755, 232, 170, 27);
+		btnLoadProject.setBounds(755, 216, 170, 27);
 		add(btnLoadProject);
 		// ------------------------------------------
 		btnNewProject = new JButton("New Project");
 		btnNewProject.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				project = ProjectFactory.newProject();
-				addMeAsProjectValuesChangedListener();
 				setPanelValues();
 				setProfileValues();
 				inputProjectPath.setText("");
 				// btnSaveProject.setEnabled(false);
 				}
 		});
-		btnNewProject.setBounds(755, 261, 170, 27);
+		btnNewProject.setBounds(755, 240, 170, 27);
 		add(btnNewProject);
 		// ------------------------------------------
-		btnSaveProject = new JButton("Save and Calc Project");
+		btnSaveProject = new JButton("Save");
 		btnSaveProject.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ProjectFactory.saveProject();
+				setPanelValues();
+				setProfileValues();
+				inputProjectPath.setText(project.getProjectPath());
+				}
+		});
+		btnSaveProject.setBounds(755, 264, 85, 27);
+		add(btnSaveProject);
+		// ------------------------------------------
+		btnSaveAsProject = new JButton("Save As");
+		btnSaveAsProject.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ProjectFactory.saveProjectAs();
 				setPanelValues();
@@ -276,8 +285,20 @@ public class ProjectPanel extends JPanel implements ProjectChangeEventListener {
 				inputProjectPath.setText(project.getProjectPath());
 				}
 		});
-		btnSaveProject.setBounds(755, 289, 170, 27);
-		add(btnSaveProject);
+		btnSaveAsProject.setBounds(840, 264, 85, 27);
+		add(btnSaveAsProject);
+		// ------------------------------------------
+		btnCalcProject = new JButton("Calculate Project");
+		btnCalcProject.addActionListener(new ActionListener() {
+		public void actionPerformed(ActionEvent e) {
+			ProjectFactory.requestCalculation();
+			}
+		});
+		btnCalcProject.setBounds(755, 288, 170, 27);
+		add(btnCalcProject);
+		// ------------------------------------------
+		
+		
 		// ------------------------------------------
 		inputProjectPath = new JFormattedTextField();
 		inputProjectPath.setBackground(Color.LIGHT_GRAY);
@@ -704,7 +725,6 @@ public class ProjectPanel extends JPanel implements ProjectChangeEventListener {
 		JLabel lblShiftCentermm = new JLabel("Shift center [mm]");
 		lblShiftCentermm.setBounds(6, 245, 170, 25);
 		add(lblShiftCentermm);
-
 		
 		// ------------------------------------------
 		
@@ -781,11 +801,6 @@ public class ProjectPanel extends JPanel implements ProjectChangeEventListener {
 		
 		}
 	}
-    
-	private void addMeAsProjectValuesChangedListener() {
-
-		project.addProjectChangeListener(this);
-	}
 	
     
 	// Hilfsfunktion
@@ -803,13 +818,4 @@ public class ProjectPanel extends JPanel implements ProjectChangeEventListener {
 	    }
 	}
 
-	@Override
-	public void ProjectValuesChangedEvent(ProjectChangeEvent evt) {
-		if(evt.isProjectChangedCleanEvent()) {
-			// btnSaveProject.setEnabled(false);
-		};
-		if(evt.isProjectChangedDirtyEvent()) {
-			// btnSaveProject.setEnabled(true);	
-		};
-	}
 }

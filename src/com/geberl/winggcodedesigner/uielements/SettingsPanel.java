@@ -23,8 +23,6 @@ import java.awt.Dimension;
 import javax.swing.JPanel;
 import javax.swing.JButton;
 
-import com.geberl.winggcodedesigner.eventing.SettingsChangeEvent;
-import com.geberl.winggcodedesigner.eventing.SettingsChangeEventListener;
 import com.geberl.winggcodedesigner.model.Settings;
 import com.geberl.winggcodedesigner.model.SettingsFactory;
 import com.geberl.winggcodedesigner.utils.GUIHelpers;
@@ -44,7 +42,7 @@ import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.beans.PropertyChangeEvent;
 
-public class SettingsPanel extends JPanel implements SettingsChangeEventListener {
+public class SettingsPanel extends JPanel {
 
 	/**
 	 * 
@@ -235,7 +233,7 @@ public class SettingsPanel extends JPanel implements SettingsChangeEventListener
 		});
 		btnSaveParameters.setBounds(16, 270, 208, 27);
 		add(btnSaveParameters);
-		btnSaveParameters.setEnabled(false);
+		btnSaveParameters.setEnabled(true);
 		// ===============================================================
 		
 		JLabel lblInputWireLength = new JLabel("Wire length [mm]");
@@ -311,13 +309,4 @@ public class SettingsPanel extends JPanel implements SettingsChangeEventListener
 		
 	}
 
-	@Override
-	public void SettingsValuesChangedEvent(SettingsChangeEvent evt) {
-		if(evt.isSettingsChangedDirtyEvent()) {
-			btnSaveParameters.setEnabled(true);
-		};
-		if(evt.isSettingsChangedCleanEvent()) {
-			btnSaveParameters.setEnabled(false);	
-		};
-	}    
 }

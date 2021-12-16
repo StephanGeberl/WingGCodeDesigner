@@ -22,6 +22,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -31,7 +33,6 @@ import java.util.logging.Logger;
  */
 public class SettingsFactory {
 	
-	
 	private static final Logger logger = Logger.getLogger(SettingsFactory.class.getName());
     private static final String USER_HOME = "user.home";
     private static final String FALSE = "false";
@@ -40,7 +41,7 @@ public class SettingsFactory {
     public static final String JSON_FILENAME = "WingGCodeDesigner.json";
     public static final String MAC_LIBRARY = "/Library/Preferences/";
 
-    private static Settings settings;
+    public static Settings settings;
 
     public static Settings loadSettings() {
         if (settings == null) {
@@ -118,4 +119,5 @@ public class SettingsFactory {
         }
         saveSettings(settings);
     }
+
 }

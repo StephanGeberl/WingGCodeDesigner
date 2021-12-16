@@ -29,20 +29,16 @@ public class ProjectChangeEvent {
 	private final EventType evt;
 
 	public enum EventType {
-		PROJECT_CHANGED_DIRTY_EVENT ,
-		PROJECT_CHANGED_CLEAN_EVENT	}
+		PROJECT_CALC_REQUESTED_EVENT }
 
 
 	public EventType getEventType(){
 		return evt;
 	}
 
-	public boolean isProjectChangedDirtyEvent() {
-		return EventType.PROJECT_CHANGED_DIRTY_EVENT.equals(evt);
-	}
 
-	public boolean isProjectChangedCleanEvent() {
-		return EventType.PROJECT_CHANGED_CLEAN_EVENT.equals(evt);
+	public boolean isProjectCalcRequestedEvent() {
+		return EventType.PROJECT_CALC_REQUESTED_EVENT.equals(evt);
 	}
 
 
@@ -53,8 +49,7 @@ public class ProjectChangeEvent {
 	public ProjectChangeEvent(EventType type) {
 		evt = type;
 		switch (evt) {
-			case PROJECT_CHANGED_DIRTY_EVENT:
-			case PROJECT_CHANGED_CLEAN_EVENT:
+			case PROJECT_CALC_REQUESTED_EVENT:
 		}
 	}
 

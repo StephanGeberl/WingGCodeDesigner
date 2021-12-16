@@ -21,6 +21,7 @@ package com.geberl.winggcodedesigner.uielements;
 import com.geberl.winggcodedesigner.eventing.WingCalculatorEvent;
 import com.geberl.winggcodedesigner.eventing.WingCalculatorEventListener;
 import com.geberl.winggcodedesigner.model.ProfileCoordinate;
+import com.geberl.winggcodedesigner.model.ProjectFactory;
 import com.geberl.winggcodedesigner.model.WingCalculatorModel;
 
 //import javax.annotation.PostConstruct;
@@ -87,7 +88,7 @@ public class ProfilesDrawPanel extends JPanel implements WingCalculatorEventList
 
 			xStart = 0.0; xEnd = 0.0; yStart = 0.0; yEnd = 0.0;
 			aFirstLine = true;
-			Iterator<ProfileCoordinate> baseIterator = wingCalculatorModel.project.baseProfileSet.iterator();
+			Iterator<ProfileCoordinate> baseIterator = ProjectFactory.project.baseProfileSet.iterator();
 			while(baseIterator.hasNext()) 
 			{
 				ProfileCoordinate coordinate = baseIterator.next();
@@ -109,7 +110,7 @@ public class ProfilesDrawPanel extends JPanel implements WingCalculatorEventList
 
 			xStart = 0.0; xEnd = 0.0; yStart = 0.0; yEnd = 0.0;
 			aFirstLine = true;
-			Iterator<ProfileCoordinate> tipIterator = wingCalculatorModel.project.tipProfileSet.iterator();
+			Iterator<ProfileCoordinate> tipIterator = ProjectFactory.project.tipProfileSet.iterator();
 			while(tipIterator.hasNext()) 
 			{
 				ProfileCoordinate coordinate = tipIterator.next();
@@ -138,7 +139,7 @@ public class ProfilesDrawPanel extends JPanel implements WingCalculatorEventList
 	@Override
 	public void WingCalculatorEvent(WingCalculatorEvent evt) {
 		switch(evt.getEventType()) {
-			case CALCULATOR_DRAW_EVENT:
+			case CALCULATION_DONE_EVENT:
 				repaint();
 				break;
 

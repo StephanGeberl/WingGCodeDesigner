@@ -19,11 +19,15 @@
  */
 package com.geberl.winggcodedesigner.model;
 
+import com.geberl.winggcodedesigner.eventing.ProjectChangeEvent;
+import com.geberl.winggcodedesigner.eventing.ProjectChangeEventListener;
 import com.geberl.winggcodedesigner.utils.GUIHelpers;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -38,10 +42,13 @@ import org.apache.commons.io.FilenameUtils;
  * @author moll
  */
 public class ProjectFactory {
-    private static final Logger logger = Logger.getLogger(ProjectFactory.class.getName());
+	
+	private static transient final Collection<ProjectChangeEventListener> projectChangeEventListener = new ArrayList<>();
 
-    private static Project project;
-    private static Settings settings;
+	private static final Logger logger = Logger.getLogger(ProjectFactory.class.getName());
+
+    public static Project project;
+    public static Settings settings;
 
     public static void setSettings(Settings aValue) { settings = aValue; }
 
@@ -146,7 +153,8 @@ public class ProjectFactory {
 					project.setFile(fileToSave);
 					
 	                project.setIsDirty(false);
-	                logger.info("Saving project as: " + project.getProjectPath());
+	                
+	                logger.info("Saving project: " + project.getProjectPath());
 
 	            }
 				
@@ -155,7 +163,21 @@ public class ProjectFactory {
 			}
 		}
     }
-    
+
+
+
+	public static void requestCalculation() {
+		
+		sendProjectChangeEvent(new ProjectChangeEvent(ProjectChangeEvent.EventType.PROJECT_CALC_REQUESTED_EVENT));
+		
+		if (project.getIsDirty()) {
+			// dirty Project cannot be calculated
+		}
+		else {
+			// this.sendProjectChangeEvent(new ProjectChangeEvent(ProjectChangeEvent.EventType.PROJECT_CALC_REQUESTED_EVENT));
+		};
+	}
+
 
 	// ==================
 	// Profilkoordinaten laden
@@ -218,7 +240,25 @@ public class ProjectFactory {
 		}
 	}
 
-    
+	// ==================
+	// Eventing
+	// ==================
+	private static void sendProjectChangeEvent(ProjectChangeEvent event) {
+		projectChangeEventListener.forEach(l -> l.ProjectChangeEvent(event));
+	}
+	
+	public static void addProjectChangeListener(ProjectChangeEventListener listener) {
+		if (!projectChangeEventListener.contains(listener)) {
+			projectChangeEventListener.add(listener);
+		}
+	}
+
+	public static void removeProjectChangeListener(ProjectChangeEventListener listener) {
+		if (projectChangeEventListener.contains(listener)) {
+			projectChangeEventListener.remove(listener);
+		}
+	}
+	    
     
     
 }
