@@ -98,20 +98,29 @@ public class WingDesigner extends JFrame {
         calculatorPanel.setBounds(5, 330, 265, 440);
         calculatorPanel.setBorder(BorderFactory.createLoweredBevelBorder());
         projectPanelContainer.add(calculatorPanel);
+
+      
+        
+        
+        
         
         ProfilesDrawPanel profileDrawPanel = new ProfilesDrawPanel(wingCalculatorModel);
-		profileDrawPanel.setBounds(285, 335, 660, 210);
+		profileDrawPanel.setBounds(285, 335, 660, 480);
 		projectPanelContainer.add(profileDrawPanel);
 
 		WingDrawPanel wingDrawPanel = new WingDrawPanel(wingCalculatorModel);
-		wingDrawPanel.setBounds(290, 590, 660, 210);
+		wingDrawPanel.setBounds(290, 590, 660, 480);
 		projectPanelContainer.add(wingDrawPanel);
-       
         
+        JTabbedPane tabbedPanelDrawings = new JTabbedPane();
+        tabbedPanelDrawings.setFont(new Font("DejaVu Sans", Font.BOLD, 12));
+        tabbedPanelDrawings.setBounds(285,335,660,480);
+        tabbedPanelDrawings.addTab("Profile Schematics",profileDrawPanel);
+        tabbedPanelDrawings.addTab("Wing Schematics",wingDrawPanel);
+ 
+        projectPanelContainer.add(tabbedPanelDrawings, BorderLayout.CENTER);
+		
 		ProjectFactory.addProjectChangeListener(wingCalculatorModel);
-        
-
-        
         
         wingCalculatorModel.addWingCalculatorEventListener(calculatorPanel);
         wingCalculatorModel.addWingCalculatorEventListener(profileDrawPanel);

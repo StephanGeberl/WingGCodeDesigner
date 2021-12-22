@@ -19,10 +19,10 @@
 package com.geberl.winggcodedesigner.model;
 
 
-import java.io.BufferedReader;
+
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
+
 import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -140,20 +140,36 @@ public class WingCalculatorModel implements ProjectChangeEventListener{
 
 	private void calcParameters() {
 		
-		Double dtiw = 0.0;
-		Double dti = 0.0;
+		// Double dtiw = 0.0;
+		// Double dti = 0.0;
+		Double deltaBase = 0.0;
+		Double deltaTip = 0.0;
 		
 		Double wireLength = SettingsFactory.settings.getWireLength();
 		Double startDistance = SettingsFactory.settings.getStartDistance();
+		Double shiftCenter = ProjectFactory.project.getShiftCenter();
+		Double tipCordLength = ProjectFactory.project.getTipCordLength();
+		Double baseCordLength = ProjectFactory.project.getBaseCordLength();
+		Double halfSpanLength = ProjectFactory.project.getHalfSpanLength();
 		
-		this.middleCordLength = (ProjectFactory.project.getBaseCordLength() + ProjectFactory.project.getTipCordLength())/2;
-		dti = (ProjectFactory.project.getBaseCordLength() - this.middleCordLength)/2;
-		dtiw = wireLength * dti / ProjectFactory.project.getHalfSpanLength();
 		
-		this.baseCordWireBase = this.middleCordLength + (2 * dtiw);
+		
+		this.middleCordLength = (baseCordLength + tipCordLength)/2;
+		deltaBase = ((wireLength - (2*shiftCenter))*(baseCordLength - this.middleCordLength))/ halfSpanLength;
+		deltaTip = ((wireLength + (2*shiftCenter))*(baseCordLength - this.middleCordLength))/ halfSpanLength;
+		
+		
+		
+		// this.middleCordLength = (ProjectFactory.project.getBaseCordLength() + ProjectFactory.project.getTipCordLength())/2;
+		// dti = (ProjectFactory.project.getBaseCordLength() - this.middleCordLength)/2;
+		// dtiw = wireLength * dti / ProjectFactory.project.getHalfSpanLength();
+		
+		// this.baseCordWireBase = this.middleCordLength + (2 * dtiw);
+		this.baseCordWireBase = this.middleCordLength + deltaBase;
 		this.baseCordWire = this.baseCordWireBase + (2 * ProjectFactory.project.getBaseMeltingLoss());
 
-		this.tipCordWireBase = this.middleCordLength - (2 * dtiw);
+		// this.tipCordWireBase = this.middleCordLength - (2 * dtiw);
+		this.tipCordWireBase = this.middleCordLength - deltaTip;
 		this.tipCordWire = this.tipCordWireBase + (2 * ProjectFactory.project.getTipMeltingLoss());
 
 		// Versatz der schmalen Flaechentiefe
