@@ -187,6 +187,8 @@ public class ProjectFactory {
 	public static void loadProfileData(Integer profileTypeCode) {
 		
 		JFileChooser profileFileChooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+		if (profileTypeCode == 1) { project.baseProfileSet.clear(); };
+		if (profileTypeCode == 2) { project.tipProfileSet.clear(); };
 
     	if (settings == null) {
     		profileFileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
@@ -219,8 +221,8 @@ public class ProjectFactory {
 							if (profileTypeCode == 1) { project.baseProfileName = profileLine; };
 							if (profileTypeCode == 2) { project.tipProfileName = profileLine; };
 						} else {
-							if (profileTypeCode == 1) { project.baseProfileSet.add(new ProfileCoordinate(profileLine, oldProfileLine)); };
-							if (profileTypeCode == 2) { project.tipProfileSet.add(new ProfileCoordinate(profileLine, oldProfileLine)); };
+							if (profileTypeCode == 1) { project.baseProfileSet.add(new ProfileCoordinate(profileLine, oldProfileLine, pointNum)); };
+							if (profileTypeCode == 2) { project.tipProfileSet.add(new ProfileCoordinate(profileLine, oldProfileLine, pointNum)); };
 							oldProfileLine = profileLine;
 						}
 						pointNum = pointNum + 1;
@@ -232,7 +234,7 @@ public class ProjectFactory {
 				if (profileTypeCode == 2) { project.tipProfileNumberPoints = pointNum -1; };
 				
 	            logger.log(Level.INFO, "Profile location: {0}", fileToOpen.getAbsolutePath());
-	            logger.info("Loading project.");
+	            logger.info("Loading profile.");
 				
 			} catch (Exception ex) {
 				GUIHelpers.displayErrorDialog("Problem loading profile file: " + ex.getMessage());

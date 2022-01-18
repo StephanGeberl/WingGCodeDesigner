@@ -22,16 +22,14 @@ import java.awt.Dimension;
 //import javax.annotation.PostConstruct;
 
 import javax.swing.JPanel;
-import javax.swing.BorderFactory;
+
 import javax.swing.JButton;
 
 // init
 import com.geberl.winggcodedesigner.eventing.WingCalculatorEvent;
 import com.geberl.winggcodedesigner.eventing.WingCalculatorEventListener;
-import com.geberl.winggcodedesigner.model.Settings;
 import com.geberl.winggcodedesigner.model.SettingsFactory;
 import com.geberl.winggcodedesigner.model.WingCalculatorModel;
-
 import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -39,15 +37,10 @@ import java.text.NumberFormat;
 import java.util.logging.Logger;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
-import java.awt.Component;
-import javax.swing.JCheckBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
-import javax.swing.JTextField;
 import javax.swing.text.NumberFormatter;
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeEvent;
-import javax.swing.JSeparator;
+
 
 public class WingCalculatorPanel extends JPanel implements WingCalculatorEventListener {
 
@@ -300,20 +293,5 @@ public class WingCalculatorPanel extends JPanel implements WingCalculatorEventLi
 		}
 
 	}
-	
-	
-	
-	// Hilfsfunktion
-	private void setPanelEnabled(JPanel panel, Boolean isEnabled) {
-	    panel.setEnabled(isEnabled);
 
-	    Component[] components = panel.getComponents();
-
-	    for (Component component : components) {
-	        if (component instanceof JPanel) {
-	            setPanelEnabled((JPanel) component, isEnabled);
-	        }
-	        component.setEnabled(isEnabled);
-	    }
-	}
 }

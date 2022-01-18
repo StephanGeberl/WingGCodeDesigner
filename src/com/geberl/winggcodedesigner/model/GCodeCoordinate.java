@@ -13,9 +13,9 @@ package com.geberl.winggcodedesigner.model;
 
 import java.util.LinkedHashSet;
 
-public class ProfileCoordinate {
+public class GCodeCoordinate {
 
-	public LinkedHashSet<ProfileCoordinate> profileAddition = new LinkedHashSet<ProfileCoordinate>();
+	public LinkedHashSet<GCodeCoordinate> profileAddition = new LinkedHashSet<GCodeCoordinate>();
 
 	// Laufnummer
 	private Integer coordNumber = 0;
@@ -49,7 +49,7 @@ public class ProfileCoordinate {
 	* Constructs and initializes a ProfileCoordinate from the read String.
 	* @param String Containing x and y coordinates
 	*/
-	public ProfileCoordinate()
+	public GCodeCoordinate()
 	{
 		this.setReadCoordinateString("");
 		this.setReadOldCoordinateString("");
@@ -59,7 +59,7 @@ public class ProfileCoordinate {
 		this.setDirection(0);      // -1 Unterseite, +1 Oberseite
 	}
 
-	public ProfileCoordinate(String aReadCoordinateString, String aOldCoordinateString, Integer aCoordinateNumber)
+	public GCodeCoordinate(String aReadCoordinateString, String aOldCoordinateString, Integer aCoordinateNumber)
 	{
 		this.setReadCoordinateString(aReadCoordinateString);
 		this.setReadOldCoordinateString(aOldCoordinateString);
@@ -81,7 +81,7 @@ public class ProfileCoordinate {
 	}
 
 	// Konstruktor fuer Insets
-	public ProfileCoordinate(Double xDirectionCoordinate, Double yDirectionCoordinate)
+	public GCodeCoordinate(Double xDirectionCoordinate, Double yDirectionCoordinate)
 	{
 		this.setReadCoordinateString("");
 		this.setReadOldCoordinateString("");

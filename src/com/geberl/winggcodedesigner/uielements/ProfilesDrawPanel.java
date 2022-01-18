@@ -92,20 +92,22 @@ public class ProfilesDrawPanel extends JPanel implements WingCalculatorEventList
 			while(baseIterator.hasNext()) 
 			{
 				ProfileCoordinate coordinate = baseIterator.next();
-				xEnd = coordinate.getXGcodeCoordinate();
-				yEnd = coordinate.getYGcodeCoordinate();
-				if (aFirstLine) { yStart = yEnd; }
-
-				Double x1 = (this.buildXMax + this.borderOffset) - (xStart * this.drawFactor);
-				Double x2 = (this.buildXMax + this.borderOffset) - (xEnd * this.drawFactor);
-				Double y1 = (this.buildYHalf + this.borderOffset) - (yStart * this.drawFactor);
-				Double y2 = (this.buildYHalf + this.borderOffset) - (yEnd * this.drawFactor);
-
-				g.setColor(Color.RED);
-				g.drawLine(x1.intValue(), y1.intValue(), x2.intValue(), y2.intValue());
-				xStart = xEnd;
-				yStart = yEnd;
-				aFirstLine = false;
+				if (!coordinate.getIgnorePoint()) {
+					xEnd = coordinate.getXGcodeCoordinate();
+					yEnd = coordinate.getYGcodeCoordinate();
+					if (aFirstLine) { yStart = yEnd; }
+	
+					Double x1 = (this.buildXMax + this.borderOffset) - (xStart * this.drawFactor);
+					Double x2 = (this.buildXMax + this.borderOffset) - (xEnd * this.drawFactor);
+					Double y1 = (this.buildYHalf + this.borderOffset) - (yStart * this.drawFactor);
+					Double y2 = (this.buildYHalf + this.borderOffset) - (yEnd * this.drawFactor);
+	
+					g.setColor(Color.RED);
+					g.drawLine(x1.intValue(), y1.intValue(), x2.intValue(), y2.intValue());
+					xStart = xEnd;
+					yStart = yEnd;
+					aFirstLine = false;
+				}
 			}
 
 			xStart = 0.0; xEnd = 0.0; yStart = 0.0; yEnd = 0.0;
@@ -114,20 +116,22 @@ public class ProfilesDrawPanel extends JPanel implements WingCalculatorEventList
 			while(tipIterator.hasNext()) 
 			{
 				ProfileCoordinate coordinate = tipIterator.next();
-				xEnd = coordinate.getXGcodeCoordinate();
-				yEnd = coordinate.getYGcodeCoordinate();
-				if (aFirstLine) { yStart = yEnd; }
-
-				Double x1 = (this.buildXMax + this.borderOffset) - (xStart * this.drawFactor);
-				Double x2 = (this.buildXMax + this.borderOffset) - (xEnd * this.drawFactor);
-				Double y1 = (this.buildYHalf + this.borderOffset) - (yStart * this.drawFactor);
-				Double y2 = (this.buildYHalf + this.borderOffset) - (yEnd * this.drawFactor);
-
-				g.setColor(Color.CYAN);
-				g.drawLine(x1.intValue(), y1.intValue(), x2.intValue(), y2.intValue());
-				xStart = xEnd;
-				yStart = yEnd;
-				aFirstLine = false;
+				if (!coordinate.getIgnorePoint()) {
+					xEnd = coordinate.getXGcodeCoordinate();
+					yEnd = coordinate.getYGcodeCoordinate();
+					if (aFirstLine) { yStart = yEnd; }
+	
+					Double x1 = (this.buildXMax + this.borderOffset) - (xStart * this.drawFactor);
+					Double x2 = (this.buildXMax + this.borderOffset) - (xEnd * this.drawFactor);
+					Double y1 = (this.buildYHalf + this.borderOffset) - (yStart * this.drawFactor);
+					Double y2 = (this.buildYHalf + this.borderOffset) - (yEnd * this.drawFactor);
+	
+					g.setColor(Color.CYAN);
+					g.drawLine(x1.intValue(), y1.intValue(), x2.intValue(), y2.intValue());
+					xStart = xEnd;
+					yStart = yEnd;
+					aFirstLine = false;
+				}
 			}
 			
 		}

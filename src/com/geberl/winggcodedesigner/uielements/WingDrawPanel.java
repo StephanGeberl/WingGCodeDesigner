@@ -20,23 +20,17 @@ package com.geberl.winggcodedesigner.uielements;
 
 import com.geberl.winggcodedesigner.eventing.WingCalculatorEvent;
 import com.geberl.winggcodedesigner.eventing.WingCalculatorEventListener;
-import com.geberl.winggcodedesigner.model.ProfileCoordinate;
 import com.geberl.winggcodedesigner.model.ProjectFactory;
 import com.geberl.winggcodedesigner.model.SettingsFactory;
 import com.geberl.winggcodedesigner.model.WingCalculatorModel;
 
-//import javax.annotation.PostConstruct;
 import javax.swing.JPanel;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
 
 
 
@@ -45,96 +39,111 @@ public class WingDrawPanel extends JPanel implements WingCalculatorEventListener
 	/**
 	 * 
 	 */
+	private static final long serialVersionUID = 1L;
+	/**
+	 * 
+	 */
 	
 	private WingCalculatorModel wingCalculatorModel = null;
-	private int buildXMax = 650;
-	private int buildYMax = 200;
-	private int buildXHalf = buildXMax / 2;
-	private int borderOffset = 0;
-	private double drawFactor = 1.0;
 
 	
-	
-	public WingDrawPanel(WingCalculatorModel anWingCalculatorModel) {
+	public WingDrawPanel(WingCalculatorModel anWingCalculatorModel, int panelLength) {
 		
 		wingCalculatorModel = anWingCalculatorModel;
-		
 		this.setLayout(null);
-		this.setPreferredSize(new Dimension(buildXMax + (2 * this.borderOffset), buildYMax + (2 * this.borderOffset)));
-		this.createControls();
-		repaint();
-	}
-
-	//	@PostConstruct
-    public void createControls() {
-
+		
+	    double wMachineLength = SettingsFactory.settings.getWireLength();
+		double xMachineWidth = SettingsFactory.settings.getXAxisMax();
+		double wFactor = panelLength / wMachineLength;
+		double drawXMax = xMachineWidth * wFactor;
+		
+		this.setPreferredSize(new java.awt.Dimension((int)panelLength, (int)drawXMax + 50));
 	}
 
 	@Override
 	public void paintComponent(Graphics g) {
-		
-		super.paintComponent(g);
-		Graphics2D g2d = (Graphics2D) g;
-		float[] dash1 = { 2f, 0f, 2f };
-	    BasicStroke bs1 = new BasicStroke(1, 
-	            BasicStroke.CAP_BUTT, 
-	            BasicStroke.JOIN_ROUND, 
-	            1.0f, 
-	            dash1,
-	            2f);		
-	    Stroke bs0 = g2d.getStroke();
-		
-		
-		// setForeground(Color.BLUE);
-		
-	    g2d.setStroke(bs1);
-	    g2d.setColor(Color.GRAY);
-	    g2d.drawRect(this.borderOffset, this.borderOffset, this.buildXMax, this.buildYMax);
-	    g2d.drawLine(this.buildXHalf, this.borderOffset, this.buildXHalf, this.buildYMax);
-		
-		if (wingCalculatorModel != null && SettingsFactory.settings.getWireLength() > 0 && wingCalculatorModel.getBaseCordLengthTipTotal() > 0) {
-			
-			double drawFactorX = 1.0;
-			double drawFactorY = 1.0;
-		
-			Double maxY = wingCalculatorModel.getBaseCordLengthBaseTotal();
-			if (maxY < wingCalculatorModel.getBaseCordLengthTipTotal()) { maxY = wingCalculatorModel.getBaseCordLengthTipTotal(); };
-			drawFactorX = this.buildXMax / SettingsFactory.settings.getWireLength();
-			drawFactorY = this.buildYMax / maxY;
-			this.drawFactor = drawFactorX;
-			if (drawFactorY < drawFactorX) { this.drawFactor = drawFactorY; };
 
-			g2d.setColor(Color.BLUE);
-			
-			double baseCordStart = SettingsFactory.settings.getStartDistance() * this.drawFactor;
-			
-			g2d.drawLine(this.borderOffset, (int)baseCordStart, this.buildXMax, (int)baseCordStart);
-			
-			double halfSpan = ProjectFactory.project.getHalfSpanLength() /2  * this.drawFactor;
-			double halfWire = SettingsFactory.settings.getWireLength() /2  * this.drawFactor;
-			
-			g2d.drawLine((int)(this.buildXHalf - halfWire), this.borderOffset, (int)(this.buildXHalf - halfWire), this.buildYMax);
-			g2d.drawLine((int)(this.buildXHalf + halfWire), this.borderOffset, (int)(this.buildXHalf + halfWire), this.buildYMax);
+		if (wingCalculatorModel != null
+				&& SettingsFactory.settings.getWireLength() > 0 
+				&& wingCalculatorModel.getBaseCordLengthTipTotal() > 0) {
 
+			super.paintComponent(g);
+			Graphics2D g2d = (Graphics2D) g;
+			float[] dash1 = { 2f, 0f, 2f };
+		    BasicStroke bs1 = new BasicStroke(1, 
+		            BasicStroke.CAP_BUTT, 
+		            BasicStroke.JOIN_ROUND, 
+		            1.0f, 
+		            dash1,
+		            2f);		
+		    Stroke bs0 = g2d.getStroke();
+			
+			
+		    double wMachineLength = SettingsFactory.settings.getWireLength();
+			double xMachineWidth = SettingsFactory.settings.getXAxisMax();
+			
+			double panelLength = this.getWidth() -1;
+			double wFactor = panelLength / wMachineLength;
+			
+			double drawMiddle = (wMachineLength * wFactor)/2;
+			double drawXMax = xMachineWidth * wFactor;
+			double drawLengthMax = wMachineLength * wFactor;
+			double drawXOffset = SettingsFactory.settings.getStartDistance() * wFactor;
+			double drawSpanHalf = ProjectFactory.project.getHalfSpanLength() * wFactor;
+			double drawShift = ProjectFactory.project.getShiftCenter() * wFactor;
+			
+			
+			// Bounding Box (Machine) and Middle Line
+			// this.setDimensions((int)panelLength, (int)drawLengthMax);
+			
 		    g2d.setStroke(bs0);
-			
-			g2d.drawLine((int)(this.buildXHalf - halfSpan), this.borderOffset, (int)(this.buildXHalf - halfSpan), this.buildYMax);
-			g2d.drawLine((int)(this.buildXHalf + halfSpan), this.borderOffset, (int)(this.buildXHalf + halfSpan), this.buildYMax);
+		    g2d.setColor(Color.GRAY);
+		    g2d.drawRect(0, 0, (int)drawLengthMax, (int)drawXMax);
+		    g2d.setStroke(bs1);
+		    g2d.setColor(Color.GRAY);
+		    g2d.drawLine((int)drawMiddle, 0, (int)drawMiddle, (int)drawXMax);
 
-			double baseCordWireY = wingCalculatorModel.getBaseCordWire() * this.drawFactor;
+
+			// Border Lines
+		    // Start Line
+			g2d.setStroke(bs1);
+			g2d.setColor(Color.BLUE);
+			if (SettingsFactory.settings.getStartDistance() > 0) {
+				g2d.drawLine(0, (int)drawXOffset, (int)drawLengthMax, (int)drawXOffset);
+			};	
+		    // Wing Span Lines
+			g2d.drawLine((int)(drawMiddle - ((drawSpanHalf/2) - drawShift)), 0, (int)(drawMiddle - ((drawSpanHalf/2) - drawShift)), (int)drawXMax);
+		    g2d.drawLine((int)(drawMiddle + ((drawSpanHalf/2) + drawShift)), 0, (int)(drawMiddle + ((drawSpanHalf/2) + drawShift)), (int)drawXMax);
 			
+			
+		    // Wing Border Lines
+			g2d.setStroke(bs1);
 			g2d.setColor(Color.RED);
+
+		    double baseCordEnd = drawXOffset;
+		    double baseCordNose = drawXOffset + (wingCalculatorModel.getBaseCordWire() * wFactor);
+		    double tipCordEnd = drawXOffset + (wingCalculatorModel.getTipDeltaAll() * wFactor);
+		    double tipCordNose = tipCordEnd + (wingCalculatorModel.getTipCordWire() * wFactor);
+			g2d.drawLine(0, (int)(baseCordEnd), (int)drawLengthMax, (int)(tipCordEnd));
+			g2d.drawLine(0, (int)(baseCordNose), (int)drawLengthMax, (int)(tipCordNose));
+
+		    // Wing Border
+			g2d.setStroke(bs0);
+			g2d.setColor(Color.BLACK);
 			
-			double yStartBase = wingCalculatorModel.getBaseCordStartBaseTotal()  * this.drawFactor;
-			double yEndBase = wingCalculatorModel.getBaseCordLengthBaseTotal() * this.drawFactor;
-			double yStartTip = wingCalculatorModel.getBaseCordStartTipTotal()  * this.drawFactor;
-			double yEndTip = wingCalculatorModel.getBaseCordLengthTipTotal()  * this.drawFactor;
+			double xFactor = wingCalculatorModel.getTipDeltaAll() / wMachineLength;
+			double drawL1 = drawMiddle - ((drawSpanHalf/2) - drawShift);
+			double drawL2 = drawMiddle + ((drawSpanHalf/2) + drawShift);
+			double drawX1End = drawXOffset + (drawL1 * xFactor);
+			double drawX1Nose = drawX1End + (ProjectFactory.project.getBaseCordLength() * wFactor);
+			double drawX2End = drawXOffset + (drawL2 * xFactor);
+			double drawX2Nose = drawX2End + (ProjectFactory.project.getTipCordLength() * wFactor);;
 			
-			g2d.drawLine((int)(this.buildXHalf - halfWire), (int)(this.borderOffset + yStartBase), (int)(this.buildXHalf - halfWire), (int)(this.borderOffset + yEndBase));
-			g2d.drawLine((int)(this.buildXHalf + halfWire), (int)(this.borderOffset + yStartTip), (int)(this.buildXHalf + halfWire), (int)(this.borderOffset + yEndTip));
+			g2d.drawLine((int)drawL1, (int)(drawX1End), (int)drawL1, (int)(drawX1Nose));
+			g2d.drawLine((int)drawL2, (int)(drawX2End), (int)drawL2, (int)(drawX2Nose));
+			g2d.drawLine((int)drawL1, (int)(drawX1End), (int)drawL2, (int)(drawX2End));
+			g2d.drawLine((int)drawL1, (int)(drawX1Nose), (int)drawL2, (int)(drawX2Nose));
 			
-			g2d.drawLine((int)(this.buildXHalf - halfWire), (int)(this.borderOffset + yStartBase), (int)(this.buildXHalf + halfWire), (int)(this.borderOffset + yStartTip));
-			g2d.drawLine((int)(this.buildXHalf - halfWire), (int)(this.borderOffset + yEndBase), (int)(this.buildXHalf + halfWire), (int)(this.borderOffset + yEndTip));
 			
 		}
 		
@@ -153,20 +162,5 @@ public class WingDrawPanel extends JPanel implements WingCalculatorEventListener
 				break;
 		}
 
-	}
-
-	
-	// Hilfsfunktion
-	private void setPanelEnabled(JPanel panel, Boolean isEnabled) {
-	    panel.setEnabled(isEnabled);
-
-	    Component[] components = panel.getComponents();
-
-	    for (Component component : components) {
-	        if (component instanceof JPanel) {
-	            setPanelEnabled((JPanel) component, isEnabled);
-	        }
-	        component.setEnabled(isEnabled);
-	    }
 	}
 }
