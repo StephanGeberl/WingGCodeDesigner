@@ -102,7 +102,7 @@ public class WingDesigner extends JFrame {
         projectPanelContainer.add(calculatorPanel);
         
         // Draw Panels
-        ProfilesDrawPanel profileDrawPanel = new ProfilesDrawPanel(wingCalculatorModel);
+        ProfilesDrawPanel profileDrawPanel = new ProfilesDrawPanel(wingCalculatorModel, 620);
 		WingDrawPanel wingDrawPanel = new WingDrawPanel(wingCalculatorModel, 620);
 
         javax.swing.JScrollPane profileDrawScrollPanel = new javax.swing.JScrollPane(profileDrawPanel, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);

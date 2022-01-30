@@ -676,7 +676,7 @@ public class ProjectPanel extends JPanel {
 		lblInputHalfspanLength_1_3_1.setBounds(6, 169, 170, 25);
 		add(lblInputHalfspanLength_1_3_1);
 		
-		JLabel lblInputHalfspanLength_1_3_2 = new JLabel("Wing tip offset [deg]");
+		JLabel lblInputHalfspanLength_1_3_2 = new JLabel("Wing twist [deg]");
 		lblInputHalfspanLength_1_3_2.setBounds(6, 194, 170, 25);
 		add(lblInputHalfspanLength_1_3_2);
 		

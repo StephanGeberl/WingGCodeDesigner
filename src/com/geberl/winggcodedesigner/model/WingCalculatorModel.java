@@ -79,6 +79,9 @@ public class WingCalculatorModel implements ProjectChangeEventListener{
 	private Double tipDeltaSweep = 0.0;
 	private Double tipDeltaAll = 0.0;
 	
+	private Double calcWingTipWrenchingOffset = 0.0;
+	private Double calcWingTipOffset = 0.0;
+	
 
 	
 	private String statusMessage = "<html><b>Idle</b></html>";
@@ -133,6 +136,7 @@ public class WingCalculatorModel implements ProjectChangeEventListener{
 		
 		Double deltaBase = 0.0;
 		Double deltaTip = 0.0;
+		Double rightAddition = 0.0;  // Hilfsvariable: Abstand Winttip - Drahtbasis
 		
 		Double wireLength = SettingsFactory.settings.getWireLength();
 		Double startDistance = SettingsFactory.settings.getStartDistance();
@@ -140,6 +144,10 @@ public class WingCalculatorModel implements ProjectChangeEventListener{
 		Double tipCordLength = ProjectFactory.project.getTipCordLength();
 		Double baseCordLength = ProjectFactory.project.getBaseCordLength();
 		Double halfSpanLength = ProjectFactory.project.getHalfSpanLength();
+		Double origWingTipWrenchingOffset = ProjectFactory.project.getWingTipOffset();
+		Double origWingTipOffset = ProjectFactory.project.getWingTipYOffset();
+		
+		rightAddition = ((wireLength - halfSpanLength) / 2) - shiftCenter;
 		
 		
 		
@@ -156,6 +164,14 @@ public class WingCalculatorModel implements ProjectChangeEventListener{
 		this.tipCordWire = this.tipCordWireBase + (2 * ProjectFactory.project.getTipMeltingLoss());
 
 		
+		
+		// Schraenkung umrechnen
+		
+		this.calcWingTipWrenchingOffset = (origWingTipWrenchingOffset *(rightAddition + halfSpanLength)) / halfSpanLength;
+
+		// Ueberhoehung umrechen
+
+		this.calcWingTipOffset = (origWingTipOffset *(rightAddition + halfSpanLength)) / halfSpanLength;
 		
 		// Versatz der schmalen Flaechentiefe
 		this.tipDeltaBase = (this.baseCordWire - this.tipCordWire)/2;
@@ -184,12 +200,63 @@ public class WingCalculatorModel implements ProjectChangeEventListener{
 	// der grosse Rechner
 	public void calculateCoordinates() {
 		
+		ProfileCoordinate coordinate = null;
+
+		// Berechne die Parameter
+		calcParameters();
+		
+		// Koordinaten passend drehen und Nasenpunkt berechnen
+		this.changeDirectionAndCalculateNose(ProjectFactory.project.baseProfileSet);
+		this.changeDirectionAndCalculateNose(ProjectFactory.project.tipProfileSet);
+		
+		// Liste mit normierten Parametern und Holmen berechnen
+		
+		this.calculateNormMeasureWithSpars(ProjectFactory.project.baseProfileSet, ProjectFactory.project.getBaseCordLength());
+		this.calculateNormMeasureWithSpars(ProjectFactory.project.tipProfileSet, ProjectFactory.project.getTipCordLength());
+		
+		// Hier Innenausschnitt berechnen
+		
+		// noch nicht implementiert
+		
+		// Listen generieren
+		this.calculateGCodeList(ProjectFactory.project.baseProfileSet, ProjectFactory.project.gCodeBaseProfileSet);
+		this.calculateGCodeList(ProjectFactory.project.tipProfileSet, ProjectFactory.project.gCodeTipProfileSet);
+
+		
+		// auf Wire-Ebene umrechnen mit Schränkung, Pfeilung und Startversatz
+		
+		Iterator<GCodeCoordinate> gCodeIterator = ProjectFactory.project.gCodeBaseProfileSet.iterator();
+		while(gCodeIterator.hasNext()) 
+		{
+			GCodeCoordinate gCodeCoordinate = gCodeIterator.next();
+			// Umrechnung Groesse auf Drahtebene
+			gCodeCoordinate.calcBasicCoordinate(this.baseCordWire);
+			// Startabstand addieren
+			gCodeCoordinate.calcGcodeCoordinate(this.baseCordStartBaseTotal);
+		
+		}
+		gCodeIterator = ProjectFactory.project.gCodeTipProfileSet.iterator();
+		while(gCodeIterator.hasNext()) 
+		{
+			GCodeCoordinate gCodeCoordinate = gCodeIterator.next();
+			// Umrechnung Groesse auf Drahtebene
+			gCodeCoordinate.calcBasicCoordinate(this.tipCordWire);
+			// Schraenkung und Y Ueberhoehung
+			gCodeCoordinate.calcYOffset(this.calcWingTipWrenchingOffset, this.calcWingTipOffset, this.tipCordWire);
+			// Startabstand addieren (+ implizit Trapez)
+			gCodeCoordinate.calcGcodeCoordinate(this.baseCordStartTipTotal);
+
+		}
+		
+			
+		Integer n=0;	
+		
+		
+		/*		
+		
 		
 		Double startDistance = SettingsFactory.settings.getStartDistance();
 		ProfileCoordinate coordinate = null;
-
-		
-		
 		
 		Double startBaseX = 0.0;
 		Double startBaseY = 0.0;
@@ -200,25 +267,6 @@ public class WingCalculatorModel implements ProjectChangeEventListener{
 		Double endTipX = 0.0;
 		Double endTipY = 0.0;
 		
-		// Berechne die Parameter
-		calcParameters();
-		
-		
-		this.calculateTrueMeasureWithSpars(ProjectFactory.project.baseProfileSet, ProjectFactory.project.getBaseCordLength());
-		this.calculateTrueMeasureWithSpars(ProjectFactory.project.tipProfileSet, ProjectFactory.project.getTipCordLength());
-
-	
-			
-			// =====================================================
-
-			// Umrechnen auf Basislaenge = Drehpunkt des Drahtes
-			// coordinate.calcBasicCoordinate(this.baseCordWire);
-			
-			
-		
-		
-		
-		
 		
 		
 		
@@ -226,6 +274,7 @@ public class WingCalculatorModel implements ProjectChangeEventListener{
 
 		
 		// GCode berechnen
+		
 		this.totalMaxX = 0.0;
 		this.totalMaxY = 0.0;
 		Double startDistanceBase = 0.0;
@@ -280,15 +329,65 @@ public class WingCalculatorModel implements ProjectChangeEventListener{
 								+ " mm / Height: " 
 								+ String.valueOf(this.totalMaxY.intValue()) 
 								+ " mm</b></html>";
-		
+*/		
 		
 	}
 
+	
+	// ==================
+	// Koordinaten drehen (1 muss vorne liegen) und Nasenpunkt berechnen (muss immer nach dem Drehen sein)
+	// ==================
+	private void changeDirectionAndCalculateNose(LinkedHashSet<ProfileCoordinate> aProfileSet) {
+		
+		ProfileCoordinate coordinate = null;
+		
+		Iterator<ProfileCoordinate> iterBase = aProfileSet.iterator();
+		while(iterBase.hasNext()) 
+		{
+			coordinate = iterBase.next();
+			// X drehen so dass 1 vorne liegt (Profilnase)
+			coordinate.changeDirection(ProjectFactory.project.getBaseDirection());
+			// Nasenpunkt markieren
+			if (coordinate.getXDirectionCoordinate() == 1.0 && coordinate.getYDirectionCoordinate() == 0.0) {
+				coordinate.setIsNosePoint(true);
+			}
+		}
+	}	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 	// ==================
-	// Calculate Spars
+	// Nasenpunkt berechnen
+	// Koordinaten drehen (x Nase = 1)
+	// Holme berechnen incl. dann nicht anfahrbaren Punkten
+	// setzt xDirectionCoordinate und yDirectionCoordinate
 	// ==================
-	private void calculateTrueMeasureWithSpars(LinkedHashSet<ProfileCoordinate> aProfileSet, Double aReferenceWidth) {
+	private void calculateNormMeasureWithSpars(LinkedHashSet<ProfileCoordinate> aProfileSet, Double aReferenceWidth) {
 		
 		Double sparTopWidth = 0.0;
 		Double sparTopStart = 0.0;
@@ -307,8 +406,8 @@ public class WingCalculatorModel implements ProjectChangeEventListener{
 		Integer sparMarker = 0;
 		Double sparYDirectionCoordinate = 0.0;
 		
-		sparTopStart = (100 - ProjectFactory.project.getSparOffsetTop())/100;
-		sparBottomStart = (100 - ProjectFactory.project.getSparOffsetBottom())/100;
+		sparTopStart = 1 - (ProjectFactory.project.getSparOffsetTop()/100);
+		sparBottomStart = 1 - (ProjectFactory.project.getSparOffsetBottom()/100);
 		
 		sparTopWidth = ProjectFactory.project.getSparWidthTop() / aReferenceWidth;
 		sparTopHeight = ProjectFactory.project.getSparHeightTop() / aReferenceWidth;
@@ -325,15 +424,9 @@ public class WingCalculatorModel implements ProjectChangeEventListener{
 			coordinate = iterBase.next();
 			coordinate.setIgnorePoint(false);
 			
-			// X drehen so dass 1 vorne liegt (Profilnase)
-			coordinate.changeDirection(ProjectFactory.project.getBaseDirection());
-			// Nasenpunkt markieren
-			if (coordinate.getXDirectionCoordinate() == 1.0 && coordinate.getYDirectionCoordinate() == 0.0) {
-				coordinate.setIsNosePoint(true);
-			}
-			
 			// =====================================================
 			// Berechne Holm auf der Oberseite
+			coordinate.profileAddition.clear();
 			if (coordinate.getDirection() > 0 && ProjectFactory.project.getHasSparTop()) {
 				if (coordinate.getXDirectionCoordinate() > sparTopEnd && coordinate.getXDirectionCoordinate() < sparTopStart) {
 					
@@ -348,12 +441,12 @@ public class WingCalculatorModel implements ProjectChangeEventListener{
 						Double sparXDirectionCoordinate = sparTopEnd;
 						
 						additionalProfileSet.add(new ProfileCoordinate(sparXDirectionCoordinate, sparYDirectionCoordinate));
-						additionalProfileSet.add(new ProfileCoordinate(sparXDirectionCoordinate, sparYDirectionCoordinate - sparTopHeight));
+						additionalProfileSet.add(new ProfileCoordinate(sparXDirectionCoordinate, coordinate.getYDirectionCoordinate() - sparTopHeight));
 						
 					}
 					else {
 						Double sparXDirectionCoordinate = coordinate.getXDirectionCoordinate();
-						additionalProfileSet.add(new ProfileCoordinate(sparXDirectionCoordinate, sparYDirectionCoordinate - sparTopHeight));
+						additionalProfileSet.add(new ProfileCoordinate(sparXDirectionCoordinate, coordinate.getYDirectionCoordinate() - sparTopHeight));
 						
 						anchorCoordinate.profileAddition = additionalProfileSet;
 						//sparMarker = 0;
@@ -362,8 +455,8 @@ public class WingCalculatorModel implements ProjectChangeEventListener{
 				else {
 					if (sparMarker > 0) {
 						Double sparXDirectionCoordinate = sparTopStart;
-						additionalProfileSet.add(new ProfileCoordinate(sparXDirectionCoordinate, sparYDirectionCoordinate - sparTopHeight));
-						additionalProfileSet.add(new ProfileCoordinate(sparXDirectionCoordinate, sparYDirectionCoordinate));
+						additionalProfileSet.add(new ProfileCoordinate(sparXDirectionCoordinate, coordinate.getYDirectionCoordinate() - sparTopHeight));
+						additionalProfileSet.add(new ProfileCoordinate(sparXDirectionCoordinate, coordinate.getYDirectionCoordinate()));
 						
 						anchorCoordinate.profileAddition = additionalProfileSet;
 						sparMarker = 0;
@@ -373,6 +466,7 @@ public class WingCalculatorModel implements ProjectChangeEventListener{
 
 			// =====================================================
 			// Berechne Holm auf der Unterseite
+			coordinate.profileAddition.clear();
 			if (coordinate.getDirection() < 0 && ProjectFactory.project.getHasSparBottom()) {
 				if (coordinate.getXDirectionCoordinate() > sparBottomEnd && coordinate.getXDirectionCoordinate() < sparBottomStart) {
 					
@@ -384,15 +478,15 @@ public class WingCalculatorModel implements ProjectChangeEventListener{
 						
 						anchorCoordinate = preCoordinate;
 						sparYDirectionCoordinate = anchorCoordinate.getYDirectionCoordinate();
-						Double sparXDirectionCoordinate = sparTopEnd;
+						Double sparXDirectionCoordinate = sparBottomStart;
 						
 						additionalProfileSet.add(new ProfileCoordinate(sparXDirectionCoordinate, sparYDirectionCoordinate));
-						additionalProfileSet.add(new ProfileCoordinate(sparXDirectionCoordinate, sparYDirectionCoordinate + sparBottomHeight));
+						additionalProfileSet.add(new ProfileCoordinate(sparXDirectionCoordinate, coordinate.getYDirectionCoordinate() + sparBottomHeight));
 						
 					}
 					else {
 						Double sparXDirectionCoordinate = coordinate.getXDirectionCoordinate();
-						additionalProfileSet.add(new ProfileCoordinate(sparXDirectionCoordinate, sparYDirectionCoordinate + sparBottomHeight));
+						additionalProfileSet.add(new ProfileCoordinate(sparXDirectionCoordinate, coordinate.getYDirectionCoordinate() + sparBottomHeight));
 						
 						anchorCoordinate.profileAddition = additionalProfileSet;
 						//sparMarker = 0;
@@ -400,9 +494,9 @@ public class WingCalculatorModel implements ProjectChangeEventListener{
 				}
 				else {
 					if (sparMarker > 0) {
-						Double sparXDirectionCoordinate = sparTopStart;
-						additionalProfileSet.add(new ProfileCoordinate(sparXDirectionCoordinate, sparYDirectionCoordinate + sparBottomHeight));
-						additionalProfileSet.add(new ProfileCoordinate(sparXDirectionCoordinate, sparYDirectionCoordinate));
+						Double sparXDirectionCoordinate = sparBottomEnd;
+						additionalProfileSet.add(new ProfileCoordinate(sparXDirectionCoordinate, coordinate.getYDirectionCoordinate() + sparBottomHeight));
+						additionalProfileSet.add(new ProfileCoordinate(sparXDirectionCoordinate, coordinate.getYDirectionCoordinate()));
 						
 						anchorCoordinate.profileAddition = additionalProfileSet;
 						sparMarker = 0;
@@ -411,6 +505,53 @@ public class WingCalculatorModel implements ProjectChangeEventListener{
 			}
 		}
 	}
+
+	// ==================
+	// G-Code Listen berechnen (verarbeitung der Extensions)
+	// ==================
+	private void calculateGCodeList(LinkedHashSet<ProfileCoordinate> profileSet, LinkedHashSet<GCodeCoordinate> gCodeSet) {
+		// Wurzel
+		Integer i = 0;
+		ProfileCoordinate coordinate = null;
+		
+		gCodeSet.clear();
+		
+		Iterator<ProfileCoordinate> iterBase = profileSet.iterator();
+		while(iterBase.hasNext()) 
+		{
+			coordinate = iterBase.next();
+			if (!coordinate.getIgnorePoint()) {
+				i = i + 1;
+				gCodeSet.add(new GCodeCoordinate( coordinate.getXDirectionCoordinate(),
+											 	  coordinate.getYDirectionCoordinate(),
+											 	  i,
+											 	  coordinate.getIsNosePoint(),
+											 	  coordinate.getDirection()
+												));
+				
+				if (!coordinate.profileAddition.isEmpty()) {
+					Iterator<ProfileCoordinate> iterAddition = coordinate.profileAddition.iterator();
+					while(iterAddition.hasNext()) 
+					{
+						coordinate = iterAddition.next();
+						if (!coordinate.getIgnorePoint()) {
+							i = i + 1;
+							gCodeSet.add(new GCodeCoordinate( coordinate.getXDirectionCoordinate(),
+														 	  coordinate.getYDirectionCoordinate(),
+														 	  i,
+														 	  false,
+														 	  0
+															));
+						}
+					}
+				}
+			}
+		}
+
+	}
+	
+	
+	
 	
 	
 	
@@ -447,8 +588,8 @@ public class WingCalculatorModel implements ProjectChangeEventListener{
 		Double wireSpeed = SettingsFactory.settings.getWireSpeed();
 		Double travelSpeed = SettingsFactory.settings.getTravelSpeed();
 		
-		ProfileCoordinate baseCordinate;
-		ProfileCoordinate tipCordinate;
+		GCodeCoordinate baseCordinate;
+		GCodeCoordinate tipCordinate;
 		
 		String aLine = "";
 		String aPrefix = "G01 ";
@@ -457,8 +598,8 @@ public class WingCalculatorModel implements ProjectChangeEventListener{
 		String aWaitLine = "G4 P" + String.valueOf(pause.intValue()); // P in Sekunden!
 				
 		
-		List<ProfileCoordinate> baseCoordinates = new ArrayList<ProfileCoordinate>( ProjectFactory.project.baseProfileSet );
-		List<ProfileCoordinate> tipCoordinates = new ArrayList<ProfileCoordinate>( ProjectFactory.project.tipProfileSet );
+		List<GCodeCoordinate> baseCoordinates = new ArrayList<GCodeCoordinate>( ProjectFactory.project.gCodeBaseProfileSet );
+		List<GCodeCoordinate> tipCoordinates = new ArrayList<GCodeCoordinate>( ProjectFactory.project.gCodeTipProfileSet );
 		
 		if (ProjectFactory.project.getBaseProfileNumberPoints() > 0 && ProjectFactory.project.getTipProfileNumberPoints() > 0 &&
 			(ProjectFactory.project.getBaseProfileNumberPoints() == ProjectFactory.project.getTipProfileNumberPoints()) ) {

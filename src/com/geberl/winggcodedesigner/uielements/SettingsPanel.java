@@ -248,11 +248,11 @@ public class SettingsPanel extends JPanel {
 		lblInputWireLength_1_1.setBounds(16, 57, 167, 25);
 		add(lblInputWireLength_1_1);
 		
-		JLabel lblInputStartDistance = new JLabel("X-Start-Distance [mm]");
+		JLabel lblInputStartDistance = new JLabel("Save Height [mm]");
 		lblInputStartDistance.setBounds(16, 108, 167, 25);
 		add(lblInputStartDistance);
 		
-		JLabel lblInputSaveHeight = new JLabel("Save Height [mm]");
+		JLabel lblInputSaveHeight = new JLabel("X-Start-Distance [mm]");
 		lblInputSaveHeight.setBounds(16, 82, 167, 25);
 		add(lblInputSaveHeight);
 		

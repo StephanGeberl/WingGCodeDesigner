@@ -41,6 +41,9 @@ public class Project {
     private transient String projectPath = "";
     private transient File file = null;
     
+    public transient LinkedHashSet<GCodeCoordinate> gCodeBaseProfileSet = new LinkedHashSet<GCodeCoordinate>();
+    public transient LinkedHashSet<GCodeCoordinate> gCodeTipProfileSet = new LinkedHashSet<GCodeCoordinate>();
+    
 	public LinkedHashSet<ProfileCoordinate> baseProfileSet = new LinkedHashSet<ProfileCoordinate>();
 	public LinkedHashSet<ProfileCoordinate> tipProfileSet = new LinkedHashSet<ProfileCoordinate>();
 	
