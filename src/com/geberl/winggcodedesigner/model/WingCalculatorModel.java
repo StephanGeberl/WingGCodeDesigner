@@ -28,10 +28,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import org.apache.commons.io.FilenameUtils;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
@@ -51,7 +51,6 @@ import com.geberl.winggcodedesigner.eventing.WingCalculatorEventListener;
 
 public class WingCalculatorModel implements ProjectChangeEventListener{
 
-	JFileChooser fileChooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
     private static final Logger logger = Logger.getLogger(Settings.class.getName());
 
 	private final Collection<WingCalculatorEventListener> wingCalculatorEventListener = new ArrayList<>();
@@ -199,8 +198,6 @@ public class WingCalculatorModel implements ProjectChangeEventListener{
 	
 	// der grosse Rechner
 	public void calculateCoordinates() {
-		
-		ProfileCoordinate coordinate = null;
 
 		// Berechne die Parameter
 		calcParameters();
@@ -215,6 +212,10 @@ public class WingCalculatorModel implements ProjectChangeEventListener{
 		this.calculateNormMeasureWithSpars(ProjectFactory.project.tipProfileSet, ProjectFactory.project.getTipCordLength());
 		
 		// Hier Innenausschnitt berechnen
+		if (ProjectFactory.project.getIsHollowed()) {
+			this.calculateInset(ProjectFactory.project.baseProfileSet, ProjectFactory.project.getBaseCordLength());
+			this.calculateInset(ProjectFactory.project.tipProfileSet, ProjectFactory.project.getTipCordLength());
+		}
 		
 		// noch nicht implementiert
 		
@@ -247,89 +248,7 @@ public class WingCalculatorModel implements ProjectChangeEventListener{
 			gCodeCoordinate.calcGcodeCoordinate(this.baseCordStartTipTotal);
 
 		}
-		
-			
-		Integer n=0;	
-		
-		
-		/*		
-		
-		
-		Double startDistance = SettingsFactory.settings.getStartDistance();
-		ProfileCoordinate coordinate = null;
-		
-		Double startBaseX = 0.0;
-		Double startBaseY = 0.0;
-		Double endBaseX = 0.0;
-		Double endBaseY = 0.0;
-		Double startTipX = 0.0;
-		Double startTipY = 0.0;
-		Double endTipX = 0.0;
-		Double endTipY = 0.0;
-		
-		
-		
-		
 
-
-		
-		// GCode berechnen
-		
-		this.totalMaxX = 0.0;
-		this.totalMaxY = 0.0;
-		Double startDistanceBase = 0.0;
-		Double startDistanceTip = 0.0;
-		Boolean isFirstCoordinate;
-		
-		if (this.tipDeltaAll < 0) {
-			startDistanceBase = startDistance + (-1)* this.tipDeltaAll;
-			startDistanceTip = startDistance;
-		} else {
-			startDistanceBase = startDistance;
-			startDistanceTip = startDistance + this.tipDeltaAll;
-		}
-		
-		isFirstCoordinate = true;
-		Iterator<ProfileCoordinate> iterGCodeBase = ProjectFactory.project.baseProfileSet.iterator();
-		while(iterGCodeBase.hasNext()) 
-		{
-			coordinate = iterGCodeBase.next();
-			coordinate.calcGcodeCoordinate(startDistanceBase, 0.0);
-			if (coordinate.getXGcodeCoordinate() > this.totalMaxX) { this.totalMaxX = coordinate.getXGcodeCoordinate(); }
-			if (coordinate.getYGcodeCoordinate() > this.totalMaxY) { this.totalMaxY = coordinate.getYGcodeCoordinate(); }
-			if (isFirstCoordinate) {
-				startBaseX = coordinate.getXGcodeCoordinate();
-				startBaseY = coordinate.getYGcodeCoordinate();
-			}
-			isFirstCoordinate = false;
-		}
-		if (coordinate != null ) { endBaseX = coordinate.getXGcodeCoordinate(); }
-		if (coordinate != null ) { endBaseY = coordinate.getYGcodeCoordinate(); }
-		
-		isFirstCoordinate = true;
-		Iterator<ProfileCoordinate> iterGCodeTip = ProjectFactory.project.tipProfileSet.iterator();
-		while(iterGCodeTip.hasNext()) 
-		{
-			coordinate = iterGCodeTip.next();
-			coordinate.calcGcodeCoordinate(startDistanceTip, 0.0);
-			if (coordinate.getXGcodeCoordinate() > this.totalMaxX) { this.totalMaxX = coordinate.getXGcodeCoordinate(); }
-			if (coordinate.getYGcodeCoordinate() > this.totalMaxY) { this.totalMaxY = coordinate.getYGcodeCoordinate(); }
-			if (isFirstCoordinate) {
-				startTipX = coordinate.getXGcodeCoordinate();
-				startTipY = coordinate.getYGcodeCoordinate();
-			}
-			isFirstCoordinate = false;
-		}
-		if (coordinate != null ) { endTipX = coordinate.getXGcodeCoordinate(); }
-		if (coordinate != null ) { endTipY = coordinate.getYGcodeCoordinate(); }
-		
-		
-		this.statusMessage = "<html><b>Width: "
-								+ String.valueOf(this.totalMaxX.intValue())
-								+ " mm / Height: " 
-								+ String.valueOf(this.totalMaxY.intValue()) 
-								+ " mm</b></html>";
-*/		
 		
 	}
 
@@ -353,33 +272,6 @@ public class WingCalculatorModel implements ProjectChangeEventListener{
 			}
 		}
 	}	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 
 	// ==================
 	// Nasenpunkt berechnen
@@ -506,6 +398,95 @@ public class WingCalculatorModel implements ProjectChangeEventListener{
 		}
 	}
 
+	
+	
+	
+	// ==================
+	// Innenauschnitt berechnen
+	// ==================
+	private void calculateInset(LinkedHashSet<ProfileCoordinate> aProfileSet, Double aReferenceWidth) {
+		
+		Double insetStart = 0.0;
+		Double insetEnd = 0.0;
+		Double insetCrossStart = 0.0;
+		Double insetCrossEnd = 0.0;
+		Double insertDelta = 0.0;
+		
+		ProfileCoordinate coordinate = null;
+
+		LinkedList<ProfileCoordinate> additionalProfileSetTop = new LinkedList<ProfileCoordinate>();;
+		LinkedList<ProfileCoordinate> additionalProfileSetBottom = new LinkedList<ProfileCoordinate>();;
+		LinkedHashSet<ProfileCoordinate> additionalProfileSetAll = new LinkedHashSet<ProfileCoordinate>();
+		
+		insertDelta = ProjectFactory.project.getWallThickness()/ aReferenceWidth;
+		insetStart = 1 - (ProjectFactory.project.getFrontHollowOffset()/100);
+		insetEnd = (ProjectFactory.project.getBackHollowOffset()/100);
+		insetCrossStart = 1 - (ProjectFactory.project.getCrosspieceOffset()/100);
+		insetCrossEnd = 1 - ((ProjectFactory.project.getCrosspieceOffset()/100) - (ProjectFactory.project.getCrosspieceWidth() / aReferenceWidth));
+		
+		Iterator<ProfileCoordinate> iterBase = aProfileSet.iterator();
+		while(iterBase.hasNext()) 
+		{
+			coordinate = iterBase.next();
+
+			Double coordinateX = coordinate.getXDirectionCoordinate();
+			Double coordinateY = coordinate.getYDirectionCoordinate();
+			Double insertCoordinateY = 0.0;
+
+			// Start von Hinten (Hinterkante auslassen)
+			if (coordinateX > insetEnd) {
+				
+				insertCoordinateY = coordinateY - coordinate.getDirection() * insertDelta;
+				// Bis zur Vorderkante, dann 0
+				if (coordinateX > insetStart) {
+					insertCoordinateY = 0.0;
+				}
+
+				if (!ProjectFactory.project.getIsHollowedFrontOnly()) {
+					if (coordinateX > insetCrossStart && coordinateX < insetCrossEnd) {
+						insertCoordinateY = 0.0;
+					}
+				}
+				
+				if (coordinate.getDirection() > 0) {
+					additionalProfileSetTop.add(new ProfileCoordinate(coordinateX, insertCoordinateY));
+				} else {
+					additionalProfileSetBottom.add(new ProfileCoordinate(coordinateX, insertCoordinateY));
+				}
+			}
+		}
+
+		// Endgueltige Koordinatenliste zusammensetzen
+		// Iterator<ProfileCoordinate> iterTop = additionalProfileSetTop.descendingIterator();
+		Iterator<ProfileCoordinate> iterTop = additionalProfileSetTop.descendingIterator();
+		while(iterTop.hasNext()) 
+		{
+			coordinate = iterTop.next();
+			additionalProfileSetAll.add(coordinate);
+		}
+		Iterator<ProfileCoordinate> iterBottom = additionalProfileSetBottom.descendingIterator();
+		while(iterBottom.hasNext()) 
+		{
+			coordinate = iterBottom.next();
+			additionalProfileSetAll.add(coordinate);
+		}
+
+		// Koordinatenliste an der Nasenkoordinate anhaengen
+		Iterator<ProfileCoordinate> iterProfile = aProfileSet.iterator();
+		while(iterProfile.hasNext()) 
+		{
+			coordinate = iterProfile.next();
+			
+			if (coordinate.getIsNosePoint()) {
+				coordinate.profileAddition = additionalProfileSetAll;
+				break;
+			}
+		}	
+	
+	
+	}
+	
+	
 	// ==================
 	// G-Code Listen berechnen (verarbeitung der Extensions)
 	// ==================
@@ -559,8 +540,7 @@ public class WingCalculatorModel implements ProjectChangeEventListener{
 	// G-Code berechnen und in das Array schreiben
 	// ==================
 
-
-	// G-Code erzeugen
+	// Header
 	public void addHeader(Boolean isRight) {
 		
 		this.gCodeLines.add("(Wing Cutter G-Code)");
@@ -575,41 +555,42 @@ public class WingCalculatorModel implements ProjectChangeEventListener{
 		this.gCodeLines.add("G94");
 	}
 	
+	// Footer
 	public void addFooter() {
 		this.gCodeLines.add("M30");
 
 	}
 	
-	
+
+	// G-Code erzeugen
 	private void generateGcodeList(Boolean isRight) {
 		
+		GCodeCoordinate baseCordinate = null;
+		GCodeCoordinate tipCordinate = null;
+
 		Double saveHeight = SettingsFactory.settings.getSaveHeight();
 		Double pause = SettingsFactory.settings.getPause();
 		Double wireSpeed = SettingsFactory.settings.getWireSpeed();
 		Double travelSpeed = SettingsFactory.settings.getTravelSpeed();
-		
-		GCodeCoordinate baseCordinate;
-		GCodeCoordinate tipCordinate;
 		
 		String aLine = "";
 		String aPrefix = "G01 ";
 		String aPostfix = " F" + String.valueOf(wireSpeed.intValue());
 		String aPostfixFast = " F" + String.valueOf(travelSpeed.intValue());
 		String aWaitLine = "G4 P" + String.valueOf(pause.intValue()); // P in Sekunden!
-				
 		
-		List<GCodeCoordinate> baseCoordinates = new ArrayList<GCodeCoordinate>( ProjectFactory.project.gCodeBaseProfileSet );
-		List<GCodeCoordinate> tipCoordinates = new ArrayList<GCodeCoordinate>( ProjectFactory.project.gCodeTipProfileSet );
-		
-		if (ProjectFactory.project.getBaseProfileNumberPoints() > 0 && ProjectFactory.project.getTipProfileNumberPoints() > 0 &&
-			(ProjectFactory.project.getBaseProfileNumberPoints() == ProjectFactory.project.getTipProfileNumberPoints()) ) {
+		if (ProjectFactory.project.gCodeBaseProfileSet.size() > 0 && ProjectFactory.project.gCodeTipProfileSet.size() > 0 &&
+			(ProjectFactory.project.gCodeBaseProfileSet.size() == ProjectFactory.project.gCodeTipProfileSet.size()) ) {
+
+			
+			Integer numPoints = ProjectFactory.project.gCodeBaseProfileSet.size();
+			List<GCodeCoordinate> baseCoordinates = new ArrayList<GCodeCoordinate>( ProjectFactory.project.gCodeBaseProfileSet );
+			List<GCodeCoordinate> tipCoordinates = new ArrayList<GCodeCoordinate>( ProjectFactory.project.gCodeTipProfileSet );
 			
 			this.gCodeLines.add("(Start processing coordinates)");
 			// Startkoordinaten
 			// baseCordinate = baseCoordinates.get(ProjectFactory.project.getBaseProfileNumberPoints() - 1);
 			// tipCordinate = tipCoordinates.get(ProjectFactory.project.getTipProfileNumberPoints() - 1);
-			baseCordinate = baseCoordinates.get(0);
-			tipCordinate = tipCoordinates.get(0);
 
 			// ===================================================================
 			// In eine hoehensichere Position gehen
@@ -625,6 +606,14 @@ public class WingCalculatorModel implements ProjectChangeEventListener{
 			// ===================================================================
 			// an die X (Z) Startposition horizontal gehen (Pfeilung/ Trapez)
 			// ===================================================================
+			
+			if (ProjectFactory.project.getCutBaseFirst()) {
+				baseCordinate = baseCoordinates.get(numPoints - 1);
+				tipCordinate = tipCoordinates.get(numPoints - 1);
+			} else {
+				baseCordinate = baseCoordinates.get(0);
+				tipCordinate = tipCoordinates.get(0);
+			}
 	
 			if (isRight) {
 				aLine = aPrefix
@@ -689,10 +678,12 @@ public class WingCalculatorModel implements ProjectChangeEventListener{
 			// ===================================================================
 
 			this.gCodeLines.add("(Start process profile coordinates)");
-			// untere Profillinie zuerst
-			//	for (int i = ProjectFactory.project.getBaseProfileNumberPoints() - 1; i >= 0; i-- ) {
-			// obere Profillinie zuerst
-			for (int i = 0; i < ProjectFactory.project.getBaseProfileNumberPoints() - 1; i++ ) {
+			
+			Boolean stillWork = true;
+			Integer i = 0;
+			if (ProjectFactory.project.getCutBaseFirst()) { i = numPoints - 1 ; };
+			
+			while (stillWork) {
 				
 				baseCordinate = baseCoordinates.get(i);
 				tipCordinate = tipCoordinates.get(i);
@@ -722,10 +713,15 @@ public class WingCalculatorModel implements ProjectChangeEventListener{
 							+ aPostfix;
 				}
 				this.gCodeLines.add(aLine);
+				
+				if (ProjectFactory.project.getCutBaseFirst()) { 
+					i = i - 1;
+					if (i < 0) {stillWork = false;};
+				} else {
+					i = i + 1;
+					if (i > numPoints - 1) {stillWork = false;};
+				};
 			}
-			
-			
-			
 			
 			this.gCodeLines.add("(End process profile coordinates)");
 			this.gCodeLines.add(aWaitLine);
@@ -768,20 +764,6 @@ public class WingCalculatorModel implements ProjectChangeEventListener{
 			
 			this.gCodeLines.add("(Goto zero horizontaly)");
 
-			System.out.println(
-					"<"
-					+ aPrefix
-					+ "X0.0"
-					+ " Y"
-					+ String.valueOf(saveHeight)
-					+ " Z0.0"
-					+ " A"
-					+ String.valueOf(saveHeight)
-					+ aPostfix			
-					+ ">"
-			);
-			
-			
 			this.gCodeLines.add(
 					aPrefix
 					+ "X0.0"
@@ -835,20 +817,35 @@ public class WingCalculatorModel implements ProjectChangeEventListener{
 	}
 	
 	public void drawDraft() {
-		this.calculateCoordinates();
-		this.sendWingCalculatorEvent(new WingCalculatorEvent(WingCalculatorEvent.EventType.CALCULATION_DONE_EVENT));
+//		this.calculateCoordinates();
+//		this.sendWingCalculatorEvent(new WingCalculatorEvent(WingCalculatorEvent.EventType.CALCULATION_DONE_EVENT));
 
 		
 	}
 
 	
 	// Speicherroutine
-	public void saveGcodeFile() {
-		int returnVal = fileChooser.showSaveDialog(null);
+	private void saveGcodeFile() {
+		
+		JFileChooser projectFileChooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+
+    	if (ProjectFactory.settings == null) {
+    		projectFileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+    	}
+    	else {
+    		projectFileChooser.setCurrentDirectory(new File(ProjectFactory.settings.getProjectDefaultPath()));    		
+    	}
+		
+		projectFileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		projectFileChooser.addChoosableFileFilter(new FileNameExtensionFilter("gcode Files", "gcode"));
+		projectFileChooser.setAcceptAllFileFilterUsed(false);
+
+		int returnVal = projectFileChooser.showSaveDialog(null);
+
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			try {
 				BufferedWriter aWriter = null;
-				File GCodeFile = fileChooser.getSelectedFile();
+				File GCodeFile = projectFileChooser.getSelectedFile();
 				File outputFile = new File(GCodeFile.getAbsolutePath());
 				if (!outputFile.exists()) {
 					outputFile.createNewFile();
@@ -869,7 +866,7 @@ public class WingCalculatorModel implements ProjectChangeEventListener{
 				System.out.println("File written Successfully");
 				
 			} catch (Exception ex) {
-				GUIHelpers.displayErrorDialog("An exception "+ex.getMessage()+" has occured reading profile coordinates.");
+				GUIHelpers.displayErrorDialog("An exception "+ex.getMessage()+" has occured writing G-Code File.");
 			}
 		}
 	}
