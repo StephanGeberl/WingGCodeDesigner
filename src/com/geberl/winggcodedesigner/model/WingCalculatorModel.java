@@ -816,12 +816,6 @@ public class WingCalculatorModel implements ProjectChangeEventListener{
 		this.saveGcodeFile();
 	}
 	
-	public void drawDraft() {
-//		this.calculateCoordinates();
-//		this.sendWingCalculatorEvent(new WingCalculatorEvent(WingCalculatorEvent.EventType.CALCULATION_DONE_EVENT));
-
-		
-	}
 
 	
 	// Speicherroutine

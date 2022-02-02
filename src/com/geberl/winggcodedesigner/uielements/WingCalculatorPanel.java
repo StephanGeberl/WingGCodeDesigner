@@ -151,12 +151,6 @@ public class WingCalculatorPanel extends JPanel implements WingCalculatorEventLi
 		btnSaveLeftGcode.setBounds(6, 235, 240, 27);
 		add(btnSaveLeftGcode);
 		
-		JButton btnDrawDraft = new JButton("Draw draft");
-		btnDrawDraft.addActionListener(new ActionListener() { 
-			public void actionPerformed(ActionEvent e) { wingCalculatorModel.drawDraft(); }
-		});
-		btnDrawDraft.setBounds(6, 265, 240, 27);
-		add(btnDrawDraft);
 
 		// ------------------
 		// Output
