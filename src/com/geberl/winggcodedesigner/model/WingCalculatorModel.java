@@ -81,6 +81,11 @@ public class WingCalculatorModel implements ProjectChangeEventListener{
 	private Double calcWingTipWrenchingOffset = 0.0;
 	private Double calcWingTipOffset = 0.0;
 	
+	private Double totalCordLength = 0.0;
+	private Double totalWidthTop = 0.0;
+	private Double totalWidthBottom = 0.0;
+	
+	
 
 	
 	private String statusMessage = "<html><b>Idle</b></html>";
@@ -111,11 +116,18 @@ public class WingCalculatorModel implements ProjectChangeEventListener{
 	public Double getTipDeltaSweep() {return this.tipDeltaSweep;};
 	public Double getTipDeltaAll() {return this.tipDeltaAll;};
 	
-	
 	public String getStatusMessage() {return this.statusMessage;}
 
 	public Double getTotalMaxX() {return this.totalMaxX;}
 	public Double getTotalMaxY() {return this.totalMaxY;}
+
+	public Double getTotalCordLength() { return this.totalCordLength; }
+	public Double getTotalWidthTop() { return this.totalWidthTop; }
+	public Double getTotalWidthBottom() { return this.totalWidthBottom; }
+
+	
+	
+	
 	
 	
 	// ==================
@@ -126,6 +138,11 @@ public class WingCalculatorModel implements ProjectChangeEventListener{
 	public Double getBaseCordLengthTipTotal() {return this.baseCordLengthTipTotal;}
 	public Double getBaseCordStartBaseTotal() {return this.baseCordStartBaseTotal;}
 	public Double getBaseCordStartTipTotal() {return this.baseCordStartTipTotal;}
+	
+	public void setTotalCordLength(Double totalCordLength) { this.totalCordLength = totalCordLength; }
+	public void setTotalWidthTop(Double totalWidthTop) { this.totalWidthTop = totalWidthTop; }
+	public void setTotalWidthBottom(Double totalWidthBottom) { this.totalWidthBottom = totalWidthBottom; }	
+
 
 	// ==================
 	// Calculations
@@ -501,6 +518,7 @@ public class WingCalculatorModel implements ProjectChangeEventListener{
 		while(iterBase.hasNext()) 
 		{
 			coordinate = iterBase.next();
+			
 			if (!coordinate.getIgnorePoint()) {
 				i = i + 1;
 				gCodeSet.add(new GCodeCoordinate( coordinate.getXDirectionCoordinate(),
@@ -902,6 +920,8 @@ public class WingCalculatorModel implements ProjectChangeEventListener{
 
 		
 	}
+
+
 
 
 }
