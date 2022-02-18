@@ -18,6 +18,7 @@ public class GCodeCoordinate {
 	// Laufnummer
 	private Integer coordNumber = 0;
 	private Boolean isNosePoint = false;
+	private Boolean isWait = false;
 	private Integer direction = 0;       // -1 Unterseite, +1 Oberseite
 	
 	// nach Richtungskorrektur, Holm und Innenausschnitt
@@ -70,6 +71,7 @@ public class GCodeCoordinate {
 	
 	public Integer getCoordNumber() { return this.coordNumber; }
 	public Boolean getIsNosePoint() { return this.isNosePoint; }
+	public Boolean getIsWait() { return this.isWait; }
 	public Integer getDirection() { return this.direction; }
 
 	// =========== Setter ========================
@@ -81,6 +83,7 @@ public class GCodeCoordinate {
 
 
 	public void setDirection(Integer direction) { this.direction = direction; }
+	public void setIsWait(Boolean isWait) { this.isWait = isWait; }
 
 	
 	// =========== Funktionen ========================

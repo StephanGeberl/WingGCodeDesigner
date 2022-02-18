@@ -36,6 +36,11 @@ public class Settings {
     private Double travelSpeed = 1000.0;
     private String projectDefaultPath = System.getProperty("user.home");
     private String profileDefaultPath = System.getProperty("user.home");
+    private String axisA = "X";
+    private String axisB = "Y";
+    private String axisC = "Z";
+    private String axisD = "A";
+    
 
     /**
      * 
@@ -59,6 +64,10 @@ public class Settings {
 	public void setTravelSpeed(Double aValue) { this.travelSpeed = aValue; this.setIsDirty(true); }
 	public void setProjectDefaultPath(String aValue) { this.projectDefaultPath = aValue; this.setIsDirty(true); }
 	public void setProfileDefaultPath(String aValue) { this.profileDefaultPath = aValue; this.setIsDirty(true); }
+	public void setAxisA(String axisA) { this.axisA = axisA; }
+	public void setAxisB(String axisB) { this.axisB = axisB; }
+	public void setAxisC(String axisC) { this.axisC = axisC; }
+	public void setAxisD(String axisD) { this.axisD = axisD; }
 	// ==================
 
 	public Boolean isDirty() { return isDirty; }
@@ -73,7 +82,13 @@ public class Settings {
 	public Double getTravelSpeed() {return this.travelSpeed;}
 	public String getProjectDefaultPath() { return this.projectDefaultPath; }
 	public String getProfileDefaultPath() { return this.profileDefaultPath; }
+	public String getAxisA() { return this.axisA; }
+	public String getAxisB() { return this.axisB; }
+	public String getAxisC() { return this.axisC; }
+	public String getAxisD() { return this.axisD; }
 	// ==================
+
+
 
 	
 }
