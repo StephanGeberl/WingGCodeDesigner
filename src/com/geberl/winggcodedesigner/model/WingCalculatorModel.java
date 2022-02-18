@@ -36,6 +36,8 @@ import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
 
+import org.apache.commons.io.FilenameUtils;
+
 import com.geberl.winggcodedesigner.utils.GUIHelpers;
 import com.geberl.winggcodedesigner.eventing.ProjectChangeEvent;
 import com.geberl.winggcodedesigner.eventing.ProjectChangeEventListener;
@@ -562,6 +564,8 @@ public class WingCalculatorModel implements ProjectChangeEventListener{
 	public void addHeader(Boolean isRight) {
 		
 		this.gCodeLines.add("(Wing Cutter G-Code)");
+		this.gCodeLines.add("(Project: " + ProjectFactory.project.getProjectName() + ")");
+		this.gCodeLines.add("(Measure: mm)");
 		if (isRight == true) {
 			this.gCodeLines.add("(Wingside: RIGHT)");
 		}
@@ -591,6 +595,11 @@ public class WingCalculatorModel implements ProjectChangeEventListener{
 		Double wireSpeed = SettingsFactory.settings.getWireSpeed();
 		Double travelSpeed = SettingsFactory.settings.getTravelSpeed();
 		
+		String axisA = SettingsFactory.settings.getAxisA();
+		String axisB = SettingsFactory.settings.getAxisB();
+		String axisC = SettingsFactory.settings.getAxisC();
+		String axisD = SettingsFactory.settings.getAxisD();
+		
 		String aLine = "";
 		String aPrefix = "G01 ";
 		String aPostfix = " F" + String.valueOf(wireSpeed.intValue());
@@ -616,8 +625,8 @@ public class WingCalculatorModel implements ProjectChangeEventListener{
 			this.gCodeLines.add("(Goto zero at save height)");
 			this.gCodeLines.add(
 					aPrefix
-					+ "X0.0 Y" + String.valueOf(saveHeight) 
-					+ " Z0.0 A" + String.valueOf(saveHeight)
+					+ axisA + "0.0 " + axisB + String.valueOf(saveHeight) 
+					+ " " + axisC + "0.0 " + axisD + String.valueOf(saveHeight)
 					+ aPostfixFast
 					);
 
@@ -635,24 +644,24 @@ public class WingCalculatorModel implements ProjectChangeEventListener{
 	
 			if (isRight) {
 				aLine = aPrefix
-						+ "X"
+						+ axisA
 						+ String.valueOf(baseCordinate.getXGcodeCoordinate())
-						+ " Y"
+						+ " " + axisB
 						+ String.valueOf(saveHeight)
-						+ " Z"
+						+ " " + axisC
 						+ String.valueOf(tipCordinate.getXGcodeCoordinate())
-						+ " A"
+						+ " " + axisD
 						+ String.valueOf(saveHeight)
 						+ aPostfixFast;
 			} else {
 				aLine = aPrefix
-						+ "X"
+						+ axisA
 						+ String.valueOf(tipCordinate.getXGcodeCoordinate())
-						+ " Y"
+						+ " " + axisB
 						+ String.valueOf(saveHeight)
-						+ " Z"
+						+ " " + axisC
 						+ String.valueOf(baseCordinate.getXGcodeCoordinate())
-						+ " A"
+						+ " " + axisD
 						+ String.valueOf(saveHeight)
 						+ aPostfixFast;
 			}
@@ -666,24 +675,24 @@ public class WingCalculatorModel implements ProjectChangeEventListener{
 			
 			if (isRight) {
 				aLine = aPrefix
-						+ "X"
+						+ axisA
 						+ String.valueOf(baseCordinate.getXGcodeCoordinate())
-						+ " Y"
+						+ " " + axisB
 						+ String.valueOf(baseCordinate.getYGcodeCoordinate())
-						+ " Z"
+						+ " " + axisC
 						+ String.valueOf(tipCordinate.getXGcodeCoordinate())
-						+ " A"
+						+ " " + axisD
 						+ String.valueOf(tipCordinate.getYGcodeCoordinate())
 						+ aPostfix;
 			} else {
 				aLine = aPrefix
-						+ "X"
+						+ axisA
 						+ String.valueOf(tipCordinate.getXGcodeCoordinate())
-						+ " Y"
+						+ " " + axisB
 						+ String.valueOf(tipCordinate.getYGcodeCoordinate())
-						+ " Z"
+						+ " " + axisC
 						+ String.valueOf(baseCordinate.getXGcodeCoordinate())
-						+ " A"
+						+ " " + axisD
 						+ String.valueOf(baseCordinate.getYGcodeCoordinate())
 						+ aPostfix;
 			}
@@ -709,24 +718,24 @@ public class WingCalculatorModel implements ProjectChangeEventListener{
 
 				if (isRight) {
 					aLine = aPrefix
-							+ "X"
+							+ axisA
 							+ String.valueOf(baseCordinate.getXGcodeCoordinate())
-							+ " Y"
+							+ " " + axisB
 							+ String.valueOf(baseCordinate.getYGcodeCoordinate())
-							+ " Z"
+							+ " " + axisC
 							+ String.valueOf(tipCordinate.getXGcodeCoordinate())
-							+ " A"
+							+ " " + axisD
 							+ String.valueOf(tipCordinate.getYGcodeCoordinate())
 							+ aPostfix;
 				} else {
 					aLine = aPrefix
-							+ "X"
+							+ axisA
 							+ String.valueOf(tipCordinate.getXGcodeCoordinate())
-							+ " Y"
+							+ " " + axisB
 							+ String.valueOf(tipCordinate.getYGcodeCoordinate())
-							+ " Z"
+							+ " " + axisC
 							+ String.valueOf(baseCordinate.getXGcodeCoordinate())
-							+ " A"
+							+ " " + axisD
 							+ String.valueOf(baseCordinate.getYGcodeCoordinate())
 							+ aPostfix;
 				}
@@ -751,24 +760,24 @@ public class WingCalculatorModel implements ProjectChangeEventListener{
 			// Achtung, wir nutzen die letzten Koordinaten des Profils
 			if (isRight) {
 				aLine = aPrefix
-						+ "X"
+						+ axisA
 						+ String.valueOf(baseCordinate.getXGcodeCoordinate())
-						+ " Y"
+						+ " " + axisB
 						+ String.valueOf(saveHeight)
-						+ " Z"
+						+ " " + axisC
 						+ String.valueOf(tipCordinate.getXGcodeCoordinate())
-						+ " A"
+						+ " " + axisD
 						+ String.valueOf(saveHeight)
 						+ aPostfix;
 			} else {
 				aLine = aPrefix
-						+ "X"
+						+ axisA
 						+ String.valueOf(tipCordinate.getXGcodeCoordinate())
-						+ " Y"
+						+ " " + axisB
 						+ String.valueOf(saveHeight)
-						+ " Z"
+						+ " " + axisC
 						+ String.valueOf(baseCordinate.getXGcodeCoordinate())
-						+ " A"
+						+ " " + axisD
 						+ String.valueOf(saveHeight)
 						+ aPostfix;
 			}
@@ -784,11 +793,11 @@ public class WingCalculatorModel implements ProjectChangeEventListener{
 
 			this.gCodeLines.add(
 					aPrefix
-					+ "X0.0"
-					+ " Y"
+					+ axisA + "0.0"
+					+ " " + axisB
 					+ String.valueOf(saveHeight)
-					+ " Z0.0"
-					+ " A"
+					+ " " + axisC + "0.0"
+					+ " " + axisD
 					+ String.valueOf(saveHeight)
 					+ aPostfix
 					);
@@ -799,7 +808,10 @@ public class WingCalculatorModel implements ProjectChangeEventListener{
 			this.gCodeLines.add("(Goto zero verticaly)");
 			this.gCodeLines.add(
 					aPrefix
-					+ "X0.0 Y0.0 Z0.0 A0.0"
+					+ axisA + "0.0"
+					+ " " + axisB + "0.0"
+					+ " " + axisC + "0.0"
+					+ " " + axisD + "0.0"
 					+ aPostfixFast
 					);
 
@@ -858,6 +870,13 @@ public class WingCalculatorModel implements ProjectChangeEventListener{
 			try {
 				BufferedWriter aWriter = null;
 				File GCodeFile = projectFileChooser.getSelectedFile();
+	
+				if (FilenameUtils.getExtension(GCodeFile.getName()).equalsIgnoreCase("gcode")) {
+				    // filename is OK as-is
+				} else {
+					GCodeFile = new File(GCodeFile.getParentFile(), FilenameUtils.getBaseName(GCodeFile.getName())+".gcode");
+				}
+				
 				File outputFile = new File(GCodeFile.getAbsolutePath());
 				if (!outputFile.exists()) {
 					outputFile.createNewFile();

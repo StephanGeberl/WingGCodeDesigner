@@ -36,7 +36,7 @@ public class SettingsFactory {
 	private static final Logger logger = Logger.getLogger(SettingsFactory.class.getName());
     private static final String USER_HOME = "user.home";
     private static final String FALSE = "false";
-    public static final String SETTINGS_DIRECTORY_NAME = "WGCD";
+    public static final String SETTINGS_DIRECTORY_NAME = "WingGCodeDesigner";
     public static final String PROPERTIES_FILENAME = "WingGCodeDesigner.properties";
     public static final String JSON_FILENAME = "WingGCodeDesigner.json";
     public static final String MAC_LIBRARY = "/Library/Preferences/";

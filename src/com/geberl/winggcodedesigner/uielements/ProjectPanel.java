@@ -267,7 +267,8 @@ public class ProjectPanel extends JPanel {
 		btnSaveProject = new JButton("Save");
 		btnSaveProject.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ProjectFactory.saveProject();
+				if (project.getProjectPath() == "") { ProjectFactory.saveProjectAs(); }
+				else { ProjectFactory.saveProject(); };
 				setPanelValues();
 				setProfileValues();
 				inputProjectPath.setText(project.getProjectPath());
