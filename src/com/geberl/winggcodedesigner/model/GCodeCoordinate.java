@@ -48,11 +48,13 @@ public class GCodeCoordinate {
 							Double yDirectionCoordinate,
 							Integer coordNumber,
 							Boolean isNosePoint,
+							Boolean isWait,
 							Integer direction )
 	{
 		this.coordNumber = coordNumber;
 		this.direction = direction;      // -1 Unterseite, +1 Oberseite
 		this.isNosePoint = isNosePoint;
+		this.isWait = isWait;
 		
 		this.xDirectionCoordinate = xDirectionCoordinate;
 		this.yDirectionCoordinate = yDirectionCoordinate;

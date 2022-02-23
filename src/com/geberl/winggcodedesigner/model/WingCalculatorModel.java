@@ -27,8 +27,8 @@ import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.LinkedList;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -58,7 +58,7 @@ public class WingCalculatorModel implements ProjectChangeEventListener{
 	private final Collection<WingCalculatorEventListener> wingCalculatorEventListener = new ArrayList<>();
 	
 	
-	private LinkedHashSet<String> gCodeLines = new LinkedHashSet<String>();
+	private LinkedList<String> gCodeLines = new LinkedList<String>();
 	// =====================================
 	
 	// calculated
@@ -476,7 +476,6 @@ public class WingCalculatorModel implements ProjectChangeEventListener{
 		}
 
 		// Endgueltige Koordinatenliste zusammensetzen
-		// Iterator<ProfileCoordinate> iterTop = additionalProfileSetTop.descendingIterator();
 		Iterator<ProfileCoordinate> iterTop = additionalProfileSetTop.descendingIterator();
 		while(iterTop.hasNext()) 
 		{
@@ -512,7 +511,9 @@ public class WingCalculatorModel implements ProjectChangeEventListener{
 	private void calculateGCodeList(LinkedHashSet<ProfileCoordinate> profileSet, LinkedHashSet<GCodeCoordinate> gCodeSet) {
 		// Wurzel
 		Integer i = 0;
+		Boolean isWait = false;
 		ProfileCoordinate coordinate = null;
+		ProfileCoordinate oldCoordinate = null;
 		
 		gCodeSet.clear();
 		
@@ -521,12 +522,22 @@ public class WingCalculatorModel implements ProjectChangeEventListener{
 		{
 			coordinate = iterBase.next();
 			
+			isWait = false;
+			// Wenn nicht die erste Koordinate und der Letzte Punkt wurde ignoriert (kommet von Addition zurück) ==> dann warte
+			if (oldCoordinate != null && oldCoordinate.getIgnorePoint()) { isWait = true; }; 
+			// Wenn Nasenkoordinate ==> dann warte
+			if (coordinate.getIsNosePoint()) { isWait = true; }; 
+			// Wenn eine Addition folgt ==> dann warte
+			if (!coordinate.profileAddition.isEmpty()) { isWait = true; };
+			
 			if (!coordinate.getIgnorePoint()) {
 				i = i + 1;
+				
 				gCodeSet.add(new GCodeCoordinate( coordinate.getXDirectionCoordinate(),
 											 	  coordinate.getYDirectionCoordinate(),
 											 	  i,
 											 	  coordinate.getIsNosePoint(),
+											 	  isWait,
 											 	  coordinate.getDirection()
 												));
 				
@@ -541,20 +552,19 @@ public class WingCalculatorModel implements ProjectChangeEventListener{
 														 	  coordinate.getYDirectionCoordinate(),
 														 	  i,
 														 	  false,
+														 	  false,
 														 	  0
 															));
 						}
 					}
 				}
 			}
+			
+			oldCoordinate = coordinate;
+			
 		}
 
 	}
-	
-	
-	
-	
-	
 	
 	// ==================
 	// G-Code berechnen und in das Array schreiben
@@ -740,6 +750,10 @@ public class WingCalculatorModel implements ProjectChangeEventListener{
 							+ aPostfix;
 				}
 				this.gCodeLines.add(aLine);
+				
+				if(baseCordinate.getIsWait()) {
+					this.gCodeLines.add(aWaitLine);
+				}
 				
 				if (ProjectFactory.project.getCutBaseFirst()) { 
 					i = i - 1;
