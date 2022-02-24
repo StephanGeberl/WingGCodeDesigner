@@ -41,6 +41,8 @@ import javax.swing.text.NumberFormatter;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.beans.PropertyChangeEvent;
+import java.awt.Panel;
+import java.awt.Canvas;
 
 public class SettingsPanel extends JPanel {
 
@@ -59,7 +61,7 @@ public class SettingsPanel extends JPanel {
 		
 		setForeground(Color.LIGHT_GRAY);
 		this.setLayout(null);
-		this.setPreferredSize(new Dimension(826, 367));
+		this.setPreferredSize(new Dimension(826, 796));
 		
 		this.createControls();
 	}
@@ -188,6 +190,21 @@ public class SettingsPanel extends JPanel {
 		add(inputTravelSpeed);
 		// ------------------------------------------
 
+		JFormattedTextField inputAxisA = new JFormattedTextField();
+		inputAxisA.setText(String.valueOf(settings.getAxisA()));
+		inputAxisA.addPropertyChangeListener(new PropertyChangeListener() {
+			public void propertyChange(PropertyChangeEvent evt) {
+				if (inputAxisA.getValue() != null) { settings.setAxisA(inputAxisA.getText() ); }
+			}
+		});
+		inputAxisA.setBounds(300, 182, 40, 25);
+		add(inputAxisA);
+		// ------------------------------------------
+		
+		
+		
+		
+		
 		// ------------------------------------------
 		JTextField inputDefaultProjectDirectory = new JTextField();
 		inputDefaultProjectDirectory.setEditable(false);
@@ -231,7 +248,7 @@ public class SettingsPanel extends JPanel {
 				SettingsFactory.saveSettings();
 				}
 		});
-		btnSaveParameters.setBounds(16, 270, 208, 27);
+		btnSaveParameters.setBounds(16, 734, 208, 27);
 		add(btnSaveParameters);
 		btnSaveParameters.setEnabled(true);
 		// ===============================================================
@@ -276,6 +293,11 @@ public class SettingsPanel extends JPanel {
 		lblInputCordOffset_1_1_1_1.setBounds(16, 233, 167, 25);
 		add(lblInputCordOffset_1_1_1_1);
 		
+		JPanelBackground axisPicturePanel = new JPanelBackground();
+		axisPicturePanel.setBounds(16, 295, 324, 267);
+		axisPicturePanel.setBackgroundImagePath("/resources/icons/HotWireBildSoftware.gif");
+		add(axisPicturePanel);
+		
 		
 	}
     
@@ -308,5 +330,4 @@ public class SettingsPanel extends JPanel {
 		return newPath;
 		
 	}
-
 }
