@@ -19,13 +19,8 @@
 
 package com.geberl.winggcodedesigner.model;
 
-import java.util.logging.Logger;
-
 public class Settings {
 	
-    private static final Logger logger = Logger.getLogger(Settings.class.getName());
-    private transient Boolean isDirty = false;
-
     private Double wireLength = 800.0;
     private Double xAxisMax = 300.0;
     private Double yAxisMax = 120.0;
@@ -46,31 +41,28 @@ public class Settings {
      * 
      */
     public Settings() {
-        logger.fine("Initializing settings ...");
+
     }
 
 	// ==================
 	// Parameter
 	// ==================
-	public void setIsDirty(Boolean aValue) { this.isDirty = aValue; }
 	
-	public void setWireLength(Double aValue) { this.wireLength = aValue; this.setIsDirty(true); }
-	public void setXAxisMax(Double aValue) { this.xAxisMax = aValue; this.setIsDirty(true); }
-	public void setYAxisMax(Double aValue) { this.yAxisMax = aValue; this.setIsDirty(true); }
-	public void setStartDistance(Double aValue) { this.startDistance = aValue; this.setIsDirty(true); }
-	public void setSaveHeight(Double aValue) { this.saveHeight = aValue; this.setIsDirty(true); }
-	public void setPause(Double aValue) { this.pause = aValue; this.setIsDirty(true); }
-	public void setWireSpeed(Double aValue) { this.wireSpeed = aValue; this.setIsDirty(true); }
-	public void setTravelSpeed(Double aValue) { this.travelSpeed = aValue; this.setIsDirty(true); }
-	public void setProjectDefaultPath(String aValue) { this.projectDefaultPath = aValue; this.setIsDirty(true); }
-	public void setProfileDefaultPath(String aValue) { this.profileDefaultPath = aValue; this.setIsDirty(true); }
+	public void setWireLength(Double aValue) { this.wireLength = aValue; }
+	public void setXAxisMax(Double aValue) { this.xAxisMax = aValue; }
+	public void setYAxisMax(Double aValue) { this.yAxisMax = aValue; }
+	public void setStartDistance(Double aValue) { this.startDistance = aValue; }
+	public void setSaveHeight(Double aValue) { this.saveHeight = aValue; }
+	public void setPause(Double aValue) { this.pause = aValue; }
+	public void setWireSpeed(Double aValue) { this.wireSpeed = aValue; }
+	public void setTravelSpeed(Double aValue) { this.travelSpeed = aValue; }
+	public void setProjectDefaultPath(String aValue) { this.projectDefaultPath = aValue; }
+	public void setProfileDefaultPath(String aValue) { this.profileDefaultPath = aValue; }
 	public void setAxisA(String axisA) { this.axisA = axisA; }
 	public void setAxisB(String axisB) { this.axisB = axisB; }
 	public void setAxisC(String axisC) { this.axisC = axisC; }
 	public void setAxisD(String axisD) { this.axisD = axisD; }
 	// ==================
-
-	public Boolean isDirty() { return isDirty; }
 
 	public Double getWireLength() {return this.wireLength;}
 	public Double getXAxisMax() {return this.xAxisMax;}
@@ -87,8 +79,5 @@ public class Settings {
 	public String getAxisC() { return this.axisC; }
 	public String getAxisD() { return this.axisD; }
 	// ==================
-
-
-
 	
 }

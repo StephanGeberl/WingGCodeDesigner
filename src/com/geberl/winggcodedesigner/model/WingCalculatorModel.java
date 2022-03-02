@@ -236,8 +236,6 @@ public class WingCalculatorModel implements ProjectChangeEventListener{
 			this.calculateInset(ProjectFactory.project.tipProfileSet, ProjectFactory.project.getTipCordLength());
 		}
 		
-		// noch nicht implementiert
-		
 		// Listen generieren
 		this.calculateGCodeList(ProjectFactory.project.baseProfileSet, ProjectFactory.project.gCodeBaseProfileSet);
 		this.calculateGCodeList(ProjectFactory.project.tipProfileSet, ProjectFactory.project.gCodeTipProfileSet);
@@ -317,15 +315,15 @@ public class WingCalculatorModel implements ProjectChangeEventListener{
 		Integer sparMarker = 0;
 		Double sparYDirectionCoordinate = 0.0;
 		
-		sparTopStart = 1 - (ProjectFactory.project.getSparOffsetTop()/100);
-		sparBottomStart = 1 - (ProjectFactory.project.getSparOffsetBottom()/100);
 		
 		sparTopWidth = ProjectFactory.project.getSparWidthTop() / aReferenceWidth;
 		sparTopHeight = ProjectFactory.project.getSparHeightTop() / aReferenceWidth;
+		sparTopStart = 1 - ((ProjectFactory.project.getSparOffsetTop()/100) - (sparTopWidth/2));
 		sparTopEnd = sparTopStart - sparTopWidth;
 		
 		sparBottomWidth = ProjectFactory.project.getSparWidthBottom() / aReferenceWidth;
 		sparBottomHeight = ProjectFactory.project.getSparHeightBottom() / aReferenceWidth;
+		sparBottomStart = 1 - ((ProjectFactory.project.getSparOffsetBottom()/100) - (sparBottomWidth/2));
 		sparBottomEnd = sparBottomStart - sparBottomWidth;
 		
 		Iterator<ProfileCoordinate> iterBase = aProfileSet.iterator();
@@ -430,6 +428,7 @@ public class WingCalculatorModel implements ProjectChangeEventListener{
 		Double insetCrossStart = 0.0;
 		Double insetCrossEnd = 0.0;
 		Double insertDelta = 0.0;
+		Double crossPeaceWidth = 0.0;
 		
 		ProfileCoordinate coordinate = null;
 
@@ -440,8 +439,9 @@ public class WingCalculatorModel implements ProjectChangeEventListener{
 		insertDelta = ProjectFactory.project.getWallThickness()/ aReferenceWidth;
 		insetStart = 1 - (ProjectFactory.project.getFrontHollowOffset()/100);
 		insetEnd = (ProjectFactory.project.getBackHollowOffset()/100);
-		insetCrossStart = 1 - (ProjectFactory.project.getCrosspieceOffset()/100);
-		insetCrossEnd = 1 - ((ProjectFactory.project.getCrosspieceOffset()/100) - (ProjectFactory.project.getCrosspieceWidth() / aReferenceWidth));
+		crossPeaceWidth = (ProjectFactory.project.getCrosspieceWidth() / aReferenceWidth);
+		insetCrossStart = 1 - ((ProjectFactory.project.getCrosspieceOffset()/100) + (crossPeaceWidth/2));
+		insetCrossEnd = 1 - ((ProjectFactory.project.getCrosspieceOffset()/100) - (crossPeaceWidth/2));
 		
 		Iterator<ProfileCoordinate> iterBase = aProfileSet.iterator();
 		while(iterBase.hasNext()) 

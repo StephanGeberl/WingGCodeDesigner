@@ -65,18 +65,11 @@ public class WingCalculatorPanel extends JPanel implements WingCalculatorEventLi
 	public WingCalculatorPanel(WingCalculatorModel anWingDesignerModel) {
 		
 		this.wingCalculatorModel = anWingDesignerModel;
-		
-		// Test
-		
-		
-		setForeground(Color.LIGHT_GRAY);
+
 		this.setLayout(null);
 		this.setPreferredSize(new Dimension(940, 460));
 		
 		this.createControls();
-		
-//		wingCalculatorModel.setBaseDirection(true);
-//		wingCalculatorModel.setTipDirection(true);
 	}
 
 	//	@PostConstruct
@@ -117,38 +110,20 @@ public class WingCalculatorPanel extends JPanel implements WingCalculatorEventLi
 		degreeFormatter.setMaximum(90.00);
 		degreeFormatter.setAllowsInvalid(false);
 		
-		// ===============================================================
-
-//		ProfilesDrawPanel profilePanel = new ProfilesDrawPanel(wingCalculatorModel);
-//		profilePanel.setBounds(270, 8, 660, 210);
-//		add(profilePanel);
-//		wingCalculatorModel.addWingCalculatorEventListener(profilePanel);
-		
-		// ===============================================================
-		
-//		WingDrawPanel wingPanel = new WingDrawPanel(wingCalculatorModel);
-//		wingPanel.setBounds(270, 220, 660, 210);
-//		add(wingPanel);
-//		wingCalculatorModel.addWingCalculatorEventListener(wingPanel);
-		
-		// =========== Status Message ===========================
-		// statusMessage.setBounds(244, 337, 403, 25);
-		// add(statusMessage);
-		// =======================================================
 		
 		// =========== Action Buttons ============================
 		JButton btnSaveRightGcode = new JButton("Save right GCode");
 		btnSaveRightGcode.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) { wingCalculatorModel.saveRightGcodeList(); }
 		});
-		btnSaveRightGcode.setBounds(6, 205, 240, 27);
+		btnSaveRightGcode.setBounds(6, 225, 240, 35);
 		add(btnSaveRightGcode);
 
 		JButton btnSaveLeftGcode = new JButton("Save left GCode");
 		btnSaveLeftGcode.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) { wingCalculatorModel.saveLeftGcodeList(); }
 		});
-		btnSaveLeftGcode.setBounds(6, 235, 240, 27);
+		btnSaveLeftGcode.setBounds(6, 265, 240, 35);
 		add(btnSaveLeftGcode);
 		
 

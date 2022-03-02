@@ -19,7 +19,6 @@
 package com.geberl.winggcodedesigner.uielements;
 
 import java.awt.Dimension;
-//import javax.annotation.PostConstruct;
 import javax.swing.JPanel;
 import javax.swing.JButton;
 
@@ -32,7 +31,6 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.awt.event.ActionEvent;
-import java.awt.Color;
 import javax.swing.JFileChooser;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
@@ -41,8 +39,8 @@ import javax.swing.text.NumberFormatter;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.beans.PropertyChangeEvent;
-import java.awt.Panel;
-import java.awt.Canvas;
+import java.awt.Font;
+import java.awt.FlowLayout;
 
 public class SettingsPanel extends JPanel {
 
@@ -59,9 +57,9 @@ public class SettingsPanel extends JPanel {
 		
 		this.settings = aSettings;
 		
-		setForeground(Color.LIGHT_GRAY);
+		// setForeground(Color.LIGHT_GRAY);
 		this.setLayout(null);
-		this.setPreferredSize(new Dimension(826, 796));
+		this.setPreferredSize(new Dimension(721, 574));
 		
 		this.createControls();
 	}
@@ -189,33 +187,17 @@ public class SettingsPanel extends JPanel {
 		inputTravelSpeed.setBounds(195, 182, 98, 25);
 		add(inputTravelSpeed);
 		// ------------------------------------------
-
-		JFormattedTextField inputAxisA = new JFormattedTextField();
-		inputAxisA.setText(String.valueOf(settings.getAxisA()));
-		inputAxisA.addPropertyChangeListener(new PropertyChangeListener() {
-			public void propertyChange(PropertyChangeEvent evt) {
-				if (inputAxisA.getValue() != null) { settings.setAxisA(inputAxisA.getText() ); }
-			}
-		});
-		inputAxisA.setBounds(300, 182, 40, 25);
-		add(inputAxisA);
-		// ------------------------------------------
-		
-		
-		
-		
-		
 		// ------------------------------------------
 		JTextField inputDefaultProjectDirectory = new JTextField();
 		inputDefaultProjectDirectory.setEditable(false);
 		inputDefaultProjectDirectory.setText(settings.getProjectDefaultPath());
-		inputDefaultProjectDirectory.setBounds(195, 209, 432, 25);
+		inputDefaultProjectDirectory.setBounds(195, 209, 400, 25);
 		add(inputDefaultProjectDirectory);
 		// ------------------------------------------
 		JTextField inputDefaultProfileDirectory = new JTextField();
 		inputDefaultProfileDirectory.setEditable(false);
 		inputDefaultProfileDirectory.setText(settings.getProfileDefaultPath());
-		inputDefaultProfileDirectory.setBounds(195, 233, 432, 25);
+		inputDefaultProfileDirectory.setBounds(195, 233, 400, 25);
 		add(inputDefaultProfileDirectory);
 		// ------------------------------------------
 		// ------------------------------------------
@@ -224,10 +206,10 @@ public class SettingsPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				String aNewPath = getDefaultPath( inputDefaultProjectDirectory.getText() );
 				inputDefaultProjectDirectory.setText(aNewPath);
-				settings.setProjectDefaultPath(aNewPath);	
+				settings.setProjectDefaultPath(aNewPath);
 			}
 		});
-		btnChangeProjectDirectory.setBounds(639, 209, 100, 27);
+		btnChangeProjectDirectory.setBounds(602, 209, 100, 27);
 		add(btnChangeProjectDirectory);
 		// ------------------------------------------
 		JButton btnChangeProfileDirectory = new JButton("Change ...");
@@ -235,20 +217,61 @@ public class SettingsPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				String aNewPath = getDefaultPath( inputDefaultProfileDirectory.getText() );
 				inputDefaultProfileDirectory.setText(aNewPath);
-				settings.setProfileDefaultPath(aNewPath);	
+				settings.setProfileDefaultPath(aNewPath);
 			}
 		});
-		btnChangeProfileDirectory.setBounds(639, 233, 100, 27);
+		btnChangeProfileDirectory.setBounds(602, 233, 100, 27);
 		add(btnChangeProfileDirectory);
 		// ------------------------------------------
-		
+		// ------------------------------------------
+		JFormattedTextField inputAxisA = new JFormattedTextField();
+		inputAxisA.setBounds(25, 513, 45, 27);
+		add(inputAxisA);
+		inputAxisA.setText(String.valueOf(settings.getAxisA()));
+		inputAxisA.addPropertyChangeListener(new PropertyChangeListener() {
+			public void propertyChange(PropertyChangeEvent evt) {
+				settings.setAxisA(inputAxisA.getText() );
+			}
+		});
+		// ------------------------------------------
+		JFormattedTextField inputAxisB = new JFormattedTextField();
+		inputAxisB.setBounds(55, 323, 45, 27);
+		add(inputAxisB);
+		inputAxisB.setText(String.valueOf(settings.getAxisB()));
+		inputAxisB.addPropertyChangeListener(new PropertyChangeListener() {
+			public void propertyChange(PropertyChangeEvent evt) {
+				settings.setAxisB(inputAxisB.getText() );
+			}
+		});
+		// ------------------------------------------
+		JFormattedTextField inputAxisC = new JFormattedTextField();
+		inputAxisC.setBounds(200, 513, 45, 27);
+		add(inputAxisC);
+		inputAxisC.setText(String.valueOf(settings.getAxisC()));
+		inputAxisC.addPropertyChangeListener(new PropertyChangeListener() {
+			public void propertyChange(PropertyChangeEvent evt) {
+				settings.setAxisC(inputAxisC.getText() );
+			}
+		});
+		// ------------------------------------------
+		JFormattedTextField inputAxisD = new JFormattedTextField();
+		inputAxisD.setBounds(190, 323, 45, 27);
+		add(inputAxisD);
+		inputAxisD.setText(String.valueOf(settings.getAxisD()));
+		inputAxisD.addPropertyChangeListener(new PropertyChangeListener() {
+			public void propertyChange(PropertyChangeEvent evt) {
+				settings.setAxisD(inputAxisD.getText() );
+			}
+		});
+		// ===============================================================
+
 		btnSaveParameters = new JButton("Save Parameters");
 		btnSaveParameters.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				SettingsFactory.saveSettings();
 				}
 		});
-		btnSaveParameters.setBounds(16, 734, 208, 27);
+		btnSaveParameters.setBounds(494, 270, 208, 27);
 		add(btnSaveParameters);
 		btnSaveParameters.setEnabled(true);
 		// ===============================================================
@@ -293,11 +316,30 @@ public class SettingsPanel extends JPanel {
 		lblInputCordOffset_1_1_1_1.setBounds(16, 233, 167, 25);
 		add(lblInputCordOffset_1_1_1_1);
 		
+		JLabel lblInputCordOffset_1_1_1_1_1 = new JLabel("Axis Configuration");
+		lblInputCordOffset_1_1_1_1_1.setFont(new Font("DejaVu Sans", Font.BOLD, 12));
+		lblInputCordOffset_1_1_1_1_1.setBounds(16, 301, 167, 25);
+		add(lblInputCordOffset_1_1_1_1_1);
+		
 		JPanelBackground axisPicturePanel = new JPanelBackground();
-		axisPicturePanel.setBounds(16, 295, 324, 267);
+		FlowLayout flowLayout = (FlowLayout) axisPicturePanel.getLayout();
+		flowLayout.setVgap(0);
+		flowLayout.setHgap(0);
+		flowLayout.setAlignment(FlowLayout.LEFT);
+		axisPicturePanel.setBorder(null);
+		axisPicturePanel.setBounds(16, 351, 255, 163);
 		axisPicturePanel.setBackgroundImagePath("/resources/icons/HotWireBildSoftware.gif");
 		add(axisPicturePanel);
-		
+
+		JPanelBackground settingsPicturePanel = new JPanelBackground();
+		FlowLayout flowLayout2 = (FlowLayout) settingsPicturePanel.getLayout();
+		flowLayout2.setVgap(0);
+		flowLayout2.setHgap(0);
+		flowLayout2.setAlignment(FlowLayout.LEFT);
+		settingsPicturePanel.setBorder(null);
+		settingsPicturePanel.setBounds(283, 351, 411, 175);
+		settingsPicturePanel.setBackgroundImagePath("/resources/icons/HotWireBildSettings.gif");
+		add(settingsPicturePanel);
 		
 	}
     

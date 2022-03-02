@@ -20,10 +20,7 @@ package com.geberl.winggcodedesigner.model;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -35,7 +32,7 @@ public class SettingsFactory {
 	
 	private static final Logger logger = Logger.getLogger(SettingsFactory.class.getName());
     private static final String USER_HOME = "user.home";
-    private static final String FALSE = "false";
+//    private static final String FALSE = "false";
     public static final String SETTINGS_DIRECTORY_NAME = "WingGCodeDesigner";
     public static final String PROPERTIES_FILENAME = "WingGCodeDesigner.properties";
     public static final String JSON_FILENAME = "WingGCodeDesigner.json";
@@ -64,7 +61,6 @@ public class SettingsFactory {
         if (settings == null) {
             settings = new Settings();
         }
-        settings.setIsDirty(false);
         return settings;
     }
 
@@ -76,7 +72,6 @@ public class SettingsFactory {
             try (FileWriter fileWriter = new FileWriter(jsonFile)) {
                 Gson gson = new GsonBuilder().setPrettyPrinting().create();
                 fileWriter.write(gson.toJson(settings, Settings.class));
-                settings.setIsDirty(false);
             }
          } catch (Exception e) {
             e.printStackTrace();
