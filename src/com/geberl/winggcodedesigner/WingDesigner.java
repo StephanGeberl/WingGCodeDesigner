@@ -21,12 +21,9 @@ package com.geberl.winggcodedesigner;
 
 import java.awt.Container;
 import java.awt.Font;
-
+import java.net.URL;
 import javax.swing.*;
-
-
 import java.awt.BorderLayout;
-
 import com.geberl.winggcodedesigner.model.Project;
 import com.geberl.winggcodedesigner.model.ProjectFactory;
 import com.geberl.winggcodedesigner.model.Settings;
@@ -63,6 +60,13 @@ public class WingDesigner extends JFrame {
         Project project;
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
+        ImageIcon myAppImage = loadIcon("/resources/icons/AirplaneIcon01.gif");
+        if(myAppImage != null)
+            setIconImage(myAppImage.getImage());
+        
+        
+        
 
         int frameWidth = 960;
         int frameHeight = 750;
@@ -160,5 +164,13 @@ public class WingDesigner extends JFrame {
 
     }
 
+    private ImageIcon loadIcon(String strPath)
+    {
+        URL imgURL = this.getClass().getResource(strPath);
+        if(imgURL != null)
+            return new ImageIcon(imgURL);
+        else
+            return null;
+    }
 
 }

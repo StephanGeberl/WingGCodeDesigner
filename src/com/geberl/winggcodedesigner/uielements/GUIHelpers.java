@@ -16,7 +16,7 @@
     You should have received a copy of the GNU General Public License
     along with UGS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.geberl.winggcodedesigner.utils;
+package com.geberl.winggcodedesigner.uielements;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;

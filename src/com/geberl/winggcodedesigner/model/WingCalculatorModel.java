@@ -38,11 +38,11 @@ import javax.swing.filechooser.FileSystemView;
 
 import org.apache.commons.io.FilenameUtils;
 
-import com.geberl.winggcodedesigner.utils.GUIHelpers;
 import com.geberl.winggcodedesigner.eventing.ProjectChangeEvent;
 import com.geberl.winggcodedesigner.eventing.ProjectChangeEventListener;
 import com.geberl.winggcodedesigner.eventing.WingCalculatorEvent;
 import com.geberl.winggcodedesigner.eventing.WingCalculatorEventListener;
+import com.geberl.winggcodedesigner.uielements.GUIHelpers;
  
 
 /**
@@ -341,31 +341,30 @@ public class WingCalculatorModel implements ProjectChangeEventListener{
 					
 					coordinate.setIgnorePoint(true);
 					sparMarker = sparMarker + 1;
+					preCoordinate.setSetWaitAfterCoordinate(true);
 					
 					if(sparMarker == 1) {
 						additionalProfileSet = new LinkedHashSet<ProfileCoordinate>();
 						
 						anchorCoordinate = preCoordinate;
-						sparYDirectionCoordinate = anchorCoordinate.getYDirectionCoordinate();
+						// sparYDirectionCoordinate = anchorCoordinate.getYDirectionCoordinate();
+						sparYDirectionCoordinate = coordinate.getYDirectionCoordinate();
 						Double sparXDirectionCoordinate = sparTopEnd;
 						
-						additionalProfileSet.add(new ProfileCoordinate(sparXDirectionCoordinate, sparYDirectionCoordinate));
-						additionalProfileSet.add(new ProfileCoordinate(sparXDirectionCoordinate, coordinate.getYDirectionCoordinate() - sparTopHeight));
+						additionalProfileSet.add(new ProfileCoordinate(sparXDirectionCoordinate, sparYDirectionCoordinate, false));
+						additionalProfileSet.add(new ProfileCoordinate(sparXDirectionCoordinate, coordinate.getYDirectionCoordinate() - sparTopHeight, false));
 						
 					}
 					else {
 						Double sparXDirectionCoordinate = coordinate.getXDirectionCoordinate();
-						additionalProfileSet.add(new ProfileCoordinate(sparXDirectionCoordinate, coordinate.getYDirectionCoordinate() - sparTopHeight));
-						
-						anchorCoordinate.profileAddition = additionalProfileSet;
-						//sparMarker = 0;
+						additionalProfileSet.add(new ProfileCoordinate(sparXDirectionCoordinate, coordinate.getYDirectionCoordinate() - sparTopHeight, false));
 					}
 				}
 				else {
 					if (sparMarker > 0) {
 						Double sparXDirectionCoordinate = sparTopStart;
-						additionalProfileSet.add(new ProfileCoordinate(sparXDirectionCoordinate, coordinate.getYDirectionCoordinate() - sparTopHeight));
-						additionalProfileSet.add(new ProfileCoordinate(sparXDirectionCoordinate, coordinate.getYDirectionCoordinate()));
+						additionalProfileSet.add(new ProfileCoordinate(sparXDirectionCoordinate, coordinate.getYDirectionCoordinate() - sparTopHeight, false));
+						additionalProfileSet.add(new ProfileCoordinate(sparXDirectionCoordinate, coordinate.getYDirectionCoordinate(), true));
 						
 						anchorCoordinate.profileAddition = additionalProfileSet;
 						sparMarker = 0;
@@ -381,6 +380,7 @@ public class WingCalculatorModel implements ProjectChangeEventListener{
 					
 					coordinate.setIgnorePoint(true);
 					sparMarker = sparMarker + 1;
+					preCoordinate.setSetWaitAfterCoordinate(true);
 					
 					if(sparMarker == 1) {
 						additionalProfileSet = new LinkedHashSet<ProfileCoordinate>();
@@ -389,23 +389,20 @@ public class WingCalculatorModel implements ProjectChangeEventListener{
 						sparYDirectionCoordinate = anchorCoordinate.getYDirectionCoordinate();
 						Double sparXDirectionCoordinate = sparBottomStart;
 						
-						additionalProfileSet.add(new ProfileCoordinate(sparXDirectionCoordinate, sparYDirectionCoordinate));
-						additionalProfileSet.add(new ProfileCoordinate(sparXDirectionCoordinate, coordinate.getYDirectionCoordinate() + sparBottomHeight));
+						additionalProfileSet.add(new ProfileCoordinate(sparXDirectionCoordinate, sparYDirectionCoordinate, false));
+						additionalProfileSet.add(new ProfileCoordinate(sparXDirectionCoordinate, coordinate.getYDirectionCoordinate() + sparBottomHeight, false));
 						
 					}
 					else {
 						Double sparXDirectionCoordinate = coordinate.getXDirectionCoordinate();
-						additionalProfileSet.add(new ProfileCoordinate(sparXDirectionCoordinate, coordinate.getYDirectionCoordinate() + sparBottomHeight));
-						
-						anchorCoordinate.profileAddition = additionalProfileSet;
-						//sparMarker = 0;
+						additionalProfileSet.add(new ProfileCoordinate(sparXDirectionCoordinate, coordinate.getYDirectionCoordinate() + sparBottomHeight, false));
 					}
 				}
 				else {
 					if (sparMarker > 0) {
 						Double sparXDirectionCoordinate = sparBottomEnd;
-						additionalProfileSet.add(new ProfileCoordinate(sparXDirectionCoordinate, coordinate.getYDirectionCoordinate() + sparBottomHeight));
-						additionalProfileSet.add(new ProfileCoordinate(sparXDirectionCoordinate, coordinate.getYDirectionCoordinate()));
+						additionalProfileSet.add(new ProfileCoordinate(sparXDirectionCoordinate, coordinate.getYDirectionCoordinate() + sparBottomHeight, false));
+						additionalProfileSet.add(new ProfileCoordinate(sparXDirectionCoordinate, coordinate.getYDirectionCoordinate(), true));
 						
 						anchorCoordinate.profileAddition = additionalProfileSet;
 						sparMarker = 0;
@@ -468,9 +465,9 @@ public class WingCalculatorModel implements ProjectChangeEventListener{
 				}
 				
 				if (coordinate.getDirection() > 0) {
-					additionalProfileSetTop.add(new ProfileCoordinate(coordinateX, insertCoordinateY));
+					additionalProfileSetTop.add(new ProfileCoordinate(coordinateX, insertCoordinateY, false));
 				} else {
-					additionalProfileSetBottom.add(new ProfileCoordinate(coordinateX, insertCoordinateY));
+					additionalProfileSetBottom.add(new ProfileCoordinate(coordinateX, insertCoordinateY, false));
 				}
 			}
 		}
@@ -496,7 +493,11 @@ public class WingCalculatorModel implements ProjectChangeEventListener{
 			coordinate = iterProfile.next();
 			
 			if (coordinate.getIsNosePoint()) {
+				// Nasenkoordinate nochmals am Ende anhaengen
+				additionalProfileSetAll.add(new ProfileCoordinate(coordinate.getXDirectionCoordinate(), coordinate.getYDirectionCoordinate(), true));
+				// Liste an die Nasenkoordinate anhaengen
 				coordinate.profileAddition = additionalProfileSetAll;
+				coordinate.setSetWaitAfterCoordinate(true);
 				break;
 			}
 		}	
@@ -506,14 +507,12 @@ public class WingCalculatorModel implements ProjectChangeEventListener{
 	
 	
 	// ==================
-	// G-Code Listen berechnen (verarbeitung der Extensions)
+	// G-Code Listen berechnen (Verarbeitung der Extensions)
 	// ==================
 	private void calculateGCodeList(LinkedHashSet<ProfileCoordinate> profileSet, LinkedHashSet<GCodeCoordinate> gCodeSet) {
 		// Wurzel
 		Integer i = 0;
-		Boolean isWait = false;
 		ProfileCoordinate coordinate = null;
-		ProfileCoordinate oldCoordinate = null;
 		
 		gCodeSet.clear();
 		
@@ -522,14 +521,6 @@ public class WingCalculatorModel implements ProjectChangeEventListener{
 		{
 			coordinate = iterBase.next();
 			
-			isWait = false;
-			// Wenn nicht die erste Koordinate und der Letzte Punkt wurde ignoriert (kommet von Addition zurück) ==> dann warte
-			if (oldCoordinate != null && oldCoordinate.getIgnorePoint()) { isWait = true; }; 
-			// Wenn Nasenkoordinate ==> dann warte
-			if (coordinate.getIsNosePoint()) { isWait = true; }; 
-			// Wenn eine Addition folgt ==> dann warte
-			if (!coordinate.profileAddition.isEmpty()) { isWait = true; };
-			
 			if (!coordinate.getIgnorePoint()) {
 				i = i + 1;
 				
@@ -537,30 +528,33 @@ public class WingCalculatorModel implements ProjectChangeEventListener{
 											 	  coordinate.getYDirectionCoordinate(),
 											 	  i,
 											 	  coordinate.getIsNosePoint(),
-											 	  isWait,
+											 	  coordinate.getSetWaitAfterCoordinate(),
 											 	  coordinate.getDirection()
 												));
 				
 				if (!coordinate.profileAddition.isEmpty()) {
+
 					Iterator<ProfileCoordinate> iterAddition = coordinate.profileAddition.iterator();
 					while(iterAddition.hasNext()) 
 					{
 						coordinate = iterAddition.next();
+						
 						if (!coordinate.getIgnorePoint()) {
 							i = i + 1;
 							gCodeSet.add(new GCodeCoordinate( coordinate.getXDirectionCoordinate(),
 														 	  coordinate.getYDirectionCoordinate(),
 														 	  i,
 														 	  false,
-														 	  false,
+														 	  coordinate.getSetWaitAfterCoordinate(),
 														 	  0
 															));
 						}
 					}
+				
+				
 				}
 			}
 			
-			oldCoordinate = coordinate;
 			
 		}
 
@@ -711,7 +705,7 @@ public class WingCalculatorModel implements ProjectChangeEventListener{
 			this.gCodeLines.add(aWaitLine);
 			
 			// ===================================================================
-			// Koordinaten abfahren und am Ende 4 sec. warten
+			// Koordinaten abfahren und am Ende 2 x aWaitLine warten
 			// ===================================================================
 
 			this.gCodeLines.add("(Start process profile coordinates)");
@@ -751,7 +745,7 @@ public class WingCalculatorModel implements ProjectChangeEventListener{
 				}
 				this.gCodeLines.add(aLine);
 				
-				if(baseCordinate.getIsWait()) {
+				if(baseCordinate.getSetWaitAfterCoordinate()) {
 					this.gCodeLines.add(aWaitLine);
 				}
 				
@@ -765,6 +759,7 @@ public class WingCalculatorModel implements ProjectChangeEventListener{
 			}
 			
 			this.gCodeLines.add("(End process profile coordinates)");
+			this.gCodeLines.add(aWaitLine);
 			this.gCodeLines.add(aWaitLine);
 			
 			// ===================================================================

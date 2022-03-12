@@ -21,6 +21,7 @@ public class ProfileCoordinate {
 	private Integer coordNumber = 0;
 	private transient Boolean isNosePoint = false;
 	private transient Boolean ignorePoint = false;
+	private transient Boolean setWaitAfterCoordinate = false;
 	private Integer direction = 0;       // -1 Unterseite, +1 Oberseite
 	
 	// gelesener Koordinatenstring
@@ -57,6 +58,7 @@ public class ProfileCoordinate {
 		
 		Double xOldCoordinate = 0.0;
 		this.setDirection(0);      // -1 Unterseite, +1 Oberseite
+		this.setWaitAfterCoordinate = false;
 		
 		if (aOldCoordinateString.contentEquals("")) { xOldCoordinate = 1.0; }
 		else { xOldCoordinate = this.calculateXCoordinate(aOldCoordinateString); }
@@ -67,12 +69,13 @@ public class ProfileCoordinate {
 	}
 
 	// Konstruktor fuer Insets
-	public ProfileCoordinate(Double xDirectionCoordinate, Double yDirectionCoordinate)
+	public ProfileCoordinate(Double xDirectionCoordinate, Double yDirectionCoordinate, Boolean stopBeforeContinue )
 	{
 		this.setReadCoordinateString("");
 		this.xReadCoordinate = 0.0;
 		this.yReadCoordinate = 0.0;
-		this.setDirection(0);      // -1 Unterseite, +1 Oberseite
+		this.setDirection(0);      							// -1 Unterseite, +1 Oberseite
+		this.setWaitAfterCoordinate = false;		// nach Abarbeiten des Punktes einen STOP einlegen
 		
 		this.xDirectionCoordinate = xDirectionCoordinate;
 		this.yDirectionCoordinate = yDirectionCoordinate;
@@ -88,6 +91,7 @@ public class ProfileCoordinate {
 	public Integer getCoordNumber() { return this.coordNumber; }
 	public Boolean getIsNosePoint() { return this.isNosePoint; }
 	public Boolean getIgnorePoint() { return this.ignorePoint; }
+	public Boolean getSetWaitAfterCoordinate() { return this.setWaitAfterCoordinate; }
 	public Integer getDirection() { return this.direction; }
 
 	// =========== Setter ========================
@@ -95,6 +99,8 @@ public class ProfileCoordinate {
 	public void setCoordNumber(Integer coordNumber) { this.coordNumber = coordNumber; }
 	public void setIsNosePoint(Boolean isNosePoint) { this.isNosePoint = isNosePoint; }
 	public void setIgnorePoint(Boolean ignorePoint) { this.ignorePoint = ignorePoint; }
+	public void setSetWaitAfterCoordinate(Boolean setWaitAfterCoordinate) { this.setWaitAfterCoordinate = setWaitAfterCoordinate; }
+
 	public void setYDirectionCoordinate(Double yDirectionCoordinate) { this.yDirectionCoordinate = yDirectionCoordinate; }
 	public void setXDirectionCoordinate(Double xDirectionCoordinate) { this.xDirectionCoordinate = xDirectionCoordinate; }
 

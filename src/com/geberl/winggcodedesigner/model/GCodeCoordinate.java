@@ -11,15 +11,13 @@
 
 package com.geberl.winggcodedesigner.model;
 
-import java.util.LinkedHashSet;
-
 public class GCodeCoordinate {
 
 	// Laufnummer
 	private Integer coordNumber = 0;
 	private Boolean isNosePoint = false;
-	private Boolean isWait = false;
-	private Integer direction = 0;       // -1 Unterseite, +1 Oberseite
+	private Boolean setWaitAfterCoordinate = false; 	// nach Abarbeiten des Punktes einen STOP einlegen
+	private Integer direction = 0;       			// -1 Unterseite, +1 Oberseite
 	
 	// nach Richtungskorrektur, Holm und Innenausschnitt
 	private Double xDirectionCoordinate = 0.0;
@@ -48,13 +46,13 @@ public class GCodeCoordinate {
 							Double yDirectionCoordinate,
 							Integer coordNumber,
 							Boolean isNosePoint,
-							Boolean isWait,
+							Boolean setWaitAfterCoordinate,
 							Integer direction )
 	{
 		this.coordNumber = coordNumber;
 		this.direction = direction;      // -1 Unterseite, +1 Oberseite
 		this.isNosePoint = isNosePoint;
-		this.isWait = isWait;
+		this.setWaitAfterCoordinate = setWaitAfterCoordinate;
 		
 		this.xDirectionCoordinate = xDirectionCoordinate;
 		this.yDirectionCoordinate = yDirectionCoordinate;
@@ -73,7 +71,7 @@ public class GCodeCoordinate {
 	
 	public Integer getCoordNumber() { return this.coordNumber; }
 	public Boolean getIsNosePoint() { return this.isNosePoint; }
-	public Boolean getIsWait() { return this.isWait; }
+	public Boolean getSetWaitAfterCoordinate() { return this.setWaitAfterCoordinate; }
 	public Integer getDirection() { return this.direction; }
 
 	// =========== Setter ========================
@@ -85,7 +83,7 @@ public class GCodeCoordinate {
 
 
 	public void setDirection(Integer direction) { this.direction = direction; }
-	public void setIsWait(Boolean isWait) { this.isWait = isWait; }
+	public void setSetWaitAfterCoordinate(Boolean stopBeforeContinue) { this.setWaitAfterCoordinate = setWaitAfterCoordinate; }
 
 	
 	// =========== Funktionen ========================

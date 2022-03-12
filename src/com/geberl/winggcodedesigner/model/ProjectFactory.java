@@ -21,7 +21,7 @@ package com.geberl.winggcodedesigner.model;
 
 import com.geberl.winggcodedesigner.eventing.ProjectChangeEvent;
 import com.geberl.winggcodedesigner.eventing.ProjectChangeEventListener;
-import com.geberl.winggcodedesigner.utils.GUIHelpers;
+import com.geberl.winggcodedesigner.uielements.GUIHelpers;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 

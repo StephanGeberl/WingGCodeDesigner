@@ -24,7 +24,6 @@ import javax.swing.JButton;
 
 import com.geberl.winggcodedesigner.model.Settings;
 import com.geberl.winggcodedesigner.model.SettingsFactory;
-import com.geberl.winggcodedesigner.utils.GUIHelpers;
 
 import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
