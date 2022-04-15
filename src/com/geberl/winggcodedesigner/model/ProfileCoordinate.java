@@ -45,6 +45,7 @@ public class ProfileCoordinate {
 		this.xReadCoordinate = 0.0;
 		this.yReadCoordinate = 0.0;
 		this.setDirection(0);      // -1 Unterseite, +1 Oberseite
+		this.setWaitAfterCoordinate = false;
 	}
 
 	public ProfileCoordinate(String aReadCoordinateString, String aOldCoordinateString, Integer aCoordinateNumber)
@@ -69,13 +70,13 @@ public class ProfileCoordinate {
 	}
 
 	// Konstruktor fuer Insets
-	public ProfileCoordinate(Double xDirectionCoordinate, Double yDirectionCoordinate, Boolean stopBeforeContinue )
+	public ProfileCoordinate(Double xDirectionCoordinate, Double yDirectionCoordinate, Boolean setWaitAfterCoordinate )
 	{
 		this.setReadCoordinateString("");
 		this.xReadCoordinate = 0.0;
 		this.yReadCoordinate = 0.0;
-		this.setDirection(0);      							// -1 Unterseite, +1 Oberseite
-		this.setWaitAfterCoordinate = false;		// nach Abarbeiten des Punktes einen STOP einlegen
+		this.setDirection(0);      									// -1 Unterseite, +1 Oberseite
+		this.setWaitAfterCoordinate = setWaitAfterCoordinate;		// nach Abarbeiten des Punktes einen STOP einlegen
 		
 		this.xDirectionCoordinate = xDirectionCoordinate;
 		this.yDirectionCoordinate = yDirectionCoordinate;
