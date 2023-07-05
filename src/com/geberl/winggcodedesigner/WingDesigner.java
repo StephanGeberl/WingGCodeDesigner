@@ -1,7 +1,7 @@
 /*
     Copyright 2021,2022,2023 Stephan Geberl
 
-    This file is part of WingGCodeDesigner.
+    This file is part of WingGCodeDesigner (Main Class).
 
     WingGCodeDesigner is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
