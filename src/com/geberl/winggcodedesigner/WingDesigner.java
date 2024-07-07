@@ -1,5 +1,5 @@
 /*
-    Copyright 2021,2022,2023 Stephan Geberl
+    Copyright 2021,2022,2023,2024 Stephan Geberl
 
     This file is part of WingGCodeDesigner (Main Class).
 
